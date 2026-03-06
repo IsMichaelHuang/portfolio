@@ -1,0 +1,75 @@
+/**
+ * About Section Styles
+ *
+ * Two-part layout: a bio paragraph followed by a skills grid.
+ * Max-width constrains readability. Skills use a simple two-column
+ * grid on wider screens, collapsing to a single column on mobile.
+ */
+
+/* Section container — matches Projects section width for visual consistency */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/* Section heading — centered, consistent with other sections */
+.heading {
+  font-size: 2rem;
+  text-align: center;
+  margin: 0 0 2.5rem;
+}
+
+/*
+ * Content wrapper — constrains bio text to a comfortable reading width.
+ * Centered within the section via auto margins.
+ */
+.content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Bio paragraph — slightly larger text for emphasis as the primary content */
+.bio {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin: 0 0 2.5rem;
+  opacity: 0.85;
+}
+
+/* Skills sub-heading */
+.skillsHeading {
+  font-size: 1.25rem;
+  margin: 0 0 1.25rem;
+}
+
+/*
+ * Skills grid — two columns on wider screens.
+ * auto-fit with 250px minimum handles the responsive collapse
+ * to one column on narrow viewports.
+ */
+.skills {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.skillGroup {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+/* Category label — small, de-emphasized to let the skill list stand out */
+.skillLabel {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.6;
+  font-weight: 600;
+}
+
+/* Skill list — plain text, no bullets; commas provide separation */
+.skillList {
+  font-size: 1rem;
+  margin: 0 0 1rem;
+  opacity: 0.8;
+}

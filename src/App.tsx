@@ -11,12 +11,14 @@
 
 import Hero from "./sections/Hero";
 import Projects from "./sections/Projects";
+import About from "./sections/About";
 
 function App() {
   return (
     <>
       <Hero />
-      <Projects />
+      <About />
+      <Projects /> 
     </>
   );
 }
