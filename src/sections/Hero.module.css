@@ -1,0 +1,63 @@
+/**
+ * Hero Section Styles
+ *
+ * Vertically and horizontally centers all content within a full-viewport
+ * container. Visual hierarchy is established through font sizing and
+ * opacity rather than color, so styles adapt to both dark and light themes
+ * without additional overrides.
+ */
+
+/* Full-viewport centered container */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* Horizontal centering */
+  justify-content: center;   /* Vertical centering */
+  min-height: 100vh;         /* Fill the entire viewport height */
+  padding: 2rem;             /* Prevent content from touching viewport edges on small screens */
+  text-align: center;
+}
+
+/* Primary heading — largest text on the page */
+.name {
+  font-size: 3rem;
+  margin: 0 0 0.5rem;        /* Reset default h1 margin; add small bottom spacing */
+}
+
+/* Role/title subtitle — slightly de-emphasized via reduced opacity */
+.title {
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
+  opacity: 0.8;
+}
+
+/* Short description — most de-emphasized; max-width keeps line length readable */
+.blurb {
+  font-size: 1.125rem;
+  margin: 0 0 2rem;
+  max-width: 500px;           /* Maintains ~60-70 characters per line for readability */
+  opacity: 0.7;
+}
+
+/* CTA link row — flexbox with gap for even spacing without margin hacks */
+.links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/*
+ * Individual CTA link — styled as a bordered pill button.
+ * Uses currentColor for the border so it inherits the active theme's
+ * text color (dark or light) without hardcoding values.
+ */
+.link {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  opacity: 0.7;
+}
