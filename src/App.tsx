@@ -10,15 +10,17 @@
  */
 
 import Hero from "./sections/Hero";
-import Projects from "./sections/Projects";
 import About from "./sections/About";
+import Projects from "./sections/Projects";
+import Experience from "./sections/Experience";
 
 function App() {
   return (
     <>
       <Hero />
       <About />
-      <Projects /> 
+      <Experience />
+      <Projects />
     </>
   );
 }
