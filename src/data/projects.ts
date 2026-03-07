@@ -1,46 +1,37 @@
 /**
- * Project Data
+ * Project Data — Auto-generated
  *
- * Typed array of project entries consumed by the Projects section.
- * Adding a new project means appending an object to the array below —
- * no JSX or style changes needed.
+ * This file is written by scripts/fetch-pinned.ts at build time.
+ * It pulls pinned repositories from GitHub so the portfolio stays
+ * in sync without manual updates.
  *
- * The Project interface enforces a consistent shape across all entries.
- * Both repoUrl and liveUrl are optional to accommodate proprietary
- * or in-progress work that may not have public links.
+ * DO NOT EDIT MANUALLY — changes will be overwritten on next build.
  */
 
 export interface Project {
-  /** Unique identifier, used as the React key when rendering the list */
   id: string;
-  /** Project name displayed as the card heading */
   title: string;
-  /** 1-2 sentence summary of what the project does */
   description: string;
-  /** Technologies, frameworks, or domains (rendered as tags/pills) */
   tags: string[];
-  /** Link to source code (optional — omit for proprietary work) */
   repoUrl?: string;
-  /** Link to live/deployed project (optional — omit if not deployed) */
   liveUrl?: string;
 }
 
 export const projects: Project[] = [
   {
-    id: "placeholder-1",
-    title: "Project One",
+    id: "discordbot",
+    title: "DiscordBot",
     description:
-      "A short description of what this project does and why it matters.",
-    tags: ["React", "TypeScript", "Vite"],
-    repoUrl: "https://github.com",
+      "Python Discord bot built with discord.py — supports music playback, custom commands, and server event handling.",
+    tags: ["bot", "discord-py", "music", "python3"],
+    repoUrl: "https://github.com/IsMichaelHuang/DiscordBot",
   },
   {
-    id: "placeholder-2",
-    title: "Project Two",
+    id: "resumebuilder",
+    title: "ResumeBuilder",
     description:
-      "Another project description. Replace with your actual projects.",
-    tags: ["Python", "FastAPI", "LLM"],
-    liveUrl: "https://example.com",
-    repoUrl: "https://github.com",
+      "Modular LaTeX resume system — one master document with four tailored single-page versions for AI/ML, full-stack, backend, and general SWE roles.",
+    tags: ["automation", "job-search", "latex", "python3", "resume", "shell"],
+    repoUrl: "https://github.com/IsMichaelHuang/resumeBuilder",
   },
 ];
