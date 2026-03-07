@@ -37,7 +37,7 @@ function Hero() {
          *                             to the target site
          */}
         <a
-          href="https://github.com/IsMichaelHuang"
+          href="https://github.com"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.link}
@@ -45,7 +45,7 @@ function Hero() {
           GitHub
         </a>
         <a
-          href="https://www.linkedin.com/in/michael-micah-huang/"
+          href="https://linkedin.com"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.link}
