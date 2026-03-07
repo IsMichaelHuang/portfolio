@@ -12,8 +12,8 @@ import styles from "./About.module.css";
 
 function About() {
   return (
-    <section id="about" className={styles.section}>
-      <h2 className={styles.heading}>About</h2>
+    <section id="about">
+      <h2>About</h2>
 
       {/* --- Narrative --- */}
       <div className={styles.bio}>
@@ -47,7 +47,7 @@ function About() {
             <h3 className={styles.skillCategory}>{group.category}</h3>
             <div className={styles.skillItems}>
               {group.items.map((skill) => (
-                <span key={skill} className={styles.skillPill}>
+                <span key={skill} data-pill>
                   {skill}
                 </span>
               ))}

@@ -1,25 +1,14 @@
 /**
- * About Section Styles
+ * About Section Styles — Space Theme
  *
  * Two-part layout: a narrative bio constrained for readability,
- * followed by a skills grid that spans the full section width.
- * Skills render as pill badges grouped by category in a responsive
- * grid — 2 columns on desktop, 1 on mobile.
+ * followed by a skills grid. Skills render as pill badges grouped
+ * by category in a responsive grid — 2 columns on desktop, 1 on mobile.
+ *
+ * Base section layout and heading styles are inherited from
+ * global section rules in index.css. Pill base styles come from
+ * the global [data-pill] rule.
  */
-
-/* Section container — full section width, consistent with other sections */
-.section {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
-
-/* Section heading — centered, consistent with other sections */
-.heading {
-  font-size: 2rem;
-  text-align: center;
-  margin: 0 0 2.5rem;
-}
 
 /* Bio wrapper — constrains text to a comfortable reading width */
 .bio {
@@ -32,7 +21,7 @@
   font-size: 1.125rem;
   line-height: 1.7;
   margin: 0 0 1.25rem;
-  opacity: 0.85;
+  color: var(--color-text-muted);
   text-align: left;
 }
 
@@ -42,8 +31,7 @@
 
 /*
  * Skills grid — 2 columns on wider screens, 1 on narrow.
- * Uses the full section width (up to 1100px) so skills have
- * more room to breathe than the constrained bio text.
+ * Constrained to match bio width for visual alignment.
  */
 .skillsGrid {
   display: grid;
@@ -60,12 +48,12 @@
   gap: 0.75rem;
 }
 
-/* Category heading — small, de-emphasized label */
+/* Category heading — muted uppercase label */
 .skillCategory {
   font-size: 0.9rem;
   font-weight: 600;
   margin: 0;
-  opacity: 0.6;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -75,15 +63,4 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-/*
- * Skill pill — same visual language as project tags for consistency.
- * Semi-transparent background adapts to both dark and light themes.
- */
-.skillPill {
-  font-size: 0.85rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 4px;
-  background: rgba(128, 128, 128, 0.2);
 }

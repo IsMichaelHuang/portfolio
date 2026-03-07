@@ -1,10 +1,9 @@
 /**
- * Hero Section Styles
+ * Hero Section Styles — Space Theme
  *
  * Vertically and horizontally centers all content within a full-viewport
- * container. Visual hierarchy is established through font sizing and
- * opacity rather than color, so styles adapt to both dark and light themes
- * without additional overrides.
+ * container. Visual hierarchy uses the theme's text/muted color variables
+ * rather than raw opacity values.
  */
 
 /* Full-viewport centered container */
@@ -21,22 +20,22 @@
 /* Primary heading — largest text on the page */
 .name {
   font-size: 3rem;
-  margin: 0 0 0.5rem;        /* Reset default h1 margin; add small bottom spacing */
+  margin: 0 0 0.5rem;
 }
 
-/* Role/title subtitle — slightly de-emphasized via reduced opacity */
+/* Role/title subtitle — muted for visual hierarchy */
 .title {
   font-size: 1.5rem;
   margin: 0 0 1rem;
-  opacity: 0.8;
+  color: var(--color-text-muted);
 }
 
 /* Short description — most de-emphasized; max-width keeps line length readable */
 .blurb {
   font-size: 1.125rem;
   margin: 0 0 2rem;
-  max-width: 500px;           /* Maintains ~60-70 characters per line for readability */
-  opacity: 0.7;
+  max-width: 500px;
+  color: var(--color-text-muted);
 }
 
 /* CTA link row — flexbox with gap for even spacing without margin hacks */
@@ -46,18 +45,18 @@
 }
 
 /*
- * Individual CTA link — styled as a bordered pill button.
- * Uses currentColor for the border so it inherits the active theme's
- * text color (dark or light) without hardcoding values.
+ * Individual CTA link — bordered button using theme border color.
+ * Accent color on hover provides a subtle interactive glow.
  */
 .link {
   padding: 0.5rem 1.25rem;
-  border: 1px solid currentColor;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
-  transition: opacity 0.2s;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .link:hover {
-  opacity: 0.7;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
