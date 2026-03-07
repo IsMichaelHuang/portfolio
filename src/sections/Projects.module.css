@@ -1,0 +1,80 @@
+/**
+ * Projects Section Styles — Space Theme
+ *
+ * Uses CSS Grid for the card layout with responsive breakpoints.
+ * Grid auto-adjusts columns: 1 on mobile, 2 on medium, 3 on large screens.
+ * Cards use theme surface and border variables for visual separation.
+ *
+ * Base section layout (max-width, margin, padding) and heading styles
+ * are inherited from global section rules in index.css.
+ */
+
+/*
+ * Responsive grid using auto-fit with a minimum column width of 300px.
+ * Columns expand to fill available space, and the grid automatically
+ * wraps to fewer columns on narrow viewports — no media queries needed.
+ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/*
+ * Individual card — uses theme surface background and border for
+ * a subtle floating appearance against the deep space background.
+ */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+/* Project name */
+.title {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+}
+
+/* Project summary */
+.description {
+  font-size: 1rem;
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* Tag container — wraps pills inline */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Tag pill size override — slightly smaller than default pill */
+.tag {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+}
+
+/* Link row — pushed to the bottom of the card via auto margin */
+.links {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+/* Individual link — muted by default, accent color on hover */
+.link {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: var(--color-accent);
+}
