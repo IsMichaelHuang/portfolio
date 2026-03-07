@@ -1,0 +1,66 @@
+/**
+ * Contact Section Styles — Space Theme
+ *
+ * Centered, minimal layout that draws focus to the email CTA.
+ * Uses accent color for the primary action and theme variables
+ * for consistent visual language.
+ *
+ * Heading styles are inherited from global section rules in index.css.
+ * Section max-width is overridden here to be narrower than the default.
+ */
+
+/* Section override — narrower than the default 1100px for focused layout */
+.section {
+  max-width: 700px;
+  text-align: center;
+}
+
+/* Heading override — tighter bottom margin for Contact's compact layout */
+.heading {
+  margin-bottom: 1rem;
+}
+
+/* Invitation message — muted supporting text */
+.message {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin: 0 0 2rem;
+  color: var(--color-text-muted);
+}
+
+/*
+ * Email link — primary CTA with accent-colored border.
+ * Stands out against the muted surroundings as the key action.
+ */
+.emailLink {
+  display: inline-block;
+  font-size: 1.1rem;
+  padding: 0.6rem 1.5rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  color: var(--color-accent);
+  transition: background-color 0.2s;
+}
+
+.emailLink:hover {
+  background-color: rgba(74, 108, 247, 0.1);
+}
+
+/* Profile links row — secondary to the email CTA */
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* Individual profile link — muted by default, accent on hover */
+.link {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: var(--color-accent);
+}
