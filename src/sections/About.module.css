@@ -1,12 +1,13 @@
 /**
  * About Section Styles
  *
- * Two-part layout: a bio paragraph followed by a skills grid.
- * Max-width constrains readability. Skills use a simple two-column
- * grid on wider screens, collapsing to a single column on mobile.
+ * Two-part layout: a narrative bio constrained for readability,
+ * followed by a skills grid that spans the full section width.
+ * Skills render as pill badges grouped by category in a responsive
+ * grid — 2 columns on desktop, 1 on mobile.
  */
 
-/* Section container — matches Projects section width for visual consistency */
+/* Section container — full section width, consistent with other sections */
 .section {
   max-width: 1100px;
   margin: 0 auto;
@@ -20,56 +21,69 @@
   margin: 0 0 2.5rem;
 }
 
+/* Bio wrapper — constrains text to a comfortable reading width */
+.bio {
+  max-width: 700px;
+  margin: 0 auto 3rem;
+}
+
+/* Individual bio paragraph */
+.paragraph {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin: 0 0 1.25rem;
+  opacity: 0.85;
+  text-align: left;
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
+}
+
 /*
- * Content wrapper — constrains bio text to a comfortable reading width.
- * Centered within the section via auto margins.
+ * Skills grid — 2 columns on wider screens, 1 on narrow.
+ * Uses the full section width (up to 1100px) so skills have
+ * more room to breathe than the constrained bio text.
  */
-.content {
+.skillsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
   max-width: 700px;
   margin: 0 auto;
 }
 
-/* Bio paragraph — slightly larger text for emphasis as the primary content */
-.bio {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  margin: 0 0 2.5rem;
-  opacity: 0.85;
+/* Individual skill category group */
+.skillGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-/* Skills sub-heading */
-.skillsHeading {
-  font-size: 1.25rem;
-  margin: 0 0 1.25rem;
+/* Category heading — small, de-emphasized label */
+.skillCategory {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Pill container — wraps pills inline */
+.skillItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 /*
- * Skills grid — two columns on wider screens.
- * auto-fit with 250px minimum handles the responsive collapse
- * to one column on narrow viewports.
+ * Skill pill — same visual language as project tags for consistency.
+ * Semi-transparent background adapts to both dark and light themes.
  */
-.skills {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.skillGroup {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-/* Category label — small, de-emphasized to let the skill list stand out */
-.skillLabel {
-  font-size: 0.9rem;
-  margin: 0;
-  opacity: 0.6;
-  font-weight: 600;
-}
-
-/* Skill list — plain text, no bullets; commas provide separation */
-.skillList {
-  font-size: 1rem;
-  margin: 0 0 1rem;
-  opacity: 0.8;
+.skillPill {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+  background: rgba(128, 128, 128, 0.2);
 }

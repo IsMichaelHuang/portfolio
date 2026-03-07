@@ -1,47 +1,59 @@
 /**
  * About Section
  *
- * A personal narrative block that tells visitors who you are beyond
- * your project list and job titles. Includes a short bio and a
- * skills summary.
- *
- * Unlike Projects or Experience, this section has no backing data file
- * because the content is singular — there's only one "about you."
- * Edit the JSX directly to update.
+ * Two-part layout: a personal narrative followed by a data-driven
+ * skills grid. The bio is edited directly in JSX (singular content),
+ * while skills are rendered from data/skills.ts so that adding or
+ * reordering skills requires no markup changes.
  */
 
+import { skills } from "../data/skills";
 import styles from "./About.module.css";
 
 function About() {
   return (
     <section id="about" className={styles.section}>
       <h2 className={styles.heading}>About</h2>
-      <div className={styles.content}>
-        <p className={styles.bio}>
-          I'm a software engineer who enjoys building across the full stack —
-          from frontend interfaces to backend systems to AI-powered tools.
-          I care about writing clean, maintainable code and shipping products
-          that solve real problems.
+
+      {/* --- Narrative --- */}
+      <div className={styles.bio}>
+        <p className={styles.paragraph}>
+          Software engineer based in Oakland, CA. I graduated from Cal Poly SLO
+          with a degree in Computer Science and a minor in Philosophy — a
+          combination that shapes how I think about building software:
+          technically rigorous, but always asking <em>why</em> before{" "}
+          <em>how</em>.
         </p>
-        <div className={styles.skills}>
-          <h3 className={styles.skillsHeading}>Skills</h3>
-          <div className={styles.skillGroup}>
-            <h4 className={styles.skillLabel}>Languages</h4>
-            <p className={styles.skillList}>TypeScript, Python, JavaScript</p>
+        <p className={styles.paragraph}>
+          Something I take seriously is how my code reads after I've left the
+          room. I hold myself to a high standard on maintainability — thorough
+          documentation, clean architecture, comprehensive tests — so that the
+          next engineer who opens my project can understand it immediately
+          without needing me to explain it.
+        </p>
+        <p className={styles.paragraph}>
+          My work centers on applied AI — multi-agent systems, LLM
+          infrastructure, and the messy engineering work of getting models to
+          behave reliably in production. I'm comfortable across the stack — from
+          low-level C and POSIX to React frontends — but I'm most energized by
+          the systems layer where AI meets infrastructure.
+        </p>
+      </div>
+
+      {/* --- Skills Grid --- */}
+      <div className={styles.skillsGrid}>
+        {skills.map((group) => (
+          <div key={group.category} className={styles.skillGroup}>
+            <h3 className={styles.skillCategory}>{group.category}</h3>
+            <div className={styles.skillItems}>
+              {group.items.map((skill) => (
+                <span key={skill} className={styles.skillPill}>
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className={styles.skillGroup}>
-            <h4 className={styles.skillLabel}>Frontend</h4>
-            <p className={styles.skillList}>React, HTML, CSS</p>
-          </div>
-          <div className={styles.skillGroup}>
-            <h4 className={styles.skillLabel}>Backend & AI</h4>
-            <p className={styles.skillList}>Node.js, FastAPI, LLMs</p>
-          </div>
-          <div className={styles.skillGroup}>
-            <h4 className={styles.skillLabel}>Tools</h4>
-            <p className={styles.skillList}>Git, Docker, AWS</p>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );
