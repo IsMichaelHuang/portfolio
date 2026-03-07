@@ -15,8 +15,8 @@ import styles from "./Projects.module.css";
 
 function Projects() {
   return (
-    <section id="projects" className={styles.section}>
-      <h2 className={styles.heading}>Projects</h2>
+    <section id="projects">
+      <h2>Projects</h2>
       <div className={styles.grid}>
         {projects.map((project) => (
           <div key={project.id} className={styles.card}>
@@ -24,7 +24,7 @@ function Projects() {
             <p className={styles.description}>{project.description}</p>
             <div className={styles.tags}>
               {project.tags.map((tag) => (
-                <span key={tag} className={styles.tag}>
+                <span key={tag} data-pill className={styles.tag}>
                   {tag}
                 </span>
               ))}

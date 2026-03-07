@@ -1,28 +1,52 @@
 /**
- * Global Styles
+ * Global Styles — Space Theme
  *
- * Base-level resets and defaults applied site-wide via main.tsx.
- * All component/section-specific styles live in co-located CSS Modules.
+ * Base-level resets, CSS custom properties, and defaults applied
+ * site-wide via main.tsx. All component/section-specific styles
+ * live in co-located CSS Modules.
  *
- * Color scheme: dark by default, with a light mode override via
- * prefers-color-scheme. Components inherit text/background colors
- * from :root so theme changes propagate automatically.
+ * Theme: minimalistic deep-space aesthetic. Dark only — no light
+ * mode override. Colors are defined as CSS custom properties so
+ * components can reference them without hardcoding values.
+ *
+ * Color philosophy:
+ *   - Deep blue-black background evokes the void of space
+ *   - Text is soft cool white, never harsh pure white
+ *   - A single accent color (distant-star blue) used sparingly
+ *   - Surfaces and borders use ultra-low-opacity white tints
  */
 
-/* --- Theme & Typography --- */
+/* --- Theme Variables & Typography --- */
 
 :root {
+  /* --- Color Palette --- */
+
+  /** Deep space background — near-black with a subtle blue undertone */
+  --color-bg: #0a0a0f;
+  /** Primary text — soft cool white, easy on the eyes against deep dark */
+  --color-text: rgba(230, 235, 245, 0.9);
+  /** De-emphasized text — for subtitles, labels, secondary content */
+  --color-text-muted: rgba(230, 235, 245, 0.5);
+  /** Accent — a cool blue like a distant star, used for interactive elements */
+  --color-accent: #4a6cf7;
+  /** Surface — barely-visible white tint for cards, pills, and borders */
+  --color-surface: rgba(255, 255, 255, 0.05);
+  /** Border — subtle separation between elements */
+  --color-border: rgba(255, 255, 255, 0.1);
+
+  /* --- Typography --- */
+
   /* System font stack: uses the OS default, falling back through common sans-serifs */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  /* Tells the browser both schemes are supported, enabling native dark/light form controls */
-  color-scheme: light dark;
+  /* Dark only — no light mode */
+  color-scheme: dark;
 
-  /* Dark theme defaults */
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Apply theme colors */
+  color: var(--color-text);
+  background-color: var(--color-bg);
 
   /* Prevents the browser from auto-synthesizing bold/italic variants of fonts */
   font-synthesis: none;
@@ -62,12 +86,43 @@ a {
   text-decoration: none;
 }
 
-/* --- Light Mode Override --- */
+/* --- Shared Section Layout --- */
 
-/* Overrides :root colors when the user's OS is set to light mode */
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
+/*
+ * Base section styling applied to all <section> elements.
+ * Constrains content width, centers horizontally, and adds
+ * consistent vertical/horizontal padding. Individual sections
+ * can override max-width in their CSS Modules if needed
+ * (e.g. Contact uses a narrower width, Hero uses full viewport).
+ */
+section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/*
+ * Shared section heading style for any <h2> that is a direct
+ * child of a <section>. Provides consistent font size, centering,
+ * and bottom spacing across all sections.
+ */
+section > h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin: 0 0 2.5rem;
+}
+
+/* --- Shared Pill Style --- */
+
+/*
+ * Reusable pill/badge pattern for tags and skills.
+ * Applied via a data attribute (data-pill) to avoid CSS Module
+ * scoping issues while keeping markup semantic.
+ */
+[data-pill] {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 }

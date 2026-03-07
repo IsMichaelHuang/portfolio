@@ -15,8 +15,8 @@ import styles from "./Experience.module.css";
 
 function Experience() {
   return (
-    <section id="experience" className={styles.section}>
-      <h2 className={styles.heading}>Experience</h2>
+    <section id="experience">
+      <h2>Experience</h2>
       <div className={styles.list}>
         {experience.map((entry) => (
           <div key={entry.id} className={styles.entry}>
