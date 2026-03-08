@@ -24,8 +24,8 @@ function Contact() {
        * mailto: link opens the visitor's default email client.
        * No target="_blank" needed — the OS handles mail client routing.
        */}
-      <a href="mailto:your.email@example.com" className={styles.emailLink}>
-        your.email@example.com
+      <a href="mailto:michael.micah.huang@gmail.com" className={styles.emailLink}>
+        Email
       </a>
       <div className={styles.links}>
         <a
