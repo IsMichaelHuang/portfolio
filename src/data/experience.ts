@@ -24,24 +24,25 @@ export interface Experience {
 
 export const experience: Experience[] = [
   {
-    id: "example-2",
-    role: "Your Role",
-    company: "Company Name",
-    period: "Month Year — Present",
+    id: "dynamic-experts",
+    role: "Contract AI Engineer",
+    company: "Dynamic Experts",
+    period: "Dec 2025 — Jan 2026",
     highlights: [
-      "Describe what you built or accomplished",
-      "Quantify impact where possible (e.g. improved X by 30%)",
-      "Mention key technologies used",
+      "Architected a production-grade MCP server to expose deep-research capabilities, integrating Gemini 2.5 Pro with markdown sanitization and automated citation handling",
+      "Delivered a fully documented, production-ready codebase with 157 unit tests (Vitest), ensuring seamless handoff to the client engineering team",
+      "Optimized async polling architecture with 90-minute timeout handling to support long-running inference tasks (60+ minutes), solving critical timeout issues in standard HTTP request flows",
     ],
   },
   {
-    id: "example-1",
-    role: "Previous Role",
-    company: "Previous Company",
-    period: "Month Year — Month Year",
+    id: "solidigm",
+    role: "Automation and Product Engineering Intern",
+    company: "Solidigm (Formerly Intel NAND)",
+    period: "Jun 2022 — Aug 2023",
     highlights: [
-      "Describe your responsibilities and achievements",
-      "Focus on outcomes, not just duties",
+      "Migrated legacy Python 2.7 automation frameworks to Python 3.x, modernizing the codebase for 600+ production-line tests and significantly reducing false-positive failures",
+      "Engineered end-to-end automation scripts that increased test coverage, saving the engineering team approximately 8 hours of manual verification per SKU during testing cycles",
+      "Performed root cause analysis on non-product failures, implementing patch fixes that improved overall testing stability and reduced infrastructure downtime",
     ],
   },
 ];
