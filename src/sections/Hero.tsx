@@ -25,7 +25,12 @@ function Hero() {
       </p>
       <div className={styles.links}>
         {/* Internal link — serves a static PDF from the assets directory */}
-        <a href="/resume.pdf" className={styles.link}>
+        <a 
+          href="/portfolio/resume.pdf" 
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.link}
+        >
           Resume
         </a>
         {/*
