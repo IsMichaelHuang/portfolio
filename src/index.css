@@ -57,6 +57,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Smooth scrolling for anchor links; offset accounts for the fixed navbar height */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+}
+
 /* --- Resets --- */
 
 /*

@@ -1,0 +1,102 @@
+/**
+ * Navbar Styles — Space Theme
+ *
+ * The bar is fixed to the viewport top so it persists during scroll.
+ * A translucent background with `backdrop-filter: blur` creates a
+ * frosted-glass effect that lets the page content show through while
+ * keeping the text legible — consistent with the deep-space aesthetic.
+ *
+ * z-index: 100 places the bar above all section content. If any section
+ * introduces a stacking context with a higher z-index, raise this value.
+ *
+ * All colors reference CSS custom properties defined in index.css so the
+ * navbar automatically inherits any future theme changes.
+ */
+
+/*
+ * .nav — the outermost <nav> element.
+ *
+ * `position: fixed` with top/left/right: 0 pins the bar to the viewport.
+ * `backdrop-filter` is a progressive enhancement: browsers that don't
+ * support it fall back to the solid-ish semi-transparent background.
+ * The -webkit- prefix covers Safari.
+ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/*
+ * .brand — the name/logo anchor on the left side of the bar.
+ *
+ * Links to #hero so clicking it scrolls back to the top of the page.
+ * Styled at full text weight to visually distinguish it from nav links.
+ * Accent color on hover signals interactivity without adding underlines,
+ * keeping the minimal aesthetic intact.
+ */
+.brand {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: color 0.2s;
+}
+
+.brand:hover {
+  color: var(--color-accent);
+}
+
+/*
+ * .links — the <ul> containing the nav link items.
+ *
+ * Browser-default list styles (bullet points, margin, padding) are reset
+ * so the list renders as a plain flex row. Gap-based spacing is used
+ * instead of margin on individual items to keep spacing uniform without
+ * targeting first/last children.
+ */
+.links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * .link — individual navigation anchor inside each <li>.
+ *
+ * Uses --color-text-muted at rest to create visual hierarchy: the brand
+ * name draws the eye first, then the nav links. On hover, color shifts
+ * to full --color-text (not accent) to indicate position without
+ * competing with the brand hover treatment.
+ */
+.link {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: var(--color-text);
+}
+
+/*
+ * .active — applied to the link whose target section is currently in view.
+ *
+ * Uses accent color to match the brand hover treatment, making it clear
+ * which section the user is reading. The selector is intentionally separate
+ * from :hover so both states can coexist independently.
+ */
+.active {
+  color: var(--color-accent);
+}
