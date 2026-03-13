@@ -1,9 +1,9 @@
 /**
  * Projects Section Styles — Space Theme
  *
- * Cards are a fixed 300px wide and never stretch. The grid is capped at
+ * Cards are a fixed 450px wide and never stretch. The grid is capped at
  * 2 columns and centered. When the viewport is too narrow to fit both
- * cards side-by-side (≤ 688px: 2 × 300px cards + 1.5rem gap + section
+ * cards side-by-side (≤ 988px: 2 × 450px cards + 1.5rem gap + section
  * padding), the grid collapses to a single centered column. The card
  * size never changes — only the column count does.
  *
@@ -18,7 +18,7 @@
  */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 300px);
+  grid-template-columns: repeat(2, 450px);
   justify-content: center;
   gap: 1.5rem;
 }
@@ -28,9 +28,9 @@
  * 300px cards plus the gap and section padding side-by-side.
  * Card width stays fixed at 300px — no resizing occurs.
  */
-@media (max-width: 688px) {
+@media (max-width: 988px) {
   .grid {
-    grid-template-columns: 300px;
+    grid-template-columns: 450px;
   }
 }
 
