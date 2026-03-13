@@ -1,23 +1,37 @@
 /**
  * Projects Section Styles — Space Theme
  *
- * Uses CSS Grid for the card layout with responsive breakpoints.
- * Grid auto-adjusts columns: 1 on mobile, 2 on medium, 3 on large screens.
- * Cards use theme surface and border variables for visual separation.
+ * Cards are a fixed 300px wide and never stretch. The grid is capped at
+ * 2 columns and centered. When the viewport is too narrow to fit both
+ * cards side-by-side (≤ 688px: 2 × 300px cards + 1.5rem gap + section
+ * padding), the grid collapses to a single centered column. The card
+ * size never changes — only the column count does.
  *
  * Base section layout (max-width, margin, padding) and heading styles
  * are inherited from global section rules in index.css.
  */
 
 /*
- * Responsive grid using auto-fit with a minimum column width of 300px.
- * Columns expand to fill available space, and the grid automatically
- * wraps to fewer columns on narrow viewports — no media queries needed.
+ * Two fixed-width columns, centered in the section.
+ * justify-content: center ensures the grid doesn't stretch to fill the
+ * full section width when there are fewer cards than columns.
  */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 300px);
+  justify-content: center;
   gap: 1.5rem;
+}
+
+/*
+ * Collapse to a single column when the viewport can no longer fit two
+ * 300px cards plus the gap and section padding side-by-side.
+ * Card width stays fixed at 300px — no resizing occurs.
+ */
+@media (max-width: 688px) {
+  .grid {
+    grid-template-columns: 300px;
+  }
 }
 
 /*
