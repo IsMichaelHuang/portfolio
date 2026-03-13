@@ -89,3 +89,14 @@
 .link:hover {
   color: var(--color-text);
 }
+
+/*
+ * .active — applied to the link whose target section is currently in view.
+ *
+ * Uses accent color to match the brand hover treatment, making it clear
+ * which section the user is reading. The selector is intentionally separate
+ * from :hover so both states can coexist independently.
+ */
+.active {
+  color: var(--color-accent);
+}
