@@ -15,7 +15,8 @@ function Contact() {
   return (
     <section id="contact" className={styles.section}>
       <h2 className={styles.heading}>Get In Touch</h2>
-      {/* heading className overrides global section > h2 margin for tighter spacing */}
+      {/* heading className overrides global section > h2 margin for
+          tighter spacing */}
       <p className={styles.message}>
         I'm currently open to new opportunities. Whether you have a question
         or just want to connect, feel free to reach out.
@@ -24,7 +25,10 @@ function Contact() {
        * mailto: link opens the visitor's default email client.
        * No target="_blank" needed — the OS handles mail client routing.
        */}
-      <a href="mailto:michael.micah.huang@gmail.com" className={styles.emailLink}>
+      <a
+        href="mailto:michael.micah.huang@gmail.com"
+        className={styles.emailLink}
+      >
         Email
       </a>
       <div className={styles.links}>

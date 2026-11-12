@@ -17,7 +17,8 @@ import styles from "./Hero.module.css";
 function Hero() {
   return (
     <section id="hero" className={styles.hero}>
-      {/* h1 is used exactly once per page for the primary heading (accessibility & SEO) */}
+      {/* h1 is used exactly once per page for the primary heading
+          (accessibility & SEO) */}
       <h1 className={styles.name}>Michael Huang</h1>
       <p className={styles.title}>Software Engineer</p>
       <p className={styles.blurb}>
@@ -35,11 +36,13 @@ function Hero() {
         </a>
         {/*
          * External links use:
-         *   target="_blank"         — opens in a new tab so users don't leave the portfolio
-         *   rel="noopener"          — prevents the new tab from accessing window.opener
+         *   target="_blank"         — opens in a new tab so users don't
+         *                             leave the portfolio
+         *   rel="noopener"          — prevents the new tab from accessing
+         *                             window.opener
          *                             (mitigates reverse tabnapping attacks)
-         *   rel="noreferrer"        — additionally prevents sending the Referer header
-         *                             to the target site
+         *   rel="noreferrer"        — additionally prevents sending the
+         *                             Referer header to the target site
          */}
         <a
           href="https://github.com/IsMichaelHuang"

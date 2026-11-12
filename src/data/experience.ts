@@ -29,9 +29,15 @@ export const experience: Experience[] = [
     company: "Dynamic Experts",
     period: "Dec 2025 — Jan 2026",
     highlights: [
-      "Architected a production-grade MCP server to expose deep-research capabilities, integrating Gemini 2.5 Pro with markdown sanitization and automated citation handling",
-      "Delivered a fully documented, production-ready codebase with 157 unit tests (Vitest), ensuring seamless handoff to the client engineering team",
-      "Optimized async polling architecture with 90-minute timeout handling to support long-running inference tasks (60+ minutes), solving critical timeout issues in standard HTTP request flows",
+      "Architected a production-grade MCP server to expose deep-research "
+        + "capabilities, integrating Gemini 2.5 Pro with markdown sanitization "
+        + "and automated citation handling",
+      "Delivered a fully documented, production-ready codebase with 157 "
+        + "unit tests (Vitest), ensuring seamless handoff to the client "
+        + "engineering team",
+      "Optimized async polling architecture with 90-minute timeout "
+        + "handling to support long-running inference tasks (60+ minutes), "
+        + "solving critical timeout issues in standard HTTP request flows",
     ],
   },
   {
@@ -40,9 +46,15 @@ export const experience: Experience[] = [
     company: "Solidigm (Formerly Intel NAND)",
     period: "Jun 2022 — Aug 2023",
     highlights: [
-      "Migrated legacy Python 2.7 automation frameworks to Python 3.x, modernizing the codebase for 600+ production-line tests and significantly reducing false-positive failures",
-      "Engineered end-to-end automation scripts that increased test coverage, saving the engineering team approximately 8 hours of manual verification per SKU during testing cycles",
-      "Performed root cause analysis on non-product failures, implementing patch fixes that improved overall testing stability and reduced infrastructure downtime",
+      "Migrated legacy Python 2.7 automation frameworks to Python 3.x, "
+        + "modernizing the codebase for 600+ production-line tests and "
+        + "significantly reducing false-positive failures",
+      "Engineered end-to-end automation scripts that increased test "
+        + "coverage, saving the engineering team approximately 8 hours of "
+        + "manual verification per SKU during testing cycles",
+      "Performed root cause analysis on non-product failures, implementing "
+        + "patch fixes that improved overall testing stability and reduced "
+        + "infrastructure downtime",
     ],
   },
 ];

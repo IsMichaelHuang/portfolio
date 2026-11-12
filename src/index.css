@@ -36,7 +36,8 @@
 
   /* --- Typography --- */
 
-  /* System font stack: uses the OS default, falling back through common sans-serifs */
+  /* System font stack: the OS default, falling back through common
+     sans-serifs */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -48,7 +49,7 @@
   color: var(--color-text);
   background-color: var(--color-bg);
 
-  /* Prevents the browser from auto-synthesizing bold/italic variants of fonts */
+  /* Prevents the browser from auto-synthesizing bold/italic variants */
   font-synthesis: none;
   /* Prioritizes legibility over speed when rendering text */
   text-rendering: optimizeLegibility;
@@ -57,7 +58,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling for anchor links; offset accounts for the fixed navbar height */
+/* Smooth scrolling for anchor links; offset accounts for the fixed
+   navbar height */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 64px;

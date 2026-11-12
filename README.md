@@ -100,8 +100,15 @@ npm run lint      # Run ESLint
 ```bash
 npm test            # Unit tests (Vitest + Testing Library)
 npm run test:e2e    # Playwright; builds and serves via vite preview
+npm run check:limits  # Fails on files over 400 lines or 80 columns
 ```
 
 Unit tests live beside the code as `*.test.ts(x)` and under
 `scripts/`. E2E specs live in `e2e/` and run against the production
 build on `http://localhost:4173/portfolio/`.
+
+`check:limits` lists every tracked file with a line over 80
+characters (`WIDE file:line`) or more than 400 lines
+(`LONG file (n)`) and exits 1; it prints nothing when the repo is
+compliant. `package-lock.json`, `public/` and the generated
+`src/data/projects.ts` are exempt.

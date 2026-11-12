@@ -27,8 +27,10 @@ on:
   push:
     branches: [main]            # Deploy on every push to the default branch
   schedule:
-    - cron: "0 0 * * *"         # Run daily at midnight UTC to refresh project data
-  workflow_dispatch:             # Allow manual trigger from the GitHub Actions UI
+    # Run daily at midnight UTC to refresh project data
+    - cron: "0 0 * * *"
+  # Allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
 
 # --- Token permissions ---
 # Scoped to the minimum needed: read source code, write to Pages.
@@ -50,7 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}    # Outputs the live URL after deploy
+      # Outputs the live URL after deploy
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,7 +62,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm              # Caches node_modules between runs for faster installs
+          # Caches node_modules between runs for faster installs
+          cache: npm
 
       # npm ci (clean install) installs exact versions from package-lock.json.
       # Preferred over npm install in CI — deterministic and faster.

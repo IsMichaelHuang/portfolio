@@ -13,7 +13,8 @@
   align-items: center;       /* Horizontal centering */
   justify-content: center;   /* Vertical centering */
   min-height: 100vh;         /* Fill the entire viewport height */
-  padding: 2rem;             /* Prevent content from touching viewport edges on small screens */
+  /* Prevent content from touching viewport edges on small screens */
+  padding: 2rem;
   text-align: center;
 }
 
@@ -30,7 +31,8 @@
   color: var(--color-text-muted);
 }
 
-/* Short description — most de-emphasized; max-width keeps line length readable */
+/* Short description — most de-emphasized; max-width keeps line length
+   readable */
 .blurb {
   font-size: 1.125rem;
   margin: 0 0 2rem;

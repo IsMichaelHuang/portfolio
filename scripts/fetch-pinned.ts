@@ -115,7 +115,9 @@ async function fetchPinnedRepos(): Promise<GitHubRepo[]> {
   });
 
   if (!res.ok) {
-    throw new Error(`GitHub API responded with ${res.status}: ${await res.text()}`);
+    throw new Error(
+      `GitHub API responded with ${res.status}: ${await res.text()}`,
+    );
   }
 
   const json = await res.json();
