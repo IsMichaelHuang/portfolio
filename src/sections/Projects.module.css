@@ -1,31 +1,266 @@
 /**
  * Projects Section Styles — Space Theme
  *
- * Cards are at most 450px wide and shrink on viewports narrower than
- * a card. The grid is capped at 2 columns and centered. When the
- * viewport is too narrow for both cards side-by-side (≤ 987px), the
- * grid collapses to a single centered column. Cards have no minimum
- * height: row-mates match because the grid stretches them, and each
- * card's tags and links are pinned to its bottom edge. On the
- * two-column layout an odd last card is centered under the pair.
+ * Everything sits in one 880px left-aligned column shared with the
+ * section heading. Hackathons: three equal columns from 720px, each
+ * under a hairline, stacked below (the place and event share a row).
+ * Featured projects: ledger rows matching Experience (11rem
+ * metadata column + content, hairline between rows). Also on
+ * GitHub: a two-up card grid filling the column, a single 450px
+ * column at 987px and below; an odd last card is centred at the
+ * width of one column. Cards have no minimum height, row-mates
+ * stretch, and tags and links are pinned to the card bottom.
  *
- * Base section layout (max-width, margin, padding) and heading styles
- * are inherited from global section rules in index.css.
+ * Base section layout and heading styles come from index.css.
  */
 
-/*
- * Two fixed-width columns, centered in the section.
- * justify-content: center ensures the grid doesn't stretch to fill the
- * full section width when there are fewer cards than columns.
- */
+.column {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+/* h3 for Hackathons and Also on GitHub */
+.blockHeading {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 0.75rem;
+}
+
+.lede,
+.takeaway {
+  margin: 0 0 1rem;
+  max-width: 44rem;
+  font-family: var(--font-body);
+  line-height: 1.7;
+}
+
+.lede {
+  color: var(--color-text-muted);
+}
+
+/* Plain paragraph, a little larger than body, primary colour */
+.takeaway {
+  font-size: 1.125rem;
+  color: var(--color-text);
+  margin-bottom: 2rem;
+}
+
+/* --- Hackathons --- */
+
+.hackathons {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 720px) {
+  .hackathons {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.hackathon {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: baseline;
+  align-content: start;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.hackathon > :not(.place, .event) {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 720px) {
+  .hackathon {
+    display: block;
+  }
+}
+
+.place {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.1;
+  color: var(--color-text-muted);
+}
+
+.event {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.detail {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.project {
+  margin: 0.75rem 0 0.25rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+.text {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+/* --- Featured projects: ledger rows --- */
+
+.row {
+  padding-bottom: 2rem;
+}
+
+.row + .row {
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* Period, then the stack: inline and comma-separated on phones */
+.meta {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.period {
+  display: block;
+  white-space: nowrap;
+}
+
+.stack {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stack li {
+  display: inline;
+}
+
+.stack li:not(:last-child)::after {
+  content: ", ";
+}
+
+/* From 720px: metadata in column 1 (explicit placement, no order),
+   one stack item per line */
+@media (min-width: 720px) {
+  .row {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 0.5rem;
+  }
+
+  .row > :not(.meta) {
+    grid-column: 2;
+  }
+
+  .meta {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    margin: 0;
+    padding-top: 0.4rem;
+  }
+
+  .stack li {
+    display: block;
+  }
+
+  .stack li:not(:last-child)::after {
+    content: none;
+  }
+}
+
+.highlights {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.highlight {
+  font-size: 1rem;
+  text-wrap: pretty;
+  font-family: var(--font-body);
+  line-height: 1.7;
+  margin-bottom: 0.4rem;
+  color: var(--color-text-muted);
+}
+
+/* Numbers lead */
+.highlight strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.highlight:last-child {
+  margin-bottom: 0;
+}
+
+/* Code links: muted, accent and underlined on hover (the shared
+   plain-text-link hover); 44px tap target on phones */
+.link {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.hackathon .link,
+.row .link {
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.link:hover {
+  color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+}
+
+@media (max-width: 599px) {
+  .link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* --- Also on GitHub --- */
+
+.pinned {
+  margin-top: 4rem;
+}
+
+/* Two cards fill the 880px column; one 450px column at 987px and
+   below */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 450px));
-  justify-content: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
-/* Collapse to a single column when two 450px cards no longer fit. */
 @media (max-width: 987px) {
   .grid {
     grid-template-columns: minmax(0, 450px);
@@ -50,12 +285,12 @@
   .card:last-child:nth-child(odd) {
     grid-column: 1 / -1;
     justify-self: center;
-    width: min(100%, 450px);
+    width: calc((100% - 1.5rem) / 2);
   }
 }
 
 /* Project name */
-.title {
+.cardTitle {
   overflow-wrap: anywhere;
   font-size: 1.25rem;
   margin: 0 0 0.5rem;
@@ -94,27 +329,4 @@
 .links {
   display: flex;
   gap: 1rem;
-}
-
-/* Individual link — muted by default; accent and underlined on hover
-   (the shared plain-text-link hover). 44px tap target on phones. */
-.link {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  transition: color 0.2s;
-}
-
-.link:hover {
-  color: var(--color-accent-text);
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-  text-decoration-thickness: 1px;
-}
-
-@media (max-width: 599px) {
-  .link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-  }
 }

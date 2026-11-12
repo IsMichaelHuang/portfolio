@@ -58,6 +58,15 @@ test('section h2 left edges match the row left edge', async ({ page }) => {
     ).toBeLessThanOrEqual(1)
 })
 
+test('skills values share the ledger right-column edge', async ({
+  page,
+}) => {
+  await open(page, 1280)
+  const dd = (await box(page, '#about dd')).left
+  const h3 = (await box(page, '#experience article h3')).left
+  expect(Math.abs(dd - h3)).toBeLessThanOrEqual(1)
+})
+
 test('about skills are a dl of text rows', async ({ page }) => {
   await open(page, 1280)
   expect(await page.locator('#about dl dt').allTextContents()).toEqual([
@@ -87,9 +96,8 @@ for (const [width, left] of [
   [1280, true],
   [375, false],
 ] as const) {
-  test(`graduation sits ${left ? 'left of' : 'above'} school at ${width}px`, async ({
-    page,
-  }) => {
+  const rel = left ? 'left of' : 'above'
+  test(`graduation sits ${rel} school at ${width}px`, async ({ page }) => {
     await open(page, width, 812)
     const g = await page
       .getByText('Graduated Aug 2025')

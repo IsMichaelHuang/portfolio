@@ -32,14 +32,16 @@ src/
 │   └── mark.webp           # Hero logo mark
 ├── lib/
 │   ├── activeSection.ts    # Pure scroll-spy picker
-│   └── emphasis.tsx        # Renders **bold** markers in data strings
+│   ├── emphasis.tsx        # Renders **bold** markers in data strings
+│   └── pins.ts             # Drops pins already shown as featured work
 ├── sections/
 │   ├── Hero.tsx            # Full-viewport intro (id="hero")
 │   ├── Experience.tsx      # Work history ledger (id="experience")
-│   ├── Projects.tsx        # Project showcase (id="projects")
+│   ├── Projects.tsx        # Hackathons, featured work, pins (id="projects")
 │   ├── About.tsx           # Bio, Education, Skills (id="about")
 │   └── Contact.tsx         # Contact links (id="contact")
-├── data/                   # experience, education, skills, projects
+├── data/                   # experience, education, skills, work,
+│                           # projects (generated)
 ├── test/
 │   └── setup.ts            # Vitest setup (jest-dom)
 ├── App.tsx                 # Composition root — section order lives here
@@ -50,6 +52,7 @@ src/
 e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
 ├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
+├── projects.spec.ts        # Hackathon columns, featured rows, links
 ├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
 ├── nav.spec.ts             # Scroll-spy / aria-current
@@ -174,8 +177,9 @@ column in DOM order. Experience has the grid in its module;
 Education uses the global `.ledger-row` / `.ledger-meta` classes in
 `index.css`. The h2 of Experience, Projects and About is aligned to
 that column by one rule in `index.css` keyed on their ids; Hero and
-Contact headings stay centred. Skills are a `<dl>` with a `8rem`
-label column from 480px.
+Contact headings stay centred. Skills are a `<dl>` with an `8rem`
+label column from 480px and the ledger's `11rem` / `2.5rem` columns
+from 720px, so every right-hand column shares one left edge.
 
 Type: Jost, an open Futura revival, is the display and UI face for
 the name, headings, nav, buttons, pills, labels and dates. Source
@@ -259,6 +263,29 @@ gh workflow enable "Deploy to GitHub Pages"
 
 Actions are pinned to commit SHAs. Dependabot opens one grouped PR a
 month for GitHub Actions and one for npm.
+
+## Projects section
+
+The section has three blocks in the same 880px column as its heading:
+
+1. **Hackathons**: a lede, a takeaway paragraph, and three entries
+   (three columns from 720px, stacked below), each marked "2nd".
+2. **Featured projects**: ledger rows like Experience, with the
+   period and the stack list on the left and the title, highlights
+   and "Code" link on the right.
+3. **Also on GitHub**: cards for the generated pins that are not
+   already shown above. The block, heading included, is absent when
+   none remain.
+
+To add a hackathon or featured project, append an object to
+`hackathons` or `featured` in `src/data/work.ts` (shapes are typed
+there). Wrap the numbers worth noticing in `**double asterisks**`.
+A `repoUrl` adds a "Code" link; leave it out for a private repo.
+
+De-duplication: `remainingPins` in `src/lib/pins.ts` removes every
+generated pin whose `repoUrl` equals the `repoUrl` of a hackathon or
+featured project, ignoring case, a trailing slash and `.git`. A
+renamed repository shows twice until `work.ts` is updated.
 
 ## Projects data
 

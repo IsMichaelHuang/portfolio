@@ -79,7 +79,8 @@
   font-size: 0.9rem;
 }
 
-/* Skills — dt above dd on phones, two columns from 480px */
+/* Skills — dt above dd on phones, two columns from 480px, ledger
+   columns from 720px */
 .skills {
   display: grid;
   gap: 1rem;
@@ -109,5 +110,14 @@
   .group {
     grid-template-columns: 8rem minmax(0, 1fr);
     gap: 0.5rem 2rem;
+  }
+}
+
+/* From 720px the labels share the ledger's 11rem column so every
+   right-hand column on the page starts on one left edge */
+@media (min-width: 720px) {
+  .group {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 2.5rem;
   }
 }

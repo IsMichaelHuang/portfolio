@@ -7,17 +7,36 @@ async function open(page: Page, width: number, height = 800) {
   await page.evaluate(() => document.fonts.ready)
 }
 
-// Cards are the h3 parents inside #projects (class names are hashed).
+// Cards are the h4 parents inside #pinned (class names are hashed).
 const cards = (page: Page) =>
-  page.locator('#projects h3').locator('xpath=..')
+  page.locator('#pinned h4').locator('xpath=..')
 
-test('last odd card is centred, 450px wide at 1280px', async ({ page }) => {
+// Clone a card until there are `n`; skip when no pins are rendered.
+async function ensureCards(page: Page, n: number) {
+  const have = await page.locator('#pinned h4').count()
+  test.skip(have === 0, '#pinned is absent: no pins left to test')
+  await page.evaluate((n) => {
+    const first = document.querySelector('#pinned h4')!.parentElement!
+    while (document.querySelectorAll('#pinned h4').length < n)
+      first.parentElement!.append(first.cloneNode(true))
+  }, n)
+}
+
+test('last odd card is centred, one column wide at 1280px', async ({
+  page,
+}) => {
   await open(page, 1280)
+  await ensureCards(page, 3)
+  // drop to exactly three cards so the last one is odd
+  await page.evaluate(() => {
+    const hs = document.querySelectorAll('#pinned h4')
+    for (let i = hs.length - 1; i >= 3; i--) hs[i].parentElement!.remove()
+  })
   const all = await cards(page).all()
   expect(all.length % 2).toBe(1)
   const last = (await all[all.length - 1].boundingBox())!
   const grid = (await cards(page).first().locator('xpath=..').boundingBox())!
-  expect(last.width).toBe(450)
+  expect(last.width).toBe(428)
   expect(
     Math.abs(last.x + last.width / 2 - (grid.x + grid.width / 2)),
   ).toBeLessThanOrEqual(1)
@@ -27,6 +46,7 @@ test('row-mates match height and align their link rows', async ({
   page,
 }) => {
   await open(page, 1280)
+  await ensureCards(page, 2)
   const all = await cards(page).all()
   const [a, b] = [await all[0].boundingBox(), await all[1].boundingBox()]
   expect(a!.height).toBe(b!.height)
@@ -40,8 +60,9 @@ test('row-mates match height and align their link rows', async ({
 
 test('cards without descriptions have no forced void', async ({ page }) => {
   await open(page, 1280)
+  await ensureCards(page, 4)
   await page.evaluate(() => {
-    const all = Array.from(document.querySelectorAll('#projects h3')).map(
+    const all = Array.from(document.querySelectorAll('#pinned h4')).map(
       (h) => h.parentElement!,
     )
     for (const c of [all[2], all[3]]) c.querySelector('p')?.remove()
@@ -54,6 +75,7 @@ test('cards without descriptions have no forced void', async ({ page }) => {
 
 test('last card matches the others at 375px', async ({ page }) => {
   await open(page, 375)
+  await ensureCards(page, 3)
   const all = await cards(page).all()
   const first = (await all[0].boundingBox())!
   const last = (await all[all.length - 1].boundingBox())!
