@@ -21,7 +21,9 @@ function Projects() {
         {projects.map((project) => (
           <div key={project.id} className={styles.card}>
             <h3 className={styles.title}>{project.title}</h3>
-            <p className={styles.description}>{project.description}</p>
+            {project.description && (
+              <p className={styles.description}>{project.description}</p>
+            )}
             <div className={styles.tags}>
               {project.tags.map((tag) => (
                 <span key={tag} data-pill className={styles.tag}>
