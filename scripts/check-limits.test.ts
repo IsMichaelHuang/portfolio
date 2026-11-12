@@ -40,6 +40,14 @@ describe('check-limits.sh', () => {
     expect(run()).toEqual({ out: 'LONG b.txt (401)\n', code: 1 })
   })
 
+  it('allows a SHA-pinned action line, which cannot be wrapped', () => {
+    const sha = 'a'.repeat(40)
+    const pin = `      - uses: actions/upload-pages-artifact@${sha} # v5.0.0`
+    put('.github/workflows/x.yml', `${pin}\n`)
+    expect(pin.length).toBeGreaterThan(80)
+    expect(run()).toEqual({ out: '', code: 0 })
+  })
+
   it('ignores exempt paths', () => {
     const wide = `${'x'.repeat(200)}\n`
     put('package-lock.json', wide)
