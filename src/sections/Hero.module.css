@@ -43,12 +43,12 @@
   color: var(--color-text-muted);
 }
 
-/* Short description — most de-emphasized; max-width keeps line length
-   readable */
+/* Short description — most de-emphasized. Wide enough to sit on one
+   line on desktop, so "multi-agent" never breaks at its hyphen. */
 .blurb {
   font-size: 1.125rem;
   margin: 0 0 2rem;
-  max-width: 500px;
+  max-width: 36rem;
   color: var(--color-text-muted);
   /* Even line lengths, so the last word never sits alone */
   text-wrap: balance;
