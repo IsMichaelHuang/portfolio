@@ -10,12 +10,14 @@
  */
 
 import styles from "./Contact.module.css";
+import ExternalLink from "../components/ExternalLink";
 
 function Contact() {
   return (
     <section id="contact" className={styles.section}>
       <h2 className={styles.heading}>Get In Touch</h2>
-      {/* heading className overrides global section > h2 margin for tighter spacing */}
+      {/* heading className overrides global section > h2 margin for
+          tighter spacing */}
       <p className={styles.message}>
         I'm currently open to new opportunities. Whether you have a question
         or just want to connect, feel free to reach out.
@@ -24,26 +26,25 @@ function Contact() {
        * mailto: link opens the visitor's default email client.
        * No target="_blank" needed — the OS handles mail client routing.
        */}
-      <a href="mailto:michael.micah.huang@gmail.com" className={styles.emailLink}>
-        Email
+      <a
+        href="mailto:michael.micah.huang@gmail.com"
+        className={styles.emailLink}
+      >
+        michael.micah.huang@gmail.com
       </a>
       <div className={styles.links}>
-        <a
+        <ExternalLink
           href="https://github.com/IsMichaelHuang"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           GitHub
-        </a>
-        <a
+        </ExternalLink>
+        <ExternalLink
           href="https://www.linkedin.com/in/michael-micah-huang/"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           LinkedIn
-        </a>
+        </ExternalLink>
       </div>
     </section>
   );

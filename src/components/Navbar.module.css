@@ -53,7 +53,7 @@
 }
 
 .brand:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 /*
@@ -82,6 +82,9 @@
  */
 .link {
   font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   color: var(--color-text-muted);
   transition: color 0.2s;
 }
@@ -98,5 +101,50 @@
  * from :hover so both states can coexist independently.
  */
 .active {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+/* The mark sits beside the text brand from 600px up. */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Visually hidden below 600px; stays the link's accessible name. */
+.brandText {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 600px) {
+  .brandText {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+/* Narrow screens: tighter padding and gap so the brand and four links
+   fit at 320px. */
+@media (max-width: 599px) {
+  .nav {
+    padding: 0.25rem 1rem;
+  }
+
+  /* 44px tap targets; the bar is then 53px tall (--nav-h: 3.25rem) */
+  .brand,
+  .link {
+    min-height: 44px;
+  }
+
+  .links {
+    gap: 0.75rem;
+  }
 }

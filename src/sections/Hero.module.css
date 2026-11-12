@@ -1,9 +1,11 @@
 /**
  * Hero Section Styles — Space Theme
  *
- * Vertically and horizontally centers all content within a full-viewport
- * container. Visual hierarchy uses the theme's text/muted color variables
- * rather than raw opacity values.
+ * Centers the mark, name, role, summary and links in a full-viewport
+ * container (85svh on phones, so the next heading peeks in). The
+ * Resume link is the lead action, styled like the Contact email
+ * button. Children fade and rise once on load, staggered; content
+ * has no base opacity, so it shows even if the animation never runs.
  */
 
 /* Full-viewport centered container */
@@ -12,14 +14,35 @@
   flex-direction: column;
   align-items: center;       /* Horizontal centering */
   justify-content: center;   /* Vertical centering */
-  min-height: 100vh;         /* Fill the entire viewport height */
-  padding: 2rem;             /* Prevent content from touching viewport edges on small screens */
+  min-height: 100vh;         /* Fallback for browsers without svh */
+  min-height: 100svh;        /* Fill the viewport; ignores mobile URL bar */
+  /* Prevent content from touching viewport edges on small screens */
+  padding: 2rem;
   text-align: center;
+}
+
+/* Phones: shorter hero so the About heading shows in the first screen */
+@media (max-width: 599px) {
+  .hero {
+    min-height: 85vh;
+    min-height: 85svh;
+  }
+}
+
+/* Logo mark — soft accent glow, not neon */
+.mark {
+  width: 128px;
+  height: 128px;
+  margin: 0 0 1.5rem;
+  filter: drop-shadow(0 0 24px rgba(74, 108, 247, 0.25));
 }
 
 /* Primary heading — largest text on the page */
 .name {
-  font-size: 3rem;
+  font-size: clamp(2.75rem, 2rem + 3.6vw, 4.75rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
   margin: 0 0 0.5rem;
 }
 
@@ -30,18 +53,23 @@
   color: var(--color-text-muted);
 }
 
-/* Short description — most de-emphasized; max-width keeps line length readable */
+/* Short description — most de-emphasized. Wide enough to sit on one
+   line on desktop, so "multi-agent" never breaks at its hyphen. */
 .blurb {
   font-size: 1.125rem;
   margin: 0 0 2rem;
-  max-width: 500px;
+  max-width: 36rem;
   color: var(--color-text-muted);
+  /* Even line lengths, so the last word never sits alone */
+  text-wrap: balance;
 }
 
-/* CTA link row — flexbox with gap for even spacing without margin hacks */
+/* CTA link row — wraps on narrow screens; gap gives even spacing */
 .links {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 1.5rem;
 }
 
 /*
@@ -49,6 +77,9 @@
  * Accent color on hover provides a subtle interactive glow.
  */
 .link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 0.5rem 1.25rem;
   border: 1px solid var(--color-border);
   border-radius: 4px;
@@ -58,5 +89,39 @@
 
 .link:hover {
   border-color: var(--color-accent);
-  color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+/* Resume is the lead action: accent border and text at rest */
+.link:first-child {
+  border-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.link:first-child:hover {
+  background-color: rgba(74, 108, 247, 0.12);
+}
+
+/* The one load animation: each child fades and rises, 70ms apart */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.hero > * {
+  animation: rise 350ms ease-out backwards;
+}
+
+.hero > :nth-child(2) { animation-delay: 70ms; }
+.hero > :nth-child(3) { animation-delay: 140ms; }
+.hero > :nth-child(4) { animation-delay: 210ms; }
+.hero > :nth-child(5) { animation-delay: 280ms; }
+
+/* Delays would otherwise leave animations "running" */
+@media (prefers-reduced-motion: reduce) {
+  .hero > * {
+    animation: none;
+  }
 }

@@ -50,8 +50,11 @@
   margin: 0;
 }
 
-/* Date period — muted, aligned to the right on wide screens */
+/* Date period — muted, aligned to the right on wide screens;
+   tabular figures, never broken across lines */
 .period {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
   font-size: 0.9rem;
   color: var(--color-text-muted);
 }
@@ -71,8 +74,10 @@
 
 /* Individual bullet — comfortable spacing between items */
 .highlight {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  text-wrap: pretty;
+  font-family: var(--font-body);
+  line-height: 1.7;
   margin-bottom: 0.4rem;
   color: var(--color-text-muted);
 }

@@ -1,9 +1,10 @@
 /**
  * Hero Section
  *
- * The full-viewport introductory section at the top of the page.
- * Displays the user's name, title, a short description, and
- * call-to-action links (resume, GitHub, LinkedIn).
+ * The full-viewport introductory section at the top of the page:
+ * the logo mark (decorative), name, role, a one-line summary, and
+ * links (resume, GitHub, LinkedIn, email). Children fade and rise once on
+ * load; reduced motion turns that off.
  *
  * The id="hero" attribute serves as a scroll anchor, allowing
  * navigation links elsewhere on the page to jump here via href="#hero".
@@ -12,50 +13,55 @@
  * class name collisions with other components.
  */
 
+import mark from "../assets/mark.webp";
 import styles from "./Hero.module.css";
+import ExternalLink from "../components/ExternalLink";
 
 function Hero() {
   return (
     <section id="hero" className={styles.hero}>
-      {/* h1 is used exactly once per page for the primary heading (accessibility & SEO) */}
+      <img
+        src={mark}
+        alt=""
+        width={128}
+        height={128}
+        fetchPriority="high"
+        decoding="async"
+        className={styles.mark}
+      />
+      {/* h1 is used exactly once per page for the primary heading
+          (accessibility & SEO) */}
       <h1 className={styles.name}>Michael Huang</h1>
       <p className={styles.title}>Software Engineer</p>
       <p className={styles.blurb}>
-        Building across full-stack, AI, and beyond.
+        Applied AI engineer — multi-agent systems and LLM
+        infrastructure.
       </p>
       <div className={styles.links}>
-        {/* Internal link — serves a static PDF from the assets directory */}
-        <a 
-          href="/portfolio/resume.pdf" 
-          target="_blank"
-          rel="noopener noreferrer"
+        <ExternalLink
+          href={`${import.meta.env.BASE_URL}resume.pdf`}
+          hint="PDF"
           className={styles.link}
         >
           Resume
-        </a>
-        {/*
-         * External links use:
-         *   target="_blank"         — opens in a new tab so users don't leave the portfolio
-         *   rel="noopener"          — prevents the new tab from accessing window.opener
-         *                             (mitigates reverse tabnapping attacks)
-         *   rel="noreferrer"        — additionally prevents sending the Referer header
-         *                             to the target site
-         */}
-        <a
+        </ExternalLink>
+        <ExternalLink
           href="https://github.com/IsMichaelHuang"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           GitHub
-        </a>
-        <a
+        </ExternalLink>
+        <ExternalLink
           href="https://www.linkedin.com/in/michael-micah-huang/"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           LinkedIn
+        </ExternalLink>
+        <a
+          href="mailto:michael.micah.huang@gmail.com"
+          className={styles.link}
+        >
+          Email
         </a>
       </div>
     </section>

@@ -9,6 +9,16 @@
  * mode override. Colors are defined as CSS custom properties so
  * components can reference them without hardcoding values.
  *
+ * Stars: a static scattering of small dots tiles over the body
+ * background (no image, no JS, no animation).
+ *
+ * Type: two self-hosted faces (@fontsource-variable, no third-party
+ * requests). Jost, an open Futura revival, is the display/UI face
+ * (--font-display: headings, nav, buttons, pills, labels, dates).
+ * Source Serif 4, roman and italic, is the prose face (--font-body:
+ * bio, bullets, descriptions). font-synthesis is none, so italics
+ * come from the real italic file.
+ *
  * Color philosophy:
  *   - Deep blue-black background evokes the void of space
  *   - Text is soft cool white, never harsh pure white
@@ -26,18 +36,31 @@
   /** Primary text — soft cool white, easy on the eyes against deep dark */
   --color-text: rgba(230, 235, 245, 0.9);
   /** De-emphasized text — for subtitles, labels, secondary content */
-  --color-text-muted: rgba(230, 235, 245, 0.5);
+  --color-text-muted: rgba(230, 235, 245, 0.62);
   /** Accent — a cool blue like a distant star, used for interactive elements */
   --color-accent: #4a6cf7;
+  /** Accent for TEXT — lighter tint of the accent, at least 4.5:1 on
+      bg and surface (--color-accent stays for borders and fills) */
+  --color-accent-text: #8098ff;
   /** Surface — barely-visible white tint for cards, pills, and borders */
   --color-surface: rgba(255, 255, 255, 0.05);
   /** Border — subtle separation between elements */
   --color-border: rgba(255, 255, 255, 0.1);
+  /** Focus ring — light blue, at least 3:1 against bg and surface */
+  --color-focus: #b4c2ff;
+  /** Fixed navbar height; keep at or below the bar's real height */
+  --nav-h: 4rem;
 
   /* --- Typography --- */
 
-  /* System font stack: uses the OS default, falling back through common sans-serifs */
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /** Display/UI face: Jost, then the OS sans */
+  --font-display: "Jost Variable", system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+  /** Prose face: Source Serif 4, then the OS serif */
+  --font-body: "Source Serif 4 Variable", "Iowan Old Style", Georgia,
+    "Times New Roman", serif;
+
+  font-family: var(--font-display);
   line-height: 1.5;
   font-weight: 400;
 
@@ -48,7 +71,7 @@
   color: var(--color-text);
   background-color: var(--color-bg);
 
-  /* Prevents the browser from auto-synthesizing bold/italic variants of fonts */
+  /* Prevents the browser from auto-synthesizing bold/italic variants */
   font-synthesis: none;
   /* Prioritizes legibility over speed when rendering text */
   text-rendering: optimizeLegibility;
@@ -57,10 +80,33 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling for anchor links; offset accounts for the fixed navbar height */
+/* Smooth scrolling for anchor links; offset keeps targets and focused
+   content below the fixed navbar */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 64px;
+  scroll-padding-top: var(--nav-h);
+}
+
+@media (max-width: 599px) {
+  :root {
+    --nav-h: 3.25rem;
+  }
+}
+
+/* Honour the OS "reduce motion" setting: no smooth scroll, no
+   animated transitions or animations */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* --- Resets --- */
@@ -81,6 +127,36 @@ body {
   margin: 0;
   /* Prevent horizontal scroll on very narrow viewports */
   min-width: 320px;
+  /* Static starfield: small dots in three tile sizes so the repeat is
+     not obvious. Default scroll attachment (fixed repaints under the
+     blurred navbar). */
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(220, 230, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 58% 64%, rgba(220, 230, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 84% 38%, rgba(220, 230, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 31% 88%, rgba(220, 230, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 22% 46%, rgba(220, 230, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 71% 12%, rgba(220, 230, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 90% 80%, rgba(220, 230, 255, 0.3), transparent),
+    radial-gradient(2px 2px at 46% 30%, rgba(220, 230, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 8% 70%, rgba(220, 230, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 63% 52%, rgba(220, 230, 255, 0.4), transparent),
+    radial-gradient(2px 2px at 37% 8%, rgba(220, 230, 255, 0.65), transparent),
+    radial-gradient(1px 1px at 80% 92%, rgba(220, 230, 255, 0.7), transparent);
+  background-size:
+    420px 420px,
+    420px 420px,
+    420px 420px,
+    420px 420px,
+    610px 610px,
+    610px 610px,
+    610px 610px,
+    610px 610px,
+    830px 830px,
+    830px 830px,
+    830px 830px,
+    830px 830px;
 }
 
 /*
@@ -90,6 +166,16 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+a:active {
+  opacity: 0.7;
+}
+
+/* Themed text selection */
+::selection {
+  background: rgba(74, 108, 247, 0.35);
+  color: #fff;
 }
 
 /* --- Shared Section Layout --- */
@@ -107,15 +193,31 @@ section {
   padding: 4rem 2rem;
 }
 
+@media (max-width: 599px) {
+  section {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
 /*
  * Shared section heading style for any <h2> that is a direct
  * child of a <section>. Provides consistent font size, centering,
  * and bottom spacing across all sections.
  */
 section > h2 {
-  font-size: 2rem;
+  font-size: clamp(1.75rem, 1.55rem + 1vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
   text-align: center;
+  text-wrap: balance;
   margin: 0 0 2.5rem;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
 }
 
 /* --- Shared Pill Style --- */
@@ -131,4 +233,43 @@ section > h2 {
   border-radius: 4px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+}
+
+/* --- Accessibility Utilities --- */
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* main is only focused programmatically (skip link target) */
+main:focus {
+  outline: none;
+}
+
+/* Visually hidden, still read by assistive tech */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Off-screen until focused; above the fixed navbar (z-index 100) */
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 200;
+  padding: 0.5rem 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-focus);
+  border-radius: 4px;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
 }
