@@ -61,11 +61,12 @@ say, in a layout that reads like a well-set resume, not a template.
   five skill groups as a `<dl>` of text rows with AI/ML first; no
   pill elements remain in About.
 - R8: Given the page, then sections run Hero, Experience, Projects,
-  About, Contact; the nav lists those four in that order; and the
-  nav hrefs equal the section ids in document order.
+  About, Contact; the nav's four section links (the brand link
+  excluded) are in that order and equal the section ids after Hero.
 - R9: Given `dist/`, then `resume.pdf` is the new file (its
-  inflated text matches `Credit\s*Karma`) and the description and
-  Open Graph copy match the content file.
+  inflated text, with kerning breaks removed, contains "Credit
+  Karma") and the description and Open Graph copy match the
+  content file.
 - R10: Given 320px to 1920px, then there is no horizontal scroll,
   axe finds no WCAG A or AA violation, phone links are at least
   44px tall, and the keyboard, motion, fonts, and nav specs pass.
@@ -110,8 +111,10 @@ Contact stay. What changes:
 - **Skills.** `<dl>`; at 480px and up
   `grid-template-columns: 8rem minmax(0, 1fr)`; `dt` Jost 500,
   `dd` serif, muted.
-- **Also on GitHub.** The existing cards under an h3; card titles
-  become h4.
+- **Also on GitHub.** The existing cards under an h3, inside a
+  plain `<div id="pinned">` (not a nested `<section>`, which the
+  global section rules and the landmark test would catch); card
+  titles become h4.
 
 Heading levels: h2 section; h3 company, project title, "Hackathons",
 "Education", "Skills", "Also on GitHub"; h4 hackathon event and pin
@@ -122,8 +125,13 @@ card title.
 - `src/lib/emphasis.tsx` (new): `renderEmphasis(text)`, pure.
 - `src/lib/pins.ts` (new): `remainingPins(projects, urls)`, pure.
 - `src/data/experience.ts` (`location` added), `src/data/work.ts`
-  (new: `hackathons`, `featured`), `src/data/education.ts` (new),
-  `src/data/skills.ts` (rewritten).
+  (new), `src/data/education.ts` (new), `src/data/skills.ts`
+  (rewritten). Shapes in `work.ts`:
+  `Hackathon { id; place; event; detail?; project; text;
+  repoUrl? }` and `Featured { id; title; stack: string[];
+  period?; repoUrl?; highlights: string[] }`. A `repoUrl` renders
+  a "Code" link through `ExternalLink` with the title or project
+  as context; without one, no link.
 - `src/sections/Experience.*`, `Projects.*`, `About.*`, `Hero.*`,
   `src/components/Navbar.tsx`, `src/App.tsx`, `src/index.css`.
 - `index.html`: description and Open Graph copy.
@@ -148,45 +156,56 @@ role and text, never by hashed class. Component tests mock the data
 modules they are not testing; nothing may depend on the current
 contents of the generated `src/data/projects.ts`.
 
-### T1 — content, emphasis, order (PR 1)
+### T1 — content, emphasis, order, hero (PR 1)
 
 ACs: R1, R2, R3, R8, R9, R11 (experience).
 May touch: `src/lib/emphasis.tsx` and its test,
 `src/data/experience.ts`, `src/sections/Experience.tsx`,
-`src/sections/Hero.tsx`, `src/sections/Hero.module.css`,
-`src/App.tsx`, `src/components/Navbar.tsx`, `index.html`,
-`src/**/*.test.tsx`, `scripts/dist.test.ts`, `e2e/*.spec.ts` whose
-assertions this makes false, `README.md`.
+`src/sections/Experience.module.css`, `src/sections/Hero.tsx`,
+`src/sections/Hero.module.css`, `src/App.tsx`,
+`src/components/Navbar.tsx`, `index.html`, `src/**/*.test.tsx`,
+`scripts/dist.test.ts`, `e2e/*.spec.ts` whose assertions this
+makes false, `README.md`.
+Experience markup is final in this task, in this DOM order per
+entry: `h3` company, `p` role, a metadata block holding the period
+and the location, then the `ul`. T2 adds only layout CSS.
+Hero: add the Now line; on phones the mark is 96px and the four
+buttons are a 2 x 2 grid.
 Known existing tests to update, intent kept: `Navbar.test` link
 order; `landmarks.test` section order; `Experience.test` (both
 tests are about the removed hackathon entry: rewrite);
-`Hero.test`; any e2e that assumes About is the first section.
+`e2e/polish.spec.ts` "About lead paragraph and prose typography"
+(the period is no longer `h3 + *`; keep the nowrap and 16px
+checks) and "About heading peeks into the first phone screen"
+(About is no longer second and the hero is taller: assert instead
+that the hero is no taller than the 812px phone viewport).
 Tests first: emphasis (none, one, several, adjacent, mid-word,
 odd count literal, `.env` and `{{PLACEHOLDER}}` fixture, no React
 key warning); Experience order and fields, each `li` text equal to
 the expected literal with markers stripped, each expected bold run
-inside a `strong`; hero Now line; nav hrefs equal section ids in
-DOM order; `dist` description and Open Graph text; `dist/resume.pdf`
-inflated with `node:zlib` matches `/Credit\s*Karma/` (this one test
-is green on arrival because the file is committed first).
+inside a `strong`; the Now element's `textContent` equals the
+content-file string; hero buttons form two rows of two at 375px;
+nav hrefs equal section ids in DOM order; `dist` description and
+Open Graph text; `dist/resume.pdf`: inflate each stream with
+`node:zlib`, delete kerning breaks matching
+`\)\s*-?\d+(\.\d+)?\s*\(`, and expect `/Credit\s*Karma/` (green
+on arrival because the file is committed first).
 
 ### T2 — ledger layout, education, skills (PR 1)
 
 ACs: R4, R7, R10.
-May touch: `src/sections/Experience.*`, `src/sections/About.*`,
-`src/data/education.ts`, `src/data/skills.ts`, `src/index.css`,
-`src/sections/Hero.module.css`, tests, `e2e/*.spec.ts`,
+May touch: `src/sections/Experience.module.css`,
+`src/sections/About.*`, `src/data/education.ts`,
+`src/data/skills.ts`, `src/index.css`, tests, `e2e/*.spec.ts`,
 `README.md`.
-Known existing tests to update, intent kept: `e2e/polish.spec.ts`
-"About lead paragraph and prose typography" (period selector and
-`#about p` indexes; keep the nowrap and 16px assertions).
 Tests first (`e2e/ledger.spec.ts`): at 1280px the period is left
 of the company heading and shares its top (within 8px); at 375px
 the heading is above the period; section h2 left edges equal the
 row left edge; About has Education text and a `dl` with five `dt`
 in order, exact `dd` text, and zero `[data-pill]`; `strong` in a
-bullet computes the `--color-text` color; hero buttons form two
-rows of two at 375px. All existing specs stay green.
+bullet computes the `--color-text` color. All existing specs stay
+green; update `#about p` indexes in `e2e/polish.spec.ts` if the
+Education block shifts them.
 
 ### T3 — hackathons and featured work (PR 2)
 
@@ -195,17 +214,16 @@ May touch: `src/data/work.ts`, `src/lib/pins.ts` and its test,
 `src/sections/Projects.*`, tests, `e2e/*.spec.ts`, `README.md`.
 Known existing tests to update, intent kept: every
 `#projects h3` selector in `e2e/layout.spec.ts` and
-`e2e/polish.spec.ts` (scope them to the "Also on GitHub" block,
-which is a `<section aria-labelledby>` with id `pinned`, and have
-each test build the card count it needs by cloning a card);
-`Projects.test` paragraph count.
+`e2e/polish.spec.ts` (scope them to the cards inside `#pinned`,
+whose titles are now `h4`, and have each test build the card count
+it needs by cloning a card); `Projects.test` paragraph count.
 Tests first: `remainingPins` with inline arrays; Projects with
 mocked data renders the three blocks in order, three "2nd", each
 featured `li` equal to its literal, no link for a project without
-`repoUrl`, no "Also on GitHub" heading when no pins remain;
-`<App />` text has no "Sugawara"; e2e: three hackathon entries
-share a top at 1280px and stack at 375px; new links are 44px tall
-on phones.
+`repoUrl`, no "Also on GitHub" heading when no pins remain; no
+string in `work.ts` or `experience.ts` contains "Sugawara"; e2e:
+three hackathon entries share a top at 1280px and stack at 375px;
+new links are 44px tall on phones.
 
 ## Test plan
 
@@ -258,3 +276,11 @@ words); a denylist of other people's names in tests (it would
 publish those names in the repository); `<time>` elements (no
 machine value for "Present"); changing the hero role and summary
 (kept, which also keeps title, JSON-LD, and noscript in step).
+
+
+Second pass (one reviewer): two more fixes. The PDF text check
+must remove kerning breaks before matching, and "Also on GitHub"
+is a `div`, not a nested `section`. T1 now owns the final
+Experience markup, the hero phone layout, and the two
+`polish.spec` tests its changes break; data shapes are written
+down.
