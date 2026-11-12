@@ -214,13 +214,6 @@ section > h2 {
   margin: 0 0 2.5rem;
 }
 
-/* Scroll anchoring would hold the view at the page bottom only
-   partly when web fonts swap in and resize the project cards, so the
-   section is skipped and the anchor falls to the following section. */
-#projects {
-  overflow-anchor: none;
-}
-
 h1,
 h2,
 h3 {

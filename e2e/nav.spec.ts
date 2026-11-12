@@ -6,6 +6,8 @@ const current = (page: Page) => page.locator('nav [aria-current]')
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('./')
+  // Web fonts resize the page; settle layout before measuring scroll.
+  await page.evaluate(() => document.fonts.ready)
 })
 
 test('no link is current at load', async ({ page }) => {
