@@ -86,6 +86,10 @@ To add a new section:
 
 ## Theme
 
+The page sits on a static starfield: a dozen small dots layered on the
+`body` background in three tile sizes, so there is no image file or
+script. The hero opens with the logo mark above the name.
+
 Dark space aesthetic defined entirely through CSS custom properties
 in `index.css`:
 
