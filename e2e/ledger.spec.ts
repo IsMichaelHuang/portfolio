@@ -87,9 +87,8 @@ for (const [width, left] of [
   [1280, true],
   [375, false],
 ] as const) {
-  test(`graduation sits ${left ? 'left of' : 'above'} school at ${width}px`, async ({
-    page,
-  }) => {
+  const rel = left ? 'left of' : 'above'
+  test(`graduation sits ${rel} school at ${width}px`, async ({ page }) => {
     await open(page, width, 812)
     const g = await page
       .getByText('Graduated Aug 2025')
