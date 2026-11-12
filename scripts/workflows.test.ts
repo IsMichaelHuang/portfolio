@@ -60,15 +60,12 @@ describe('action pins', () => {
     ['ci.yml', ci],
     ['deploy.yml', deploy],
   ])('%s pins third-party actions to a 40-char SHA', (_n, src) => {
-    // Join YAML double-quote line continuations first.
-    const text = src
-      .replace(/\\\n\s*/g, '')
-      .replace(/uses: "(.*)"/g, 'uses: $1')
-    const uses = [...text.matchAll(/^\s*(?:- )?uses: (\S+)/gm)].map(
+    // "owner/action@<sha> # vX.Y.Z" is the shape Dependabot rewrites.
+    const uses = [...src.matchAll(/^\s*(?:- )?uses: (.+)$/gm)].map(
       (m) => m[1],
     )
     for (const u of uses.filter((x) => !x.startsWith('./'))) {
-      expect(u).toMatch(/^[\w.-]+\/[\w./-]+@[0-9a-f]{40}$/)
+      expect(u).toMatch(/^[\w.-]+\/[\w./-]+@[0-9a-f]{40} # v[\d.]+$/)
     }
   })
 })

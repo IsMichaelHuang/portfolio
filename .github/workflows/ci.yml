@@ -2,17 +2,15 @@
 # CI
 # =============================================================================
 #
-# Lint, build, unit, e2e and file-limit checks. Runs on pull requests, on
-# pushes to any branch except main, and when deploy.yml calls it, so a
-# deploy only starts after the same checks pass. Read-only token, no secrets.
+# Lint, build, unit, e2e and file-limit checks. Runs on pull requests and
+# when deploy.yml calls it, so a deploy only starts after the same checks
+# pass. Read-only token, no secrets.
 # =============================================================================
 
 name: CI
 
 on:
   pull_request:
-  push:
-    branches-ignore: [main]
   workflow_call:
 
 permissions:
@@ -27,14 +25,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        # actions/checkout v7.0.1
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup Node
-        # actions/setup-node v7.1.0
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
           cache: npm
