@@ -13,12 +13,8 @@ const html = readFileSync(indexPath, 'utf8')
 const parse = (s: string) => new DOMParser().parseFromString(s, 'text/html')
 const doc = parse(html)
 
-// Long values wrap across lines in the source; whitespace collapses.
 const meta = (attr: string, key: string) =>
-  doc
-    .querySelector(`meta[${attr}="${key}"]`)
-    ?.getAttribute('content')
-    ?.replace(/\s+/g, ' ')
+  doc.querySelector(`meta[${attr}="${key}"]`)?.getAttribute('content')
 const link = (rel: string) =>
   doc.querySelector(`link[rel="${rel}"]`)?.getAttribute('href')
 
@@ -28,6 +24,16 @@ function png(file: string) {
 }
 
 describe('dist/index.html', () => {
+  // Long values wrap across lines in the source; the build joins them
+  // so link previews never show stray newlines or runs of spaces.
+  it('has single-line meta content values', () => {
+    const values = Array.from(
+      doc.querySelectorAll('meta[content]'),
+      (m) => m.getAttribute('content'),
+    )
+    for (const v of values) expect(v).not.toMatch(/\n|\s{2,}|^\s|\s$/)
+  })
+
   it('has the title and language', () => {
     expect(doc.title).toBe('Michael Huang — Software Engineer')
     expect(doc.documentElement.lang).toBe('en')

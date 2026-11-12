@@ -75,7 +75,9 @@ link, Open Graph and Twitter card tags (absolute URLs under
 `color-scheme`, a referrer policy, and a minimal Person JSON-LD block
 (name, job title, URL, GitHub and LinkedIn). A `<noscript>` block
 shows the name, role, focus line and Resume, GitHub, LinkedIn and
-Email links when JavaScript is off.
+Email links when JavaScript is off. Long `content` values wrap
+across lines in the source; the `single-line-meta` plugin in
+`vite.config.ts` joins them at build time.
 
 Images live in `public/`: `favicon.png` (square, 64x64),
 `apple-touch-icon.png` (180x180) and `og.png` (1200x630). Vite
