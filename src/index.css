@@ -214,10 +214,59 @@ section > h2 {
   margin: 0 0 2.5rem;
 }
 
+/*
+ * Experience, Projects and About run a left-aligned 880px column.
+ * Their h2 shares that column so its left edge meets the rows below.
+ * Hero and Contact stay centred. IDs outrank section > h2.
+ */
+#experience > h2,
+#projects > h2,
+#about > h2 {
+  max-width: 880px;
+  margin: 0 auto 2.5rem;
+  text-align: left;
+}
+
 h1,
 h2,
 h3 {
   font-weight: 600;
+}
+
+/* --- Shared Ledger Row --- */
+
+/*
+ * Resume-style row used by About's Education block (Experience has
+ * the same values in its module). DOM order is heading, meta, rest;
+ * from 720px the meta block takes column 1 across the four rows.
+ * Phones read in DOM order.
+ */
+.ledger-meta {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 720px) {
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 0.5rem;
+  }
+
+  .ledger-row > :not(.ledger-meta) {
+    grid-column: 2;
+  }
+
+  .ledger-meta {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    margin: 0;
+    padding-top: 0.4rem;
+    white-space: nowrap;
+  }
 }
 
 /* --- Shared Pill Style --- */

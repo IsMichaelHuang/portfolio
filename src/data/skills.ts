@@ -1,7 +1,7 @@
 /**
  * Skills Data
  *
- * Typed array of skill groups consumed by the About section.
+ * Typed array of skill groups rendered by About as a <dl>, in order.
  * Each group has a category label and a list of individual skills.
  *
  * Adding a new category or skill means editing this array —
@@ -17,19 +17,58 @@ export interface SkillGroup {
 
 export const skills: SkillGroup[] = [
   {
+    category: "AI/ML",
+    items: [
+      "LLMs",
+      "Agent Orchestration",
+      "Multi-Agent Systems",
+      "MCP",
+      "Claude",
+      "Gemini",
+      "PyTorch",
+      "Scikit-learn",
+    ],
+  },
+  {
     category: "Languages",
-    items: ["Python", "TypeScript", "JavaScript", "C", "C++", "SML/NJ"],
+    items: ["Python", "TypeScript", "JavaScript (ES6+)", "C/C++", "SQL"],
   },
   {
-    category: "Frontend",
-    items: ["React", "HTML5", "CSS3", "Vite"],
-  },
-  {
-    category: "Backend & AI",
-    items: ["Node.js", "FastAPI", "LLMs", "Multi-Agent Systems"],
+    category: "Web",
+    items: [
+      "React",
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "MongoDB",
+      "REST APIs",
+      "HTML5",
+      "CSS3",
+    ],
   },
   {
     category: "Infrastructure",
-    items: ["Docker", "Kubernetes", "Git"],
+    items: [
+      "GCP (BigQuery, GCS)",
+      "Docker",
+      "Kubernetes/k3s",
+      "Redis",
+      "nginx",
+      "Uvicorn",
+      "CI/CD",
+    ],
+  },
+  {
+    category: "Tools",
+    items: [
+      "Git",
+      "Linux",
+      "Vitest",
+      "pytest",
+      "Firecrawl",
+      "Jira",
+      "Confluence",
+      "Agile/Scrum",
+    ],
   },
 ];

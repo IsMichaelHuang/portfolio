@@ -35,10 +35,11 @@ src/
 │   └── emphasis.tsx        # Renders **bold** markers in data strings
 ├── sections/
 │   ├── Hero.tsx            # Full-viewport intro (id="hero")
-│   ├── Experience.tsx      # Work history (id="experience")
+│   ├── Experience.tsx      # Work history ledger (id="experience")
 │   ├── Projects.tsx        # Project showcase (id="projects")
-│   ├── About.tsx           # About me (id="about")
+│   ├── About.tsx           # Bio, Education, Skills (id="about")
 │   └── Contact.tsx         # Contact links (id="contact")
+├── data/                   # experience, education, skills, projects
 ├── test/
 │   └── setup.ts            # Vitest setup (jest-dom)
 ├── App.tsx                 # Composition root — section order lives here
@@ -48,6 +49,7 @@ src/
 └── index.css               # Global styles, theme variables, shared patterns
 e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
+├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
 ├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
 ├── nav.spec.ts             # Scroll-spy / aria-current
@@ -99,6 +101,14 @@ an object (most recent first) with `id`, `company`, `role`, `period`,
 numbers worth noticing in a bullet in `**double asterisks**` and they
 render in bold through `renderEmphasis` in `src/lib/emphasis.tsx`.
 Text with an odd number of `**` markers renders literally.
+
+## Education and skills
+
+Education lives in `src/data/education.ts` (school, degree, detail,
+honor, certification name and issuer) and skills in
+`src/data/skills.ts` (an ordered list of `{ category, items }`).
+About renders them as an Education row and a `<dl>` of text rows,
+the items joined with ", "; edit the data and no JSX changes.
 
 ## Navigation
 
@@ -155,6 +165,17 @@ in `index.css`:
 | `--color-border` | Subtle element borders |
 | `--font-display` | Jost, then the OS sans |
 | `--font-body` | Source Serif 4, then the OS serif |
+
+Layout: Experience and Education are resume-style ledger rows in an
+880px column. From 720px each row is a grid (`11rem minmax(0, 1fr)`,
+gap `0.5rem 2.5rem`): period and location (or "Graduated ...") on
+the left, company or school and bullets on the right; below 720px one
+column in DOM order. Experience has the grid in its module;
+Education uses the global `.ledger-row` / `.ledger-meta` classes in
+`index.css`. The h2 of Experience, Projects and About is aligned to
+that column by one rule in `index.css` keyed on their ids; Hero and
+Contact headings stay centred. Skills are a `<dl>` with a `8rem`
+label column from 480px.
 
 Type: Jost, an open Futura revival, is the display and UI face for
 the name, headings, nav, buttons, pills, labels and dates. Source

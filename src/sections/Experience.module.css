@@ -1,33 +1,34 @@
 /**
  * Experience Section Styles — Space Theme
  *
- * Vertical list layout for work history entries, one column. Each
- * entry is separated with a theme-colored border: company, role,
- * period and location, then bullets.
+ * Resume-style ledger. From 720px each entry is a two-column grid:
+ * period and location on the left, company, role and bullets on the
+ * right. Below 720px it is one column in DOM order.
  *
  * Base section layout and heading styles are inherited from
  * global section rules in index.css.
  */
 
-/* Entries container — constrained for readability like the About bio */
+/* Entries container — the 880px ledger column, left-aligned content */
 .list {
-  max-width: 700px;
+  max-width: 880px;
   margin: 0 auto;
 }
 
 /*
- * Individual entry — theme border separates entries visually.
- * Last entry has no border to avoid a trailing line.
+ * Individual entry — a hairline and 2rem of air separate rows; no
+ * outer border, dots or vertical lines.
  */
 .entry {
   padding-bottom: 2rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid var(--color-border);
+}
+
+.entry + .entry {
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
 }
 
 .entry:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
   padding-bottom: 0;
 }
 
@@ -38,15 +39,17 @@
   font-weight: 600;
   color: var(--color-text);
   margin: 0;
+  text-wrap: balance;
 }
 
 /* Role — muted, under the company */
 .role {
   margin: 0.25rem 0 0;
+  font-size: 1rem;
   color: var(--color-text-muted);
 }
 
-/* Period and location on one line under the role */
+/* Period and location on one line under the role (phones) */
 .meta {
   display: flex;
   flex-wrap: wrap;
@@ -54,12 +57,47 @@
   margin: 0.25rem 0 0.75rem;
   font-size: 0.9rem;
   color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Tabular figures, never broken across lines */
+/* Never broken across lines */
 .period {
-  font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/*
+ * From 720px each entry is a two-column grid. DOM order stays
+ * company, role, meta, bullets; the meta block is placed in column 1
+ * across all three rows. padding-top levels its first baseline with
+ * the company heading's.
+ */
+@media (min-width: 720px) {
+  .entry {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 0.5rem;
+  }
+
+  .entry > :not(.meta) {
+    grid-column: 2;
+  }
+
+  .role {
+    margin: 0;
+  }
+
+  .meta {
+    display: block;
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    margin: 0;
+    padding-top: 0.4rem;
+  }
+
+  .period {
+    display: block;
+  }
 }
 
 /* Bullet list — slight left padding instead of default browser indent */
