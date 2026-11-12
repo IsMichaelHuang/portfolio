@@ -1,6 +1,11 @@
 import { remainingPins } from './pins'
 
-const p = (id: string, repoUrl?: string) => ({ id, title: id, tags: [], repoUrl })
+const p = (id: string, repoUrl?: string) => ({
+  id,
+  title: id,
+  tags: [],
+  repoUrl,
+})
 
 describe('remainingPins', () => {
   const urls = ['https://github.com/o/Alpha']

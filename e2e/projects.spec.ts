@@ -36,7 +36,8 @@ for (const [width, left] of [
   [1280, true],
   [375, false],
 ] as const) {
-  test(`featured stack sits ${left ? 'left of' : 'below'} title at ${width}px`, async ({
+  const where = left ? 'left of' : 'below'
+  test(`featured stack sits ${where} title at ${width}px`, async ({
     page,
   }) => {
     await open(page, width, 812)
@@ -46,7 +47,12 @@ for (const [width, left] of [
         as.map((a) => {
           const h = a.querySelector('h3')!.getBoundingClientRect()
           const s = a.querySelector('ul')!.getBoundingClientRect()
-          return { hLeft: h.left, hBottom: h.bottom, sRight: s.right, sTop: s.top }
+          return {
+            hLeft: h.left,
+            hBottom: h.bottom,
+            sRight: s.right,
+            sTop: s.top,
+          }
         }),
       )
     expect(rows).toHaveLength(3)
