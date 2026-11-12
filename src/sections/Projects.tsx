@@ -12,6 +12,7 @@
 
 import { projects } from "../data/projects";
 import styles from "./Projects.module.css";
+import ExternalLink from "../components/ExternalLink";
 
 function Projects() {
   return (
@@ -33,24 +34,22 @@ function Projects() {
             </div>
             <div className={styles.links}>
               {project.repoUrl && (
-                <a
+                <ExternalLink
                   href={project.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  context={project.title}
                   className={styles.link}
                 >
                   Code
-                </a>
+                </ExternalLink>
               )}
               {project.liveUrl && (
-                <a
+                <ExternalLink
                   href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  context={project.title}
                   className={styles.link}
                 >
                   Live
-                </a>
+                </ExternalLink>
               )}
             </div>
           </div>

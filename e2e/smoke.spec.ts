@@ -21,7 +21,7 @@ for (const id of ['about', 'experience', 'projects', 'contact']) {
 
 test('resume link target responds 200', async ({ page, request }) => {
   await page.goto('./')
-  const link = page.getByRole('link', { name: 'Resume' })
+  const link = page.getByRole('link', { name: /^Resume/ })
   const href = await link.getAttribute('href')
   const res = await request.get(new URL(href!, page.url()).toString())
   expect(res.status()).toBe(200)

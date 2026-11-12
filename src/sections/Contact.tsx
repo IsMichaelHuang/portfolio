@@ -10,6 +10,7 @@
  */
 
 import styles from "./Contact.module.css";
+import ExternalLink from "../components/ExternalLink";
 
 function Contact() {
   return (
@@ -32,22 +33,18 @@ function Contact() {
         Email
       </a>
       <div className={styles.links}>
-        <a
+        <ExternalLink
           href="https://github.com/IsMichaelHuang"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           GitHub
-        </a>
-        <a
+        </ExternalLink>
+        <ExternalLink
           href="https://www.linkedin.com/in/michael-micah-huang/"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           LinkedIn
-        </a>
+        </ExternalLink>
       </div>
     </section>
   );

@@ -13,6 +13,7 @@
  */
 
 import styles from "./Hero.module.css";
+import ExternalLink from "../components/ExternalLink";
 
 function Hero() {
   return (
@@ -25,41 +26,25 @@ function Hero() {
         Building across full-stack, AI, and beyond.
       </p>
       <div className={styles.links}>
-        {/* Internal link — serves a static PDF from the assets directory */}
-        <a 
-          href="/portfolio/resume.pdf" 
-          target="_blank"
-          rel="noopener noreferrer"
+        <ExternalLink
+          href={`${import.meta.env.BASE_URL}resume.pdf`}
+          hint="PDF"
           className={styles.link}
         >
           Resume
-        </a>
-        {/*
-         * External links use:
-         *   target="_blank"         — opens in a new tab so users don't
-         *                             leave the portfolio
-         *   rel="noopener"          — prevents the new tab from accessing
-         *                             window.opener
-         *                             (mitigates reverse tabnapping attacks)
-         *   rel="noreferrer"        — additionally prevents sending the
-         *                             Referer header to the target site
-         */}
-        <a
+        </ExternalLink>
+        <ExternalLink
           href="https://github.com/IsMichaelHuang"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           GitHub
-        </a>
-        <a
+        </ExternalLink>
+        <ExternalLink
           href="https://www.linkedin.com/in/michael-micah-huang/"
-          target="_blank"
-          rel="noopener noreferrer"
           className={styles.link}
         >
           LinkedIn
-        </a>
+        </ExternalLink>
       </div>
     </section>
   );
