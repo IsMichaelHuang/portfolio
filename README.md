@@ -100,6 +100,16 @@ in `index.css`:
 | `--nav-h` | Fixed navbar height, used by `scroll-padding-top` |
 | `--color-surface` | Card / pill backgrounds |
 | `--color-border` | Subtle element borders |
+| `--font-display` | Jost, then the OS sans |
+| `--font-body` | Source Serif 4, then the OS serif |
+
+Type: Jost, an open Futura revival, is the display and UI face for
+the name, headings, nav, buttons, pills, labels and dates. Source
+Serif 4 (roman and italic) is the prose face for the bio, highlights,
+project descriptions and contact message. Both ship as variable
+fonts from `@fontsource-variable/*`, self-hosted with no third-party
+requests; `unicode-range` makes the browser fetch only the subsets
+the page's characters need.
 
 `src/contrast.test.ts` reads these tokens and fails if text, muted
 or accent-text drop below the ratios above.

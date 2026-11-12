@@ -58,7 +58,8 @@
   font-size: 1rem;
   margin: 0 0 1rem;
   color: var(--color-text-muted);
-  line-height: 1.5;
+  font-family: var(--font-body);
+  line-height: 1.7;
 }
 
 /* Tag container — wraps pills inline */

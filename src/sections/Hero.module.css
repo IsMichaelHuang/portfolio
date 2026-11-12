@@ -21,7 +21,10 @@
 
 /* Primary heading — largest text on the page */
 .name {
-  font-size: 3rem;
+  font-size: clamp(2.75rem, 2rem + 3.6vw, 4.75rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
   margin: 0 0 0.5rem;
 }
 

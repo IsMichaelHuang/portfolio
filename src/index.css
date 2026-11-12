@@ -9,6 +9,13 @@
  * mode override. Colors are defined as CSS custom properties so
  * components can reference them without hardcoding values.
  *
+ * Type: two self-hosted faces (@fontsource-variable, no third-party
+ * requests). Jost, an open Futura revival, is the display/UI face
+ * (--font-display: headings, nav, buttons, pills, labels, dates).
+ * Source Serif 4, roman and italic, is the prose face (--font-body:
+ * bio, bullets, descriptions). font-synthesis is none, so italics
+ * come from the real italic file.
+ *
  * Color philosophy:
  *   - Deep blue-black background evokes the void of space
  *   - Text is soft cool white, never harsh pure white
@@ -43,9 +50,14 @@
 
   /* --- Typography --- */
 
-  /* System font stack: the OS default, falling back through common
-     sans-serifs */
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /** Display/UI face: Jost, then the OS sans */
+  --font-display: "Jost Variable", system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+  /** Prose face: Source Serif 4, then the OS serif */
+  --font-body: "Source Serif 4 Variable", "Iowan Old Style", Georgia,
+    "Times New Roman", serif;
+
+  font-family: var(--font-display);
   line-height: 1.5;
   font-weight: 400;
 
@@ -151,9 +163,17 @@ section {
  * and bottom spacing across all sections.
  */
 section > h2 {
-  font-size: 2rem;
+  font-size: clamp(1.75rem, 1.55rem + 1vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
   text-align: center;
   margin: 0 0 2.5rem;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
 }
 
 /* --- Shared Pill Style --- */

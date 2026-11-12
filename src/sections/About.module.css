@@ -19,7 +19,8 @@
 /* Individual bio paragraph */
 .paragraph {
   font-size: 1.125rem;
-  line-height: 1.7;
+  font-family: var(--font-body);
+  line-height: 1.75;
   margin: 0 0 1.25rem;
   color: var(--color-text-muted);
   text-align: left;
@@ -48,14 +49,12 @@
   gap: 0.75rem;
 }
 
-/* Category heading — muted uppercase label */
+/* Category heading — quiet sentence-case label */
 .skillCategory {
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 500;
   margin: 0;
   color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 /* Pill container — wraps pills inline */
