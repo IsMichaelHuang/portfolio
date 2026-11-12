@@ -50,9 +50,9 @@ say, in a layout that reads like a well-set resume, not a template.
   project, and the Education block is a two-column row: metadata
   left, content right, tops aligned; below 720px one column with
   the heading first.
-- R5: Given Projects, then it shows, in order: the hackathon block
-  (lede, takeaway, three entries each marked 2nd), three featured
-  projects, and "Also on GitHub".
+- R5: Given the page, then Hackathons is its own section (lede,
+  takeaway, three entries each marked 2nd) and Projects shows three
+  featured projects followed by "Also on GitHub".
 - R6: Given pins and a list of featured URLs, then
   `remainingPins` drops pins whose `repoUrl` matches one (ignoring
   case, a trailing slash, and `.git`), keeps pins without a URL,
@@ -60,9 +60,12 @@ say, in a layout that reads like a well-set resume, not a template.
 - R7: Given About, then it shows the bio, the Education block, and
   five skill groups as a `<dl>` of text rows with AI/ML first; no
   pill elements remain in About.
-- R8: Given the page, then sections run Hero, Experience, Projects,
-  About, Contact; the nav's four section links (the brand link
-  excluded) are in that order and equal the section ids after Hero.
+- R8: Given the page, then sections run Hero, Experience,
+  Hackathons, Projects, About, Contact; the nav's four section
+  links (Experience, Projects, About, Contact) appear in document
+  order and each resolves to a section.
+- R12: Given a 1280x800 window or a 375x812 phone, then the
+  Experience heading is visible without scrolling.
 - R9: Given `dist/`, then `resume.pdf` is the new file (its
   inflated text, with kerning breaks removed, contains "Credit
   Karma") and the description and Open Graph copy match the
@@ -145,8 +148,7 @@ Stacked; base of PR 1 is `main`.
 |----|--------|-------------|-------|
 | 1 | `feature/resume-content` | Site matches the resume | T1, T2 |
 | 2 | `feature/featured-work` | Projects tell the story | T3 |
-
-A critique pass after PR 2 may add a polish PR.
+| 3 | `feature/redesign-polish` | Fixes from the critique | T4 |
 
 ## Tasks
 
@@ -284,3 +286,51 @@ is a `div`, not a nested `section`. T1 now owns the final
 Experience markup, the hero phone layout, and the two
 `polish.spec` tests its changes break; data shapes are written
 down.
+
+Design critique (after PR 2): one reviewer judged the built page
+against the taste-skill and impeccable guidance, read as reference
+only. Accepted into T4 (PR 3): Hackathons as its own section with
+no nav entry, so personal projects are not mistaken for hackathon
+entries (this revised R5 and R8); a hero capped at 44rem so the
+first job is on the first screen (R12); aligned hackathon columns;
+tighter phone spacing; label, metadata, and certification tone
+fixes. The reviewer's alternative of setting hackathons as ledger
+rows was declined: the three columns are the page's one deliberate
+change of shape.
+
+## Verification record
+
+Each of the three branch heads passes lint, build, unit, e2e, and
+the limit check. At the top of the stack: 127 unit tests and 82
+Chromium e2e tests. One-off run outside CI: Firefox passes all;
+WebKit passes all but the two keyboard tests that fail because
+Safari's Tab key skips links by default. Production build on a
+throttled 1.6 Mbps link: largest paint about 1.7s, layout shift
+under 0.01. Content accuracy: a reviewer compared every resume
+string and bold run with the PDF; the tests hold the same strings
+as literals.
+
+## The four questions
+
+1. **Regressions.** Section order and nav order changed; skill
+   pills, the hackathon entry in Experience, and the fixed 450px
+   pin cards are gone by design (cards fill the 880px column, 428px
+   each). Any pin whose repository is featured no longer shows as a
+   card. `resume.pdf` is replaced. None found that breaks a caller;
+   every changed test was rewritten to the same intent.
+2. **Security.** No new inputs, dependencies, or endpoints. The
+   emphasis renderer builds React nodes from committed strings, so
+   no HTML is injected. New public facts: the Credit Karma figures
+   and the phone number in the PDF, both already on the resume
+   Michael distributes. None found that needs action; both are
+   flagged to him.
+3. **Efficiency.** JS grew by about 8 KB raw for three data modules
+   and two sections; CSS is 21 KB. No new requests. Experience and
+   featured rows duplicate a few grid values with the global ledger
+   utilities; folding them together would touch final markup for
+   little gain. None worth doing now.
+4. **More tests before prod.** While reading Hackathons the nav
+   keeps Experience current; that is accepted behavior, not tested
+   as a requirement. Link previews and the deployed PDF can only be
+   checked after a deploy. Action: check both by hand once shipped.
+
