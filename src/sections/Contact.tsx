@@ -30,7 +30,7 @@ function Contact() {
         href="mailto:michael.micah.huang@gmail.com"
         className={styles.emailLink}
       >
-        Email
+        michael.micah.huang@gmail.com
       </a>
       <div className={styles.links}>
         <ExternalLink

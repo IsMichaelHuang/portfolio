@@ -41,7 +41,15 @@
   border-radius: 4px;
   margin-bottom: 2rem;
   color: var(--color-accent-text);
+  overflow-wrap: anywhere; /* the address must not overflow at 320px */
   transition: background-color 0.2s;
+}
+
+@media (max-width: 599px) {
+  .emailLink {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
 }
 
 .emailLink:hover {

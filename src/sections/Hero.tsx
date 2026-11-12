@@ -3,7 +3,7 @@
  *
  * The full-viewport introductory section at the top of the page:
  * the logo mark (decorative), name, role, a one-line summary, and
- * links (resume, GitHub, LinkedIn). Children fade and rise once on
+ * links (resume, GitHub, LinkedIn, email). Children fade and rise once on
  * load; reduced motion turns that off.
  *
  * The id="hero" attribute serves as a scroll anchor, allowing
@@ -57,6 +57,12 @@ function Hero() {
         >
           LinkedIn
         </ExternalLink>
+        <a
+          href="mailto:michael.micah.huang@gmail.com"
+          className={styles.link}
+        >
+          Email
+        </a>
       </div>
     </section>
   );

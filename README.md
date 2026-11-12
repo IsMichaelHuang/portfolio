@@ -24,7 +24,12 @@ src/
 │   ├── Navbar.tsx          # Fixed top navigation bar
 │   ├── Navbar.module.css
 │   ├── Navbar.test.tsx     # Unit test
+│   ├── Footer.tsx          # Page footer: stack credit, source link
+│   ├── Footer.module.css
+│   ├── Footer.test.tsx     # Unit test
 │   └── ExternalLink.tsx    # New-tab link with sr-only notice
+├── assets/
+│   └── mark.webp           # Hero logo mark
 ├── lib/
 │   └── activeSection.ts    # Pure scroll-spy picker
 ├── sections/

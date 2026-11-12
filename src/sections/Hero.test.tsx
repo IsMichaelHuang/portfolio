@@ -31,4 +31,15 @@ describe('Hero', () => {
     expect(names[1]).toMatch(/^GitHub/)
     expect(names[2]).toMatch(/^LinkedIn/)
   })
+
+  it('adds a plain Email link after LinkedIn', () => {
+    render(<Hero />)
+    const links = screen.getAllByRole('link')
+    expect(links[3]).toHaveAccessibleName('Email')
+    expect(links[3]).toHaveAttribute(
+      'href',
+      'mailto:michael.micah.huang@gmail.com',
+    )
+    expect(links[3]).not.toHaveAttribute('target')
+  })
 })

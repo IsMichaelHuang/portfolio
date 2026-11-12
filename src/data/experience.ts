@@ -14,7 +14,7 @@ export interface Experience {
   id: string;
   /** Job title / role name */
   role: string;
-  /** Company or organization name */
+  /** Secondary line: company, or stack for non-employment entries */
   company: string;
   /** Time period (e.g. "Jan 2024 — Present" or "2022 — 2023") */
   period: string;
@@ -38,6 +38,24 @@ export const experience: Experience[] = [
       "Optimized async polling architecture with 90-minute timeout "
         + "handling to support long-running inference tasks (60+ minutes), "
         + "solving critical timeout issues in standard HTTP request flows",
+    ],
+  },
+  {
+    id: "hackathons",
+    role: "Hackathon Wins",
+    company: "Gemini, Azure Speech, ElevenLabs, TypeScript",
+    period: "Jan 2026",
+    highlights: [
+      "Won 2nd place at two hackathons, building a real-time election "
+        + "misinformation detector (Before the Ballot) and a live speech "
+        + "fact-checker (Claude Code Hack Day @ AWS, out of 25 teams)",
+      "Upgraded static LLM validation to live search grounding with "
+        + "Gemini, enabling real-time source retrieval and contradiction "
+        + "flagging",
+      "Engineered a JSON Schema validation layer using Gemini to ensure "
+        + "deterministic, error-free outputs from non-deterministic LLMs",
+      "Led orchestration of four microservices and shipped fully "
+        + "integrated, crash-resistant MVPs under tight sprint deadlines",
     ],
   },
   {

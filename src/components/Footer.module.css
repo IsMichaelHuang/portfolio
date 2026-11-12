@@ -1,0 +1,33 @@
+/*
+ * Footer Styles
+ *
+ * Small muted centred text under a hairline border, matching the
+ * page container width.
+ */
+
+.footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.text {
+  margin: 0 0 0.5rem;
+}
+
+.link {
+  display: inline-block;
+  padding: 0.5rem 0.25rem;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: var(--color-accent-text);
+}
