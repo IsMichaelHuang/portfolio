@@ -40,6 +40,8 @@ describe('Hackathons', () => {
       'href',
       'https://github.com/IsMichaelHuang/live-fact-checker',
     )
-    expect(links[0]).toHaveAccessibleName(/^Code.*for SkepticScript.*opens in new tab/)
+    expect(links[0]).toHaveAccessibleName(
+      /^Code.*for SkepticScript.*opens in new tab/,
+    )
   })
 })
