@@ -112,3 +112,26 @@ characters (`WIDE file:line`) or more than 400 lines
 (`LONG file (n)`) and exits 1; it prints nothing when the repo is
 compliant. `package-lock.json`, `public/` and the generated
 `src/data/projects.ts` are exempt.
+
+## Deployment
+
+`.github/workflows/deploy.yml` publishes the site to GitHub Pages. It
+runs on a push to `main`, daily at 00:00 UTC (to refresh the pinned
+repos), and on manual dispatch. Pull requests never deploy.
+
+`.github/workflows/ci.yml` runs lint, build, unit tests, e2e tests
+and the file-limit check with a read-only token. It runs on pull
+requests and branch pushes, and deploy calls it first: the deploy job
+starts only if CI passes.
+
+GitHub disables scheduled workflows in public repos after 60 days
+without repository activity. A `keepalive` job on the daily run calls
+the API to re-enable the workflow. If the schedule ever stops, re-enable
+it by hand:
+
+```bash
+gh workflow enable "Deploy to GitHub Pages"
+```
+
+Actions are pinned to commit SHAs. Dependabot opens one grouped PR a
+month for GitHub Actions and one for npm.
