@@ -111,4 +111,5 @@ build on `http://localhost:4173/portfolio/`.
 characters (`WIDE file:line`) or more than 400 lines
 (`LONG file (n)`) and exits 1; it prints nothing when the repo is
 compliant. `package-lock.json`, `public/` and the generated
-`src/data/projects.ts` are exempt.
+`src/data/projects.ts` are exempt, as are SHA-pinned `uses:` lines
+in workflows, which cannot be wrapped.
