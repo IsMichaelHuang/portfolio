@@ -14,19 +14,57 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "discordbot",
-    title: "DiscordBot",
-    description:
-      "Python Discord bot built with discord.py — supports music playback, custom commands, and server event handling.",
-    tags: ["bot", "discord-py", "music", "python3"],
-    repoUrl: "https://github.com/IsMichaelHuang/DiscordBot",
+    "id": "ismichaelhuang-discordbot",
+    "title": "DiscordBot",
+    "tags": [
+      "bot",
+      "discord-py",
+      "music",
+      "python3"
+    ],
+    "repoUrl": "https://github.com/IsMichaelHuang/DiscordBot",
+    "description": "Python Discord bot built with discord.py — supports music playback, custom commands, and server event handling."
   },
   {
-    id: "resumebuilder",
-    title: "ResumeBuilder",
-    description:
-      "Modular LaTeX resume system — one master document with four tailored single-page versions for AI/ML, full-stack, backend, and general SWE roles.",
-    tags: ["automation", "job-search", "latex", "python3", "resume", "shell"],
-    repoUrl: "https://github.com/IsMichaelHuang/resumeBuilder",
+    "id": "ismichaelhuang-resumebuilder",
+    "title": "ResumeBuilder",
+    "tags": [
+      "automation",
+      "latex",
+      "python3",
+      "resume",
+      "dotenv",
+      "pdflatex",
+      "pytest",
+      "templating"
+    ],
+    "repoUrl": "https://github.com/IsMichaelHuang/resumeBuilder",
+    "description": "Modular LaTeX resume system with Python build pipeline, .env secret injection, configurable section ordering, and 33 pytest tests. Assembles tailored single-page resumes from shared sections."
   },
+  {
+    "id": "ismichaelhuang-betterwealth",
+    "title": "BetterWealth",
+    "tags": [
+      "TypeScript"
+    ],
+    "repoUrl": "https://github.com/IsMichaelHuang/BetterWealth"
+  },
+  {
+    "id": "ismichaelhuang-live-fact-checker",
+    "title": "Live Fact Checker",
+    "tags": [
+      "JavaScript"
+    ],
+    "repoUrl": "https://github.com/IsMichaelHuang/live-fact-checker",
+    "description": "Real time fact checking transcript"
+  },
+  {
+    "id": "randomcybercoder-vectordb-agentic-sar",
+    "title": "VectorDB Agentic SAR",
+    "tags": [
+      "Python"
+    ],
+    "repoUrl": "https://github.com/RandomCyberCoder/vectorDB-Agentic-SAR",
+    "description": "Building Knowledge Base for SAR Agentic AI"
+  }
 ];
