@@ -48,6 +48,17 @@ describe('check-limits.sh', () => {
     expect(run()).toEqual({ out: '', code: 0 })
   })
 
+  it('skips binary files wherever they live', () => {
+    // A long run of bytes, then a NUL: wide if read as text.
+    const bytes = Buffer.concat([
+      Buffer.alloc(300, 0x41),
+      Buffer.from([0x0a, 0x00, 0x01, 0xff, 0x0a]),
+    ])
+    put('src/assets/mark.webp', '')
+    writeFileSync(join(dir, 'src/assets/mark.webp'), bytes)
+    expect(run()).toEqual({ out: '', code: 0 })
+  })
+
   it('ignores exempt paths', () => {
     const wide = `${'x'.repeat(200)}\n`
     put('package-lock.json', wide)
