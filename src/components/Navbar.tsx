@@ -1,39 +1,21 @@
 /**
  * Navbar
  *
- * Fixed site-wide navigation bar rendered at the top of every page view.
- * All navigation is in-page: every href is a hash anchor that targets a
- * section element by its `id` attribute. No client-side router is involved.
+ * Fixed in-page navigation (hash anchors, no router), a "Primary"
+ * navigation landmark. To add or reorder items, edit `links` only.
  *
- * Active link highlighting:
- *   An IntersectionObserver watches all navigable sections. When a section
- *   enters the "active zone" — defined by rootMargin as the band between
- *   the navbar bottom and 45% up from the viewport bottom — its id is set
- *   as the active section and the corresponding nav link is highlighted.
- *   This means the link for whichever section is currently at the top of
- *   the readable area lights up as you scroll.
- *
- * Scroll behavior is controlled globally in index.css:
- *   - `scroll-behavior: smooth`  — animates the scroll instead of jumping
- *   - `scroll-padding-top: 64px` — offsets the scroll target so content
- *     lands below the fixed bar rather than underneath it
- *
- * Accessibility:
- *   - Rendered as a semantic <nav> element, which creates a landmark region
- *     that screen readers can navigate to directly.
- *   - Links are plain <a> elements with meaningful text labels, so they are
- *     announced correctly without additional ARIA attributes.
- *   - The active link receives aria-current="page" so screen readers
- *     announce which section is currently in view.
- *
- * To add or reorder navigation items, edit the `links` array only.
- * The component renders from that array, so no JSX changes are needed.
+ * Active link: passive scroll and resize listeners measure each
+ * section's top and ask `pickActive` which one the reader is in, with
+ * the bar's measured height (+ 8px) as the offset. Above the first
+ * section nothing is current; at the page bottom the last section is.
+ * The current link gets aria-current="location".
  *
  * Styles are scoped via CSS Modules (Navbar.module.css).
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Navbar.module.css";
 import mark from "../assets/mark.webp";
+import { pickActive } from "../lib/activeSection";
 
 /**
  * Navigation link definitions.
@@ -57,37 +39,31 @@ const sectionIds = links.map(({ href }) => href.slice(1));
 
 function Navbar() {
   const [activeId, setActiveId] = useState<string>("");
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    /**
-     * rootMargin shrinks the intersection viewport:
-     *   - Top: -64px hides the navbar height so sections behind it don't count
-     *   - Bottom: -45% means a section must be in the top 55% of the viewport
-     *     to be considered active, which keeps the highlight on the section
-     *     the user is currently reading rather than jumping ahead.
-     */
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        }
-      },
-      { rootMargin: "-64px 0px -45% 0px" }
-    );
-
-    const elements = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
+    const update = () => {
+      const tops = sectionIds.flatMap((id) => {
+        const el = document.getElementById(id);
+        return el ? [{ id, top: el.getBoundingClientRect().top }] : [];
+      });
+      const offset = (navRef.current?.offsetHeight ?? 0) + 8;
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      setActiveId(pickActive(tops, offset, atBottom));
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   return (
-    <nav className={styles.nav}>
+    <nav ref={navRef} aria-label="Primary" className={styles.nav}>
       <a href="#hero" className={styles.brand}>
         <img src={mark} alt="" width={28} height={28} />
         <span className={styles.brandText}>Michael Huang</span>
@@ -100,7 +76,7 @@ function Navbar() {
               <a
                 href={href}
                 className={`${styles.link} ${isActive ? styles.active : ""}`}
-                aria-current={isActive ? "page" : undefined}
+                aria-current={isActive ? "location" : undefined}
               >
                 {label}
               </a>
