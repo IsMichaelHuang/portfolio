@@ -39,7 +39,7 @@
   border: 1px solid var(--color-accent);
   border-radius: 4px;
   margin-bottom: 2rem;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   transition: background-color 0.2s;
 }
 
@@ -62,5 +62,5 @@
 }
 
 .link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }

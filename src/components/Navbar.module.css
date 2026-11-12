@@ -53,7 +53,7 @@
 }
 
 .brand:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 /*
@@ -101,7 +101,7 @@
  * from :hover so both states can coexist independently.
  */
 .active {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 /* The mark sits beside the text brand from 600px up. */

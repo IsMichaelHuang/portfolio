@@ -23,7 +23,10 @@ src/
 ├── components/
 │   ├── Navbar.tsx          # Fixed top navigation bar
 │   ├── Navbar.module.css
-│   └── Navbar.test.tsx     # Unit test
+│   ├── Navbar.test.tsx     # Unit test
+│   └── ExternalLink.tsx    # New-tab link with sr-only notice
+├── lib/
+│   └── activeSection.ts    # Pure scroll-spy picker
 ├── sections/
 │   ├── Hero.tsx            # Full-viewport intro (id="hero")
 │   ├── About.tsx           # About me (id="about")
@@ -31,13 +34,19 @@ src/
 │   ├── Projects.tsx        # Project showcase (id="projects")
 │   └── Contact.tsx         # Contact links (id="contact")
 ├── test/
-│   └── setup.ts            # Vitest setup (jest-dom, observer stub)
+│   └── setup.ts            # Vitest setup (jest-dom)
 ├── App.tsx                 # Composition root — section order lives here
 ├── App.test.tsx            # Unit tests for the composed page
+├── contrast.test.ts        # Colour-token contrast ratios
 ├── main.tsx                # React entry point
 └── index.css               # Global styles, theme variables, shared patterns
 e2e/
-└── smoke.spec.ts           # Playwright smoke test against vite preview
+├── smoke.spec.ts           # Smoke test against vite preview
+├── layout.spec.ts          # Responsive layout, 320 to 1920px
+├── nav.spec.ts             # Scroll-spy / aria-current
+├── keyboard.spec.ts        # Skip link and focus ring
+├── motion.spec.ts          # prefers-reduced-motion
+└── a11y.spec.ts            # axe (WCAG 2.2 AA) and text spacing
 scripts/
 ├── fetch-pinned.ts         # Writes src/data/projects.ts from pinned repos
 ├── pinned.ts               # Pure mapping/validation helpers for the above
@@ -50,18 +59,30 @@ public/
 ## Navigation
 
 The navbar uses plain HTML anchor links (`href="#section-id"`). No
-client-side router is involved. Scroll behavior is controlled by two
-CSS properties on `html` in `index.css`:
+client-side router is involved. The bar is a "Primary" `nav`; the
+sections live in one `main` (`id="main"`) that the "Skip to content"
+link targets.
 
-- `scroll-behavior: smooth` — animates the scroll
-- `scroll-padding-top: 64px` — prevents the fixed navbar from
-  covering the scroll target
+On `html` in `index.css`:
+
+- `scroll-behavior: smooth` — animates the scroll; it is `auto`
+  under `prefers-reduced-motion: reduce`
+- `scroll-padding-top: var(--nav-h)` — keeps scroll targets and
+  focused elements clear of the fixed bar. `--nav-h` is set in CSS
+  only (4rem, 3.5rem below 600px) and must stay at or below the
+  bar's real height
+
+The active link is measured on scroll and resize: `pickActive` in
+`src/lib/activeSection.ts` picks the last section whose top is at or
+above the bar's height plus 8px, the last section at the page bottom,
+and none above the first. The link gets `aria-current="location"`.
 
 To add a new section:
 1. Create the component in `src/sections/` with a unique `id` on the
    root `<section>` element.
 2. Import and place it in `App.tsx`.
-3. Add a matching entry to the `links` array in `Navbar.tsx`.
+3. Add a matching entry to the `links` array in `Navbar.tsx`; the
+   scroll-spy and skip link need nothing else.
 
 ## Theme
 
@@ -72,10 +93,16 @@ in `index.css`:
 |---|---|
 | `--color-bg` | Page background (`#0a0a0f`) |
 | `--color-text` | Primary text |
-| `--color-text-muted` | Secondary / de-emphasized text |
-| `--color-accent` | Interactive highlight (`#4a6cf7`) |
+| `--color-text-muted` | Secondary text; at least 5.5:1 on `--color-bg` |
+| `--color-accent` | Borders and fills only (`#4a6cf7`) |
+| `--color-accent-text` | Accent text; at least 4.5:1 on bg and surface |
+| `--color-focus` | The 2px `:focus-visible` ring |
+| `--nav-h` | Fixed navbar height, used by `scroll-padding-top` |
 | `--color-surface` | Card / pill backgrounds |
 | `--color-border` | Subtle element borders |
+
+`src/contrast.test.ts` reads these tokens and fails if text, muted
+or accent-text drop below the ratios above.
 
 ## Getting started
 

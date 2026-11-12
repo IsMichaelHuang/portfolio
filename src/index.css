@@ -26,9 +26,12 @@
   /** Primary text — soft cool white, easy on the eyes against deep dark */
   --color-text: rgba(230, 235, 245, 0.9);
   /** De-emphasized text — for subtitles, labels, secondary content */
-  --color-text-muted: rgba(230, 235, 245, 0.5);
+  --color-text-muted: rgba(230, 235, 245, 0.62);
   /** Accent — a cool blue like a distant star, used for interactive elements */
   --color-accent: #4a6cf7;
+  /** Accent for TEXT — lighter tint of the accent, at least 4.5:1 on
+      bg and surface (--color-accent stays for borders and fills) */
+  --color-accent-text: #8098ff;
   /** Surface — barely-visible white tint for cards, pills, and borders */
   --color-surface: rgba(255, 255, 255, 0.05);
   /** Border — subtle separation between elements */
