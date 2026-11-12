@@ -63,7 +63,8 @@ this file only; README and code comments describe current behavior.
 - AC2: Given a 320px viewport, then the brand and all four nav
   links are inside the viewport and each is at least 24px tall.
 - AC3: Given a 1280px viewport, then project cards sit two per row
-  at 450px wide and row-mates have equal height, at least 270px.
+  at 450px wide, row-mates have equal height, and an odd last card
+  is centred. No card is padded out to a fixed minimum height.
 - AC4: Given a card with long or unbroken text at 320px, then the
   card grows; nothing is clipped (`scrollHeight <= clientHeight`).
 - AC5: Given built `dist/index.html`, then it has a descriptive
@@ -112,6 +113,10 @@ this file only; README and code comments describe current behavior.
   or the repo is skipped; nothing unvalidated reaches an `href`.
 - AC21: Given the page, then every font request is same-origin and
   the Jost and Source Serif 4 faces report as loaded.
+- AC22: Given a phone, then every link in the nav, hero, projects,
+  contact, and footer is at least 44px tall; Resume is the one lead
+  hero action; plain text links share one hover style; the About
+  heading is visible in the first screen.
 
 ## Design
 
@@ -209,6 +214,7 @@ branch are merged upward (no rebase).
 | 8 | `feature/hero-identity` | Hero mark + starfield |
 | 9 | `feature/footer-content` | Footer, hackathons, copy |
 | 10 | `feature/seo-sharing` | Metadata, icons, 404 |
+| 11 | `feature/design-polish` | Fixes from design critique |
 
 PR 1's base is `fix/project`; every other PR's base is the PR
 above it. The docs each PR must correct are listed per task in
@@ -243,6 +249,7 @@ current behavior (green on arrival) and assert only invariants.
 | AC17, AC19 | Vitest + RTL | `src/**/*.test.tsx` |
 | AC18 | Playwright, JS off | `e2e/noscript.spec.ts` |
 | AC21 | Playwright | `e2e/fonts.spec.ts` |
+| AC3, AC22 | Playwright | `e2e/polish.spec.ts` |
 
 E2E rules: web-first assertions only, no `waitForTimeout`;
 `reducedMotion: 'reduce'` and `document.fonts.ready` before geometry
@@ -323,3 +330,52 @@ forbids the `<noscript>` mailto; the focus-not-obscured check
 exempts the nav's own links; T1 stubs `IntersectionObserver` and
 adds DOM types for e2e; the hero Email link moved to PR 9; T10
 builds before the unit step.
+
+Design critique (after PR 10, at Michael's suggestion): two Sonnet
+reviewers judged the built site against the published guidance of
+`Leonxlnx/taste-skill` and `pbakaus/impeccable`, read as reference
+only (nothing installed or run). Accepted into PR 11: hollow and
+orphaned project cards, one lead hero action, 44px tap targets, one
+link-hover style, a lead paragraph, tabular dates, a shorter phone
+hero. That revised AC3: the 270px card minimum is gone because it is
+what made a description-less card look empty. Rejected: gradient
+marks under headings, uppercase tracked labels, card hover lifts,
+arrow glyphs, and left-border stripes, which are the templated
+tells the design brief set out to avoid.
+
+## Verification record
+
+Every branch head passes lint, build, unit, e2e, and the limit
+check on its own. At the top of the stack: 91 unit tests and 50
+Chromium e2e tests. One-off checks outside CI: the e2e suite in
+Firefox passes; in WebKit all pass except two keyboard tests, which
+fail only because Safari's default Tab key skips links (verified
+with Option+Tab: every focusable shows a ring, none under the nav).
+Production build under a throttled 1.6 Mbps link: largest paint at
+about 1.7s, layout shift under 0.01, three font files fetched
+(about 129 KB) from the same origin.
+
+## The four questions
+
+1. **Regressions.** Reviewed every changed interface. Intended
+   behavior changes: project cards have no fixed minimum height;
+   `npm test` builds first; deploy waits for CI; a pin set with no
+   usable repo fails the deploy and keeps the last good site;
+   `public/stars-space*.png` are gone (nothing references them);
+   Node 24 or newer is expected. None found that breaks a caller.
+2. **Security.** Pinned-repo fields are third-party input: emitted
+   only through `JSON.stringify`, URLs allow-listed, token never
+   logged, all tested. Workflows are least-privilege with
+   SHA-pinned actions; PRs cannot deploy. New runtime dependencies
+   are two font packages. `npm audit` still lists moderate
+   advisories in dev tooling that need breaking upgrades; nothing
+   from them ships. None found that needs action before merge.
+3. **Efficiency.** The page ships about 64 KB of gzipped JS to
+   render static content; prerendering would remove most of it but
+   is a stated non-goal. CI builds twice (unit `pretest`, e2e web
+   server), costing seconds. None worth the added complexity now.
+4. **More tests before prod.** What only a push can exercise: the
+   two workflows have never run on GitHub; the keepalive call is
+   unverified; link previews (LinkedIn, Slack) and the Pages 404
+   need the live URL. Action: watch the first CI and deploy runs
+   and check those three by hand after the first deploy.

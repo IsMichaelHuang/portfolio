@@ -339,3 +339,24 @@ columns; `<noscript>` block styled inline; static `404.html` with a
 link home; icons. `dist.test.ts` needs a fresh build: locally run
 `npm run build` before `npm test`, and reorder `ci.yml` so build
 precedes the unit step.
+
+## T11 — design polish (`feature/design-polish`, PR 11)
+
+ACs: AC3 (revised), AC22.
+
+May touch: `e2e/polish.spec.ts`, one assertion in
+`e2e/layout.spec.ts`, `src/index.css`, CSS modules, `README.md`.
+
+Tests first (`e2e/polish.spec.ts`): odd last card centred at
+1280px; row-mates equal height with aligned link rows; a card with
+no description is not padded tall; Resume has the accent border and
+all hero links are 44px tall; phone links are 44px tall; a hovered
+text link is underlined in the accent text color with no glow; the
+first About paragraph leads; dates do not wrap; the About heading
+is inside the first phone screen.
+
+Do: remove the card minimum height and pin tags to the card
+bottom; centre an odd last card on the two-column layout; style
+Resume as the lead action; 44px targets; one hover style;
+`text-wrap` pretty and balance; tabular dates; 85svh phone hero;
+themed `::selection`.
