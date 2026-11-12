@@ -13,6 +13,12 @@ vi.mock('../data/projects', () => ({
       tags: [],
       repoUrl: 'https://github.com/ismichaelhuang/resumebuilder/',
     },
+    {
+      id: 'f',
+      title: 'FactChecker',
+      tags: [],
+      repoUrl: 'https://github.com/ismichaelhuang/live-fact-checker',
+    },
   ],
 }))
 
@@ -52,43 +58,17 @@ const heads = () =>
     .map((h) => [h.tagName, h.textContent])
 
 describe('Projects', () => {
-  it('orders headings: hackathons, featured, also on GitHub', () => {
+  it('orders headings: featured projects, also on GitHub', () => {
     render(<Projects />)
-    expect(heads().slice(0, 2)).toEqual([
-      ['H2', 'Projects'],
-      ['H3', 'Hackathons'],
-    ])
-    const rest = heads().filter(([t]) => t === 'H3').map(([, x]) => x)
-    expect(rest).toEqual([
-      'Hackathons',
+    expect(heads()[0]).toEqual(['H2', 'Projects'])
+    const h3 = heads().filter(([t]) => t === 'H3').map(([, x]) => x)
+    expect(h3).toEqual([
       'BudgetTracker',
       'Modular Resume Build System',
       'Laser-Based Audio Injection ("Light Commands")',
       'Also on GitHub',
     ])
-  })
-
-  it('shows lede, takeaway, three 2nd and three events', () => {
-    render(<Projects />)
-    expect(
-      screen.getByText('Second place at three hackathons.'),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        'My biggest lesson from these hackathons so far: clarity ' +
-          'wins. Simple idea, strong execution, clear story.',
-      ),
-    ).toBeInTheDocument()
-    expect(screen.getAllByText('2nd')).toHaveLength(3)
-    const events = screen
-      .getAllByRole('heading', { level: 4 })
-      .slice(0, 3)
-      .map((h) => h.textContent)
-    expect(events).toEqual([
-      'Claude Code Hack Day @ AWS',
-      'Before the Ballot',
-      'Lovable × Vapi',
-    ])
+    expect(screen.queryByText('Hackathons')).toBeNull()
   })
 
   it('renders each featured bullet as its literal text', () => {
@@ -123,7 +103,7 @@ describe('Projects', () => {
     ).toHaveAttribute('href', RB)
   })
 
-  it('leaves featured repositories out of the pins', () => {
+  it('leaves featured and hackathon repositories out of the pins', () => {
     render(<Projects />)
     const h4 = screen
       .getAllByRole('heading', { level: 4 })
@@ -131,6 +111,7 @@ describe('Projects', () => {
     expect(h4).toContain('Alpha')
     expect(h4).toContain('Beta')
     expect(h4).not.toContain('ResumeBuilder')
+    expect(h4).not.toContain('FactChecker')
   })
 
   it('renders a description only when one exists', () => {

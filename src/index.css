@@ -195,6 +195,8 @@ section {
 
 @media (max-width: 599px) {
   section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
@@ -215,11 +217,12 @@ section > h2 {
 }
 
 /*
- * Experience, Projects and About run a left-aligned 880px column.
+ * Experience, Hackathons, Projects and About run a left-aligned 880px column.
  * Their h2 shares that column so its left edge meets the rows below.
  * Hero and Contact stay centred. IDs outrank section > h2.
  */
 #experience > h2,
+#hackathons > h2,
 #projects > h2,
 #about > h2 {
   max-width: 880px;

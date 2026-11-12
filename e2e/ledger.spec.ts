@@ -52,7 +52,7 @@ test('experience entry stacks at 375px', async ({ page }) => {
 test('section h2 left edges match the row left edge', async ({ page }) => {
   await open(page, 1280)
   const row = (await box(page, '#experience article')).left
-  for (const id of ['experience', 'about', 'projects'])
+  for (const id of ['experience', 'hackathons', 'about', 'projects'])
     expect(
       Math.abs((await box(page, `#${id} > h2`)).left - row),
     ).toBeLessThanOrEqual(1)
@@ -109,6 +109,22 @@ for (const [width, left] of [
     else expect(g).toBeGreaterThan(s)
   })
 }
+
+test('skills label and value share a top', async ({ page }) => {
+  await open(page, 1280)
+  const dt = (await box(page, '#about dt')).top
+  const dd = (await box(page, '#about dd')).top
+  expect(Math.abs(dt - dd)).toBeLessThanOrEqual(2)
+})
+
+test('certification is as muted as the degree', async ({ page }) => {
+  await open(page, 1280)
+  const color = (t: string) =>
+    page.getByText(t).evaluate((e) => getComputedStyle(e).color)
+  expect(await color('AWS Academy Cloud Security Foundations')).toBe(
+    await color('Bachelor of Science in Computer Science, Minor in Philosophy'),
+  )
+})
 
 test('bold run matches the company colour', async ({ page }) => {
   await open(page, 1280)

@@ -3,7 +3,8 @@
  *
  * Resume-style ledger. From 720px each entry is a two-column grid:
  * period and location on the left, company, role and bullets on the
- * right. Below 720px it is one column in DOM order.
+ * right. Below 720px it is one column in DOM order, with 1.5rem row
+ * padding and 1.6 bullet leading on phones.
  *
  * Base section layout and heading styles are inherited from
  * global section rules in index.css.
@@ -114,6 +115,20 @@
   line-height: 1.7;
   margin-bottom: 0.4rem;
   color: var(--color-text-muted);
+}
+
+@media (max-width: 599px) {
+  .entry {
+    padding-bottom: 1.5rem;
+  }
+
+  .entry + .entry {
+    padding-top: 1.5rem;
+  }
+
+  .highlight {
+    line-height: 1.6;
+  }
 }
 
 /* Numbers lead: bold runs read as the headline of the bullet */

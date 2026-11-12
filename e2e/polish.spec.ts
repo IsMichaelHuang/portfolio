@@ -105,7 +105,9 @@ test('links are 44px tall on phones, no scroll at 320px', async ({
   page,
 }) => {
   await open(page, 375)
-  const links = page.locator('nav a, #projects a, #contact a, footer a')
+  const links = page.locator(
+    'nav a, #hackathons a, #projects a, #contact a, footer a',
+  )
   expect(await links.count()).toBeGreaterThan(8)
   for (const el of await links.all()) {
     expect((await el.boundingBox())!.height).toBeGreaterThanOrEqual(44)

@@ -1,7 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import App from './App'
 
-const headings = ['Experience', 'Projects', 'About', 'Get In Touch']
+const headings = [
+  'Experience',
+  'Hackathons',
+  'Projects',
+  'About',
+  'Get In Touch',
+]
 
 describe('App sections', () => {
   it('renders exactly one h1', () => {
@@ -16,7 +22,7 @@ describe('App sections', () => {
     ).toBeInTheDocument()
   })
 
-  it('orders sections as the nav links do', () => {
+  it('orders sections, nav links following their order', () => {
     const { container } = render(<App />)
     const ids = [...container.querySelectorAll('main section')].map(
       (s) => s.id,
@@ -24,14 +30,24 @@ describe('App sections', () => {
     expect(ids).toEqual([
       'hero',
       'experience',
+      'hackathons',
       'projects',
       'about',
       'contact',
     ])
     const hrefs = [...container.querySelectorAll('nav a')]
-      .map((a) => a.getAttribute('href'))
+      .map((a) => a.getAttribute('href')!)
       .filter((h) => h !== '#hero')
-    expect(hrefs).toEqual(ids.slice(1).map((id) => '#' + id))
+    expect(hrefs).toEqual([
+      '#experience',
+      '#projects',
+      '#about',
+      '#contact',
+    ])
+    // in section order, each resolving to a section
+    const at = hrefs.map((h) => ids.indexOf(h.slice(1)))
+    expect(at.every((i) => i >= 0)).toBe(true)
+    expect(at).toEqual([...at].sort((a, b) => a - b))
   })
 
   it('gives every target=_blank link rel noopener noreferrer', () => {

@@ -37,7 +37,8 @@ src/
 ├── sections/
 │   ├── Hero.tsx            # Full-viewport intro (id="hero")
 │   ├── Experience.tsx      # Work history ledger (id="experience")
-│   ├── Projects.tsx        # Hackathons, featured work, pins (id="projects")
+│   ├── Hackathons.tsx      # Lede, takeaway, three entries (id="hackathons")
+│   ├── Projects.tsx        # Featured work and pins (id="projects")
 │   ├── About.tsx           # Bio, Education, Skills (id="about")
 │   └── Contact.tsx         # Contact links (id="contact")
 ├── data/                   # experience, education, skills, work,
@@ -53,6 +54,7 @@ e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
 ├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
 ├── projects.spec.ts        # Hackathon columns, featured rows, links
+├── fold.spec.ts            # First screen, hero clears nav, phone rhythm
 ├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
 ├── nav.spec.ts             # Scroll-spy / aria-current
@@ -134,10 +136,11 @@ The active link is measured on scroll and resize: `pickActive` in
 above the bar's height plus 8px, the last section at the page bottom,
 and none above the first. The link gets `aria-current="location"`.
 
-The sections run Hero, Experience, Projects, About, Contact, and the
-navbar lists Experience, Projects, About, Contact in that order. The
-scroll-spy reads the `links` array in order, so it must match the
-document order in `App.tsx`.
+The sections run Hero, Experience, Hackathons, Projects, About,
+Contact, and the navbar lists Experience, Projects, About, Contact in
+that order. Hackathons has no nav entry, so Experience stays current
+while it is on screen. The scroll-spy reads the `links` array in
+order, so it must follow the document order in `App.tsx`.
 
 To add a new section:
 1. Create the component in `src/sections/` with a unique `id` on the
@@ -175,7 +178,7 @@ gap `0.5rem 2.5rem`): period and location (or "Graduated ...") on
 the left, company or school and bullets on the right; below 720px one
 column in DOM order. Experience has the grid in its module;
 Education uses the global `.ledger-row` / `.ledger-meta` classes in
-`index.css`. The h2 of Experience, Projects and About is aligned to
+`index.css`. The h2 of Experience, Hackathons, Projects and About is aligned to
 that column by one rule in `index.css` keyed on their ids; Hero and
 Contact headings stay centred. Skills are a `<dl>` with an `8rem`
 label column from 480px and the ledger's `11rem` / `2.5rem` columns
@@ -264,22 +267,26 @@ gh workflow enable "Deploy to GitHub Pages"
 Actions are pinned to commit SHAs. Dependabot opens one grouped PR a
 month for GitHub Actions and one for npm.
 
-## Projects section
+## Hackathons and Projects sections
 
-The section has three blocks in the same 880px column as its heading:
+Hackathons (`id="hackathons"`) is its own section between Experience
+and Projects, in the same 880px column as its heading: a lede, a
+takeaway paragraph, and three entries (three columns from 720px with
+the "Code" link rows aligned at the bottom, stacked below), each
+marked "2nd". Events are h3 under the section h2.
 
-1. **Hackathons**: a lede, a takeaway paragraph, and three entries
-   (three columns from 720px, stacked below), each marked "2nd".
-2. **Featured projects**: ledger rows like Experience, with the
+Projects (`id="projects"`) has two blocks in that column:
+
+1. **Featured projects**: ledger rows like Experience, with the
    period and the stack list on the left and the title, highlights
    and "Code" link on the right.
-3. **Also on GitHub**: cards for the generated pins that are not
-   already shown above. The block, heading included, is absent when
-   none remain.
+2. **Also on GitHub**: cards for the generated pins that are not
+   already shown above or in Hackathons. The block, heading
+   included, is absent when none remain.
 
-To add a hackathon or featured project, append an object to
-`hackathons` or `featured` in `src/data/work.ts` (shapes are typed
-there). Wrap the numbers worth noticing in `**double asterisks**`.
+Hackathon and featured data live in `src/data/work.ts` (`hackathons`
+and `featured`; shapes are typed there). To add one, append an
+object. Wrap the numbers worth noticing in `**double asterisks**`.
 A `repoUrl` adds a "Code" link; leave it out for a private repo.
 
 De-duplication: `remainingPins` in `src/lib/pins.ts` removes every

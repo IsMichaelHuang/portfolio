@@ -1,8 +1,8 @@
 /**
  * App — Composition Root
  *
- * Defines the top-level page structure (Hero, Experience, Projects,
- * About, Contact): skip link, Navbar, the single
+ * Defines the top-level page structure (Hero, Experience, Hackathons,
+ * Projects, About, Contact): skip link, Navbar, the single
  * <main> landmark holding all sections, then the Footer. Contains no
  * state or logic; adding or reordering sections means editing only
  * this file.
@@ -14,6 +14,7 @@
 import Navbar from "./components/Navbar";
 import Hero from "./sections/Hero";
 import Experience from "./sections/Experience";
+import Hackathons from "./sections/Hackathons";
 import Projects from "./sections/Projects";
 import About from "./sections/About";
 import Contact from "./sections/Contact";
@@ -29,6 +30,7 @@ function App() {
       <main id="main" tabIndex={-1}>
         <Hero />
         <Experience />
+        <Hackathons />
         <Projects />
         <About />
         <Contact />

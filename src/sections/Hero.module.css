@@ -2,7 +2,8 @@
  * Hero Section Styles — Space Theme
  *
  * Centers the mark, name, role, summary, Now line and links in a
- * full-viewport container. The Resume link is the lead action,
+ * container as tall as the viewport, up to 44rem, so the Experience
+ * heading shows on the first screen. The Resume link is the lead action,
  * styled like the Contact email button. Phones get a 96px mark and
  * a 2 x 2 button grid. Children fade and rise once on load, staggered; content
  * has no base opacity, so it shows even if the animation never runs.
@@ -14,10 +15,10 @@
   flex-direction: column;
   align-items: center;       /* Horizontal centering */
   justify-content: center;   /* Vertical centering */
-  min-height: 100vh;         /* Fallback for browsers without svh */
-  min-height: 100svh;        /* Fill the viewport; ignores mobile URL bar */
-  /* Prevent content from touching viewport edges on small screens */
-  padding: 2rem;
+  min-height: min(100vh, 44rem);   /* Fallback for browsers without svh */
+  min-height: min(100svh, 44rem);  /* Ignores the mobile URL bar */
+  /* Clear the fixed nav; keep content off the viewport edges */
+  padding: calc(var(--nav-h) + 1.5rem) 2rem 2rem;
   text-align: center;
 }
 
@@ -40,27 +41,27 @@
 
 /* Role/title subtitle — muted for visual hierarchy */
 .title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 0 0 1rem;
   color: var(--color-text-muted);
 }
 
-/* Short description — most de-emphasized. Wide enough to sit on one
-   line on desktop, so "multi-agent" never breaks at its hyphen. */
+/* Short description — most de-emphasized; a 34rem balanced measure */
 .blurb {
   font-size: 1.125rem;
   margin: 0 0 2rem;
-  max-width: 36rem;
+  max-width: 34rem;
   color: var(--color-text-muted);
   /* Even line lengths, so the last word never sits alone */
   text-wrap: balance;
 }
 
-/* Now line — same size as the summary; the label reads as a lead-in */
+/* Now line — the label reads as a lead-in */
 .now {
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
   margin: -1rem 0 2rem;
-  max-width: 36rem;
+  max-width: 34rem;
   color: var(--color-text-muted);
   text-wrap: balance;
 }
