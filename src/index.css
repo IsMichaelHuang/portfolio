@@ -33,6 +33,10 @@
   --color-surface: rgba(255, 255, 255, 0.05);
   /** Border — subtle separation between elements */
   --color-border: rgba(255, 255, 255, 0.1);
+  /** Focus ring — light blue, at least 3:1 against bg and surface */
+  --color-focus: #b4c2ff;
+  /** Fixed navbar height; keep at or below the bar's real height */
+  --nav-h: 4rem;
 
   /* --- Typography --- */
 
@@ -58,11 +62,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling for anchor links; offset accounts for the fixed
-   navbar height */
+/* Smooth scrolling for anchor links; offset keeps targets and focused
+   content below the fixed navbar */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 64px;
+  scroll-padding-top: var(--nav-h);
+}
+
+@media (max-width: 599px) {
+  :root {
+    --nav-h: 3.5rem;
+  }
 }
 
 /* --- Resets --- */
@@ -140,4 +150,43 @@ section > h2 {
   border-radius: 4px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+}
+
+/* --- Accessibility Utilities --- */
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* main is only focused programmatically (skip link target) */
+main:focus {
+  outline: none;
+}
+
+/* Visually hidden, still read by assistive tech */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Off-screen until focused; above the fixed navbar (z-index 100) */
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 200;
+  padding: 0.5rem 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-focus);
+  border-radius: 4px;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
 }
