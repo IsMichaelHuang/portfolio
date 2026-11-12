@@ -7,7 +7,7 @@ const EMAIL = 'michael.micah.huang@gmail.com'
 
 const indexPath = 'dist/index.html'
 if (!existsSync(indexPath)) {
-  throw new Error('dist/ is missing. Run `npm run build` before `npm test`.')
+  throw new Error('dist/ is missing. Run `npm run build` first.')
 }
 const html = readFileSync(indexPath, 'utf8')
 const parse = (s: string) => new DOMParser().parseFromString(s, 'text/html')

@@ -174,14 +174,14 @@ npm run lint      # Run ESLint
 ## Testing
 
 ```bash
-npm run build && npm test   # Unit tests (Vitest + Testing Library)
-npm run test:e2e    # Playwright; builds and serves via vite preview
+npm test              # Builds, then unit tests (Vitest)
+npm run test:e2e      # Playwright; builds and serves via vite preview
 npm run check:limits  # Fails on files over 400 lines or 80 columns
 ```
 
-`npm test` includes `scripts/dist.test.ts`, which reads `dist/`, so
-build first (`npm run build && npm test`); without `dist/` it fails
-with a message saying so. CI builds before the unit step.
+`npm test` builds first (`pretest`) because `scripts/dist.test.ts`
+reads `dist/`. Running `npx vitest` directly skips that step and
+fails with a message saying so when `dist/` is missing.
 
 Unit tests live beside the code as `*.test.ts(x)` and under
 `scripts/`. E2E specs live in `e2e/` and run against the production
