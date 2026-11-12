@@ -47,6 +47,7 @@ src/
 └── index.css               # Global styles, theme variables, shared patterns
 e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
+├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
 ├── nav.spec.ts             # Scroll-spy / aria-current
 ├── keyboard.spec.ts        # Skip link and focus ring
@@ -55,11 +56,37 @@ e2e/
 scripts/
 ├── fetch-pinned.ts         # Writes src/data/projects.ts from pinned repos
 ├── pinned.ts               # Pure mapping/validation helpers for the above
+├── dist.test.ts            # Checks the built dist/: metadata, 404, icons
 └── readme.test.ts          # Fails if a package.json script is undocumented
 playwright.config.ts        # Playwright config (preview on port 4173)
 public/
-└── resume.pdf              # Served statically; linked from Hero
+├── resume.pdf              # Served statically; linked from Hero
+├── 404.html                # Static not-found page (GitHub Pages)
+├── favicon.png             # 64x64 tab icon
+├── apple-touch-icon.png    # 180x180 home-screen icon
+└── og.png                  # 1200x630 link-preview image
 ```
+
+## SEO and sharing
+
+`index.html` carries the page title, a meta description, a canonical
+link, Open Graph and Twitter card tags (absolute URLs under
+`https://ismichaelhuang.github.io/portfolio/`), `theme-color`,
+`color-scheme`, a referrer policy, and a minimal Person JSON-LD block
+(name, job title, URL, GitHub and LinkedIn). A `<noscript>` block
+shows the name, role, focus line and Resume, GitHub, LinkedIn and
+Email links when JavaScript is off.
+
+Images live in `public/`: `favicon.png` (square, 64x64),
+`apple-touch-icon.png` (180x180) and `og.png` (1200x630). Vite
+rewrites root-absolute `/favicon.png` style links in `index.html`
+with the base path. `public/404.html` is copied verbatim, so it
+hard-codes `/portfolio/`; update it if the deploy path changes.
+`scripts/dist.test.ts` checks all of this against `dist/`.
+
+There is deliberately no `robots.txt` or sitemap: a project site
+cannot serve a root `robots.txt`, and a one-page site does not need a
+sitemap.
 
 ## Navigation
 
@@ -145,10 +172,14 @@ npm run lint      # Run ESLint
 ## Testing
 
 ```bash
-npm test            # Unit tests (Vitest + Testing Library)
+npm run build && npm test   # Unit tests (Vitest + Testing Library)
 npm run test:e2e    # Playwright; builds and serves via vite preview
 npm run check:limits  # Fails on files over 400 lines or 80 columns
 ```
+
+`npm test` includes `scripts/dist.test.ts`, which reads `dist/`, so
+build first (`npm run build && npm test`); without `dist/` it fails
+with a message saying so. CI builds before the unit step.
 
 Unit tests live beside the code as `*.test.ts(x)` and under
 `scripts/`. E2E specs live in `e2e/` and run against the production
