@@ -33,6 +33,7 @@
  */
 import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
+import mark from "../assets/mark.webp";
 
 /**
  * Navigation link definitions.
@@ -88,7 +89,8 @@ function Navbar() {
   return (
     <nav className={styles.nav}>
       <a href="#hero" className={styles.brand}>
-        Michael Huang
+        <img src={mark} alt="" width={28} height={28} />
+        <span className={styles.brandText}>Michael Huang</span>
       </a>
       <ul className={styles.links}>
         {links.map(({ label, href }) => {

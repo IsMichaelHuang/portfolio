@@ -12,7 +12,8 @@
   flex-direction: column;
   align-items: center;       /* Horizontal centering */
   justify-content: center;   /* Vertical centering */
-  min-height: 100vh;         /* Fill the entire viewport height */
+  min-height: 100vh;         /* Fallback for browsers without svh */
+  min-height: 100svh;        /* Fill the viewport; ignores mobile URL bar */
   /* Prevent content from touching viewport edges on small screens */
   padding: 2rem;
   text-align: center;
@@ -40,10 +41,12 @@
   color: var(--color-text-muted);
 }
 
-/* CTA link row — flexbox with gap for even spacing without margin hacks */
+/* CTA link row — wraps on narrow screens; gap gives even spacing */
 .links {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 1.5rem;
 }
 
 /*

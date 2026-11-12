@@ -82,6 +82,9 @@
  */
 .link {
   font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   color: var(--color-text-muted);
   transition: color 0.2s;
 }
@@ -99,4 +102,43 @@
  */
 .active {
   color: var(--color-accent);
+}
+
+/* The mark sits beside the text brand from 600px up. */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Visually hidden below 600px; stays the link's accessible name. */
+.brandText {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 600px) {
+  .brandText {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+/* Narrow screens: tighter padding and gap so the brand and four links
+   fit at 320px. */
+@media (max-width: 599px) {
+  .nav {
+    padding: 0.75rem 1rem;
+  }
+
+  .links {
+    gap: 0.75rem;
+  }
 }

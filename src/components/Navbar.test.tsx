@@ -16,4 +16,11 @@ describe('Navbar', () => {
       '#contact',
     ])
   })
+
+  it('names the brand link "Michael Huang" with a decorative mark', () => {
+    render(<Navbar />)
+    const brand = screen.getByRole('link', { name: 'Michael Huang' })
+    expect(brand).toHaveAttribute('href', '#hero')
+    expect(brand.querySelector('img')).toHaveAttribute('alt', '')
+  })
 })

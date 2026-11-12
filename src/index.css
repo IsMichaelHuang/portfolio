@@ -109,6 +109,13 @@ section {
   padding: 4rem 2rem;
 }
 
+@media (max-width: 599px) {
+  section {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
 /*
  * Shared section heading style for any <h2> that is a direct
  * child of a <section>. Provides consistent font size, centering,
