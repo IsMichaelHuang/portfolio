@@ -122,7 +122,7 @@ test('About lead paragraph and prose typography', async ({ page }) => {
   expect(p1.color).not.toBe(p2.color)
   expect(p1.size).toBeGreaterThan(p2.size)
   const nowrap = await page
-    .locator('#experience h3 + *')
+    .locator('#experience article span', { hasText: /20\d\d/ })
     .evaluateAll((els) => els.map((e) => getComputedStyle(e).whiteSpace))
   expect(nowrap.length).toBeGreaterThan(0)
   for (const w of nowrap) expect(w).toBe('nowrap')
@@ -132,10 +132,30 @@ test('About lead paragraph and prose typography', async ({ page }) => {
   for (const s of sizes) expect(s).toBe('16px')
 })
 
-test('About heading peeks into the first phone screen', async ({ page }) => {
+test('hero is no taller than the phone viewport', async ({ page }) => {
   await open(page, 375, 812)
-  const top = await page
-    .locator('#about h2')
-    .evaluate((el) => el.getBoundingClientRect().top)
-  expect(top).toBeLessThan(812)
+  const h = await page
+    .locator('#hero')
+    .evaluate((el) => el.getBoundingClientRect().height)
+  expect(h).toBeLessThanOrEqual(812)
+})
+
+test('hero links form two rows of two, 44px tall, at 375px', async ({
+  page,
+}) => {
+  await open(page, 375, 812)
+  const boxes = await page
+    .locator('#hero a')
+    .evaluateAll((els) =>
+      els.map((e) => {
+        const r = e.getBoundingClientRect()
+        return { top: Math.round(r.top), width: r.width, h: r.height }
+      }),
+    )
+  expect(boxes).toHaveLength(4)
+  expect(new Set(boxes.map((b) => b.top)).size).toBe(2)
+  expect(boxes[0].top).toBe(boxes[1].top)
+  expect(boxes[2].top).toBe(boxes[3].top)
+  expect(Math.abs(boxes[0].width - boxes[1].width)).toBeLessThan(1)
+  for (const b of boxes) expect(b.h).toBeGreaterThanOrEqual(44)
 })

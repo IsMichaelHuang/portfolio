@@ -9,9 +9,9 @@ describe('App landmarks', () => {
     const ids = [...mains[0].querySelectorAll('section')].map((s) => s.id)
     expect(ids).toEqual([
       'hero',
-      'about',
       'experience',
       'projects',
+      'about',
       'contact',
     ])
     expect(container.querySelectorAll('main section')).toHaveLength(5)

@@ -25,12 +25,14 @@ import { pickActive } from "../lib/activeSection";
  * (`document.getElementById`), so no build-time binding exists —
  * a mismatched id silently fails to scroll.
  *
- * Order here determines the visual order in the rendered nav bar.
+ * Order here determines the visual order in the rendered nav bar and
+ * must match the section order in App.tsx (the scroll-spy needs
+ * document order).
  */
 const links = [
-  { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
 

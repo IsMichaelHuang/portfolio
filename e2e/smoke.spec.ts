@@ -11,7 +11,7 @@ test('loads with no console errors', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-for (const id of ['about', 'experience', 'projects', 'contact']) {
+for (const id of ['experience', 'projects', 'about', 'contact']) {
   test(`nav link #${id} brings its section into view`, async ({ page }) => {
     await page.goto('./')
     await page.locator(`nav a[href="#${id}"]`).click()

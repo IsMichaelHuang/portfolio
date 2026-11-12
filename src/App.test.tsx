@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import App from './App'
 
-const headings = ['About', 'Experience', 'Projects', 'Get In Touch']
+const headings = ['Experience', 'Projects', 'About', 'Get In Touch']
 
 describe('App sections', () => {
   it('renders exactly one h1', () => {
@@ -14,6 +14,24 @@ describe('App sections', () => {
     expect(
       screen.getByRole('heading', { level: 2, name }),
     ).toBeInTheDocument()
+  })
+
+  it('orders sections as the nav links do', () => {
+    const { container } = render(<App />)
+    const ids = [...container.querySelectorAll('main section')].map(
+      (s) => s.id,
+    )
+    expect(ids).toEqual([
+      'hero',
+      'experience',
+      'projects',
+      'about',
+      'contact',
+    ])
+    const hrefs = [...container.querySelectorAll('nav a')]
+      .map((a) => a.getAttribute('href'))
+      .filter((h) => h !== '#hero')
+    expect(hrefs).toEqual(ids.slice(1).map((id) => '#' + id))
   })
 
   it('gives every target=_blank link rel noopener noreferrer', () => {

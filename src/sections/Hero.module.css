@@ -1,10 +1,10 @@
 /**
  * Hero Section Styles — Space Theme
  *
- * Centers the mark, name, role, summary and links in a full-viewport
- * container (85svh on phones, so the next heading peeks in). The
- * Resume link is the lead action, styled like the Contact email
- * button. Children fade and rise once on load, staggered; content
+ * Centers the mark, name, role, summary, Now line and links in a
+ * full-viewport container. The Resume link is the lead action,
+ * styled like the Contact email button. Phones get a 96px mark and
+ * a 2 x 2 button grid. Children fade and rise once on load, staggered; content
  * has no base opacity, so it shows even if the animation never runs.
  */
 
@@ -19,14 +19,6 @@
   /* Prevent content from touching viewport edges on small screens */
   padding: 2rem;
   text-align: center;
-}
-
-/* Phones: shorter hero so the About heading shows in the first screen */
-@media (max-width: 599px) {
-  .hero {
-    min-height: 85vh;
-    min-height: 85svh;
-  }
 }
 
 /* Logo mark — soft accent glow, not neon */
@@ -64,6 +56,21 @@
   text-wrap: balance;
 }
 
+/* Now line — same size as the summary; the label reads as a lead-in */
+.now {
+  font-size: 1.125rem;
+  margin: -1rem 0 2rem;
+  max-width: 36rem;
+  color: var(--color-text-muted);
+  text-wrap: balance;
+}
+
+.nowLabel {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
 /* CTA link row — wraps on narrow screens; gap gives even spacing */
 .links {
   display: flex;
@@ -92,6 +99,26 @@
   color: var(--color-accent-text);
 }
 
+/* Phones: smaller mark, and the four buttons as a 2 x 2 grid */
+@media (max-width: 599px) {
+  .mark {
+    width: 96px;
+    height: 96px;
+  }
+
+  .links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 22rem;
+  }
+
+  .link {
+    justify-content: center;
+  }
+}
+
 /* Resume is the lead action: accent border and text at rest */
 .link:first-child {
   border-color: var(--color-accent);
@@ -118,6 +145,8 @@
 .hero > :nth-child(3) { animation-delay: 140ms; }
 .hero > :nth-child(4) { animation-delay: 210ms; }
 .hero > :nth-child(5) { animation-delay: 280ms; }
+.hero > :nth-child(6) { animation-delay: 350ms; }
+.hero > :nth-child(7) { animation-delay: 420ms; }
 
 /* Delays would otherwise leave animations "running" */
 @media (prefers-reduced-motion: reduce) {

@@ -31,12 +31,13 @@ src/
 ├── assets/
 │   └── mark.webp           # Hero logo mark
 ├── lib/
-│   └── activeSection.ts    # Pure scroll-spy picker
+│   ├── activeSection.ts    # Pure scroll-spy picker
+│   └── emphasis.tsx        # Renders **bold** markers in data strings
 ├── sections/
 │   ├── Hero.tsx            # Full-viewport intro (id="hero")
-│   ├── About.tsx           # About me (id="about")
 │   ├── Experience.tsx      # Work history (id="experience")
 │   ├── Projects.tsx        # Project showcase (id="projects")
+│   ├── About.tsx           # About me (id="about")
 │   └── Contact.tsx         # Contact links (id="contact")
 ├── test/
 │   └── setup.ts            # Vitest setup (jest-dom)
@@ -90,6 +91,15 @@ There is deliberately no `robots.txt` or sitemap: a project site
 cannot serve a root `robots.txt`, and a one-page site does not need a
 sitemap.
 
+## Experience entries
+
+Work history lives in `src/data/experience.ts`. To add a role, append
+an object (most recent first) with `id`, `company`, `role`, `period`,
+`location` and `highlights`; no JSX changes are needed. Wrap the
+numbers worth noticing in a bullet in `**double asterisks**` and they
+render in bold through `renderEmphasis` in `src/lib/emphasis.tsx`.
+Text with an odd number of `**` markers renders literally.
+
 ## Navigation
 
 The navbar uses plain HTML anchor links (`href="#section-id"`). No
@@ -110,6 +120,11 @@ The active link is measured on scroll and resize: `pickActive` in
 `src/lib/activeSection.ts` picks the last section whose top is at or
 above the bar's height plus 8px, the last section at the page bottom,
 and none above the first. The link gets `aria-current="location"`.
+
+The sections run Hero, Experience, Projects, About, Contact, and the
+navbar lists Experience, Projects, About, Contact in that order. The
+scroll-spy reads the `links` array in order, so it must match the
+document order in `App.tsx`.
 
 To add a new section:
 1. Create the component in `src/sections/` with a unique `id` on the

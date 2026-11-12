@@ -1,10 +1,9 @@
 /**
  * Experience Section Styles — Space Theme
  *
- * Vertical list layout for work history entries. Each entry is
- * visually separated with theme-colored borders. The header row uses
- * flexbox to place role and date period side by side, wrapping
- * gracefully on narrow screens.
+ * Vertical list layout for work history entries, one column. Each
+ * entry is separated with a theme-colored border: company, role,
+ * period and location, then bullets.
  *
  * Base section layout and heading styles are inherited from
  * global section rules in index.css.
@@ -32,38 +31,35 @@
   padding-bottom: 0;
 }
 
-/*
- * Header row — role on the left, date on the right.
- * flex-wrap ensures graceful stacking on narrow screens.
- */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-/* Role title — the primary visual anchor of each entry */
-.role {
-  font-size: 1.2rem;
+/* Company — the prominent line; recruiters scan employers */
+.company {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
   margin: 0;
 }
 
-/* Date period — muted, aligned to the right on wide screens;
-   tabular figures, never broken across lines */
-.period {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+/* Role — muted, under the company */
+.role {
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
+}
+
+/* Period and location on one line under the role */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  margin: 0.25rem 0 0.75rem;
   font-size: 0.9rem;
   color: var(--color-text-muted);
 }
 
-/* Company name — secondary to the role */
-.company {
-  font-size: 1rem;
-  margin: 0.25rem 0 0.75rem;
-  color: var(--color-text-muted);
+/* Tabular figures, never broken across lines */
+.period {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* Bullet list — slight left padding instead of default browser indent */
@@ -80,6 +76,12 @@
   line-height: 1.7;
   margin-bottom: 0.4rem;
   color: var(--color-text-muted);
+}
+
+/* Numbers lead: bold runs read as the headline of the bullet */
+.highlight strong {
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 .highlight:last-child {
