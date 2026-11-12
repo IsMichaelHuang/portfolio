@@ -2,7 +2,9 @@
  * Hero Section Styles — Space Theme
  *
  * Centers the mark, name, role, summary and links in a full-viewport
- * container. Children fade and rise once on load, staggered; content
+ * container (85svh on phones, so the next heading peeks in). The
+ * Resume link is the lead action, styled like the Contact email
+ * button. Children fade and rise once on load, staggered; content
  * has no base opacity, so it shows even if the animation never runs.
  */
 
@@ -17,6 +19,14 @@
   /* Prevent content from touching viewport edges on small screens */
   padding: 2rem;
   text-align: center;
+}
+
+/* Phones: shorter hero so the About heading shows in the first screen */
+@media (max-width: 599px) {
+  .hero {
+    min-height: 85vh;
+    min-height: 85svh;
+  }
 }
 
 /* Logo mark — soft accent glow, not neon */
@@ -67,6 +77,9 @@
  * Accent color on hover provides a subtle interactive glow.
  */
 .link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 0.5rem 1.25rem;
   border: 1px solid var(--color-border);
   border-radius: 4px;
@@ -77,6 +90,16 @@
 .link:hover {
   border-color: var(--color-accent);
   color: var(--color-accent-text);
+}
+
+/* Resume is the lead action: accent border and text at rest */
+.link:first-child {
+  border-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.link:first-child:hover {
+  background-color: rgba(74, 108, 247, 0.12);
 }
 
 /* The one load animation: each child fades and rises, 70ms apart */

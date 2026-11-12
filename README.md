@@ -149,6 +149,13 @@ fonts from `@fontsource-variable/*`, self-hosted with no third-party
 requests; `unicode-range` makes the browser fetch only the subsets
 the page's characters need.
 
+Plain text links (project Code and Live, Contact profiles, footer)
+share one hover: accent-text colour with a thin underline offset
+0.25em, and `a:active` dims them. The Resume button in the hero is
+the lead action: it keeps the accent border and text at rest, like the
+Contact email button, while the other hero links stay neutral. Links
+and buttons are at least 44px tall on phones.
+
 `src/contrast.test.ts` reads these tokens and fails if text, muted
 or accent-text drop below the ratios above.
 

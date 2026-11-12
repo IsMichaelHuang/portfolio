@@ -21,10 +21,15 @@
 }
 
 .link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  vertical-align: top;
   padding: 0.5rem 0.25rem;
   color: var(--color-text-muted);
   text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
   transition: color 0.2s;
 }
 

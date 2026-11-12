@@ -89,7 +89,7 @@ html {
 
 @media (max-width: 599px) {
   :root {
-    --nav-h: 3.5rem;
+    --nav-h: 3.25rem;
   }
 }
 
@@ -168,6 +168,16 @@ a {
   text-decoration: none;
 }
 
+a:active {
+  opacity: 0.7;
+}
+
+/* Themed text selection */
+::selection {
+  background: rgba(74, 108, 247, 0.35);
+  color: #fff;
+}
+
 /* --- Shared Section Layout --- */
 
 /*
@@ -200,7 +210,15 @@ section > h2 {
   font-weight: 600;
   line-height: 1.2;
   text-align: center;
+  text-wrap: balance;
   margin: 0 0 2.5rem;
+}
+
+/* Scroll anchoring would hold the view at the page bottom only
+   partly when web fonts swap in and resize the project cards, so the
+   section is skipped and the anchor falls to the following section. */
+#projects {
+  overflow-anchor: none;
 }
 
 h1,

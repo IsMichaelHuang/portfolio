@@ -135,7 +135,13 @@
    fit at 320px. */
 @media (max-width: 599px) {
   .nav {
-    padding: 0.75rem 1rem;
+    padding: 0.25rem 1rem;
+  }
+
+  /* 44px tap targets; the bar is then 53px tall (--nav-h: 3.25rem) */
+  .brand,
+  .link {
+    min-height: 44px;
   }
 
   .links {

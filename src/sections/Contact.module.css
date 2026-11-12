@@ -27,6 +27,7 @@
   line-height: 1.75;
   margin: 0 0 2rem;
   color: var(--color-text-muted);
+  text-wrap: pretty;
 }
 
 /*
@@ -49,6 +50,7 @@
   .emailLink {
     font-size: 1rem;
     padding: 0.6rem 1rem;
+    min-height: 44px;
   }
 }
 
@@ -63,7 +65,8 @@
   gap: 1.5rem;
 }
 
-/* Individual profile link — muted by default, accent on hover */
+/* Individual profile link — muted by default; accent and underlined
+   on hover (the shared plain-text-link hover) */
 .link {
   font-size: 0.95rem;
   color: var(--color-text-muted);
@@ -72,4 +75,15 @@
 
 .link:hover {
   color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+}
+
+@media (max-width: 599px) {
+  .link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }

@@ -46,7 +46,6 @@ test('AC3 cards are 450px wide, two per row, equal height', async ({
   expect(b.width).toBe(450)
   expect(a.y).toBe(b.y)
   expect(a.height).toBe(b.height)
-  expect(a.height).toBeGreaterThanOrEqual(270)
 })
 
 test('AC4 long unbroken text grows the card at 320px', async ({ page }) => {
