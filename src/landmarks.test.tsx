@@ -2,19 +2,20 @@ import { render, screen, within } from '@testing-library/react'
 import App from './App'
 
 describe('App landmarks', () => {
-  it('has one main containing all five sections', () => {
+  it('has one main containing all six sections', () => {
     const { container } = render(<App />)
     const mains = screen.getAllByRole('main')
     expect(mains).toHaveLength(1)
     const ids = [...mains[0].querySelectorAll('section')].map((s) => s.id)
     expect(ids).toEqual([
       'hero',
-      'about',
       'experience',
+      'hackathons',
       'projects',
+      'about',
       'contact',
     ])
-    expect(container.querySelectorAll('main section')).toHaveLength(5)
+    expect(container.querySelectorAll('main section')).toHaveLength(6)
   })
 
   it('keeps the nav outside main, labelled Primary', () => {

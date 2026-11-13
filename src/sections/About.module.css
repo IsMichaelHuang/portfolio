@@ -1,19 +1,20 @@
 /**
  * About Section Styles — Space Theme
  *
- * Two-part layout: a narrative bio constrained for readability,
- * followed by a skills grid. Skills render as pill badges grouped
- * by category in a responsive grid — 2 columns on desktop, 1 on mobile.
- *
- * Base section layout and heading styles are inherited from
- * global section rules in index.css. Pill base styles come from
- * the global [data-pill] rule.
+ * One 880px left-aligned column (the h2 shares it via index.css):
+ * the bio at a comfortable measure, an Education ledger row (grid
+ * values in index.css as .ledger-row / .ledger-meta), then skills as
+ * a <dl> of text rows.
  */
+
+.column {
+  max-width: 880px;
+  margin: 0 auto;
+}
 
 /* Bio wrapper — constrains text to a comfortable reading width */
 .bio {
-  max-width: 700px;
-  margin: 0 auto 3rem;
+  max-width: 44rem;
 }
 
 /* Individual bio paragraph */
@@ -44,36 +45,79 @@
   margin-bottom: 0;
 }
 
-/*
- * Skills grid — 2 columns on wider screens, 1 on narrow.
- * Constrained to match bio width for visual alignment.
- */
-.skillsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  max-width: 700px;
-  margin: 0 auto;
+/* Block label above Education and Skills */
+.subhead {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 3rem 0 1.25rem;
 }
 
-/* Individual skill category group */
-.skillGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-/* Category heading — quiet sentence-case label */
-.skillCategory {
-  font-size: 0.9rem;
-  font-weight: 500;
+/* School — the prominent line of the Education row */
+.school {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
   margin: 0;
+  text-wrap: balance;
+}
+
+.line {
+  margin: 0;
+  font-family: var(--font-body);
   color: var(--color-text-muted);
 }
 
-/* Pill container — wraps pills inline */
-.skillItems {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.cert {
+  display: block;
+}
+
+.issuer {
+  display: block;
+  font-size: 0.9rem;
+}
+
+/* Skills — dt above dd on phones, two columns from 480px, ledger
+   columns from 720px */
+.skills {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+
+.group {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.term {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.items {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 480px) {
+  .group {
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 0.5rem 2rem;
+  }
+}
+
+/* From 720px the labels share the ledger's 11rem column so every
+   right-hand column on the page starts on one left edge */
+@media (min-width: 720px) {
+  .group {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 2.5rem;
+  }
 }

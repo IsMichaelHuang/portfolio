@@ -11,9 +11,12 @@ test('loads with no console errors', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-for (const id of ['about', 'experience', 'projects', 'contact']) {
+for (const id of ['experience', 'projects', 'about', 'contact']) {
   test(`nav link #${id} brings its section into view`, async ({ page }) => {
+    // Instant scroll and settled fonts: a long smooth scroll races.
+    await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('./')
+    await page.evaluate(() => document.fonts.ready)
     await page.locator(`nav a[href="#${id}"]`).click()
     await expect(page.locator(`#${id}`)).toBeInViewport()
   })

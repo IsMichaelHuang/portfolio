@@ -24,7 +24,21 @@ describe('Hero', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders the three links in order', () => {
+  it('renders the Now line under the summary', () => {
+    const { container } = render(<Hero />)
+    const now =
+      'Now: Contract AI Engineer at Intuit Credit Karma in Oakland, ' +
+      'CA. Built an AI code review agent that reviews about 70 pull ' +
+      'requests a day.'
+    const el = screen.getByText('Now:').parentElement!
+    expect(el.textContent).toBe(now)
+    expect(el.previousElementSibling).toHaveTextContent(
+      /^Applied AI engineer/,
+    )
+    expect(container.querySelectorAll('h1, h2')).toHaveLength(1)
+  })
+
+  it('renders the four links in order', () => {
     render(<Hero />)
     const names = screen.getAllByRole('link').map((a) => a.textContent)
     expect(names[0]).toMatch(/^Resume/)

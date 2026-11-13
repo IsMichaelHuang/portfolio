@@ -31,13 +31,18 @@ src/
 ├── assets/
 │   └── mark.webp           # Hero logo mark
 ├── lib/
-│   └── activeSection.ts    # Pure scroll-spy picker
+│   ├── activeSection.ts    # Pure scroll-spy picker
+│   ├── emphasis.tsx        # Renders **bold** markers in data strings
+│   └── pins.ts             # Drops pins already shown as featured work
 ├── sections/
 │   ├── Hero.tsx            # Full-viewport intro (id="hero")
-│   ├── About.tsx           # About me (id="about")
-│   ├── Experience.tsx      # Work history (id="experience")
-│   ├── Projects.tsx        # Project showcase (id="projects")
+│   ├── Experience.tsx      # Work history ledger (id="experience")
+│   ├── Hackathons.tsx      # Lede, takeaway, three entries (id="hackathons")
+│   ├── Projects.tsx        # Featured work and pins (id="projects")
+│   ├── About.tsx           # Bio, Education, Skills (id="about")
 │   └── Contact.tsx         # Contact links (id="contact")
+├── data/                   # experience, education, skills, work,
+│                           # projects (generated)
 ├── test/
 │   └── setup.ts            # Vitest setup (jest-dom)
 ├── App.tsx                 # Composition root — section order lives here
@@ -47,6 +52,9 @@ src/
 └── index.css               # Global styles, theme variables, shared patterns
 e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
+├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
+├── projects.spec.ts        # Hackathon columns, featured rows, links
+├── fold.spec.ts            # First screen, hero clears nav, phone rhythm
 ├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
 ├── nav.spec.ts             # Scroll-spy / aria-current
@@ -90,6 +98,23 @@ There is deliberately no `robots.txt` or sitemap: a project site
 cannot serve a root `robots.txt`, and a one-page site does not need a
 sitemap.
 
+## Experience entries
+
+Work history lives in `src/data/experience.ts`. To add a role, append
+an object (most recent first) with `id`, `company`, `role`, `period`,
+`location` and `highlights`; no JSX changes are needed. Wrap the
+numbers worth noticing in a bullet in `**double asterisks**` and they
+render in bold through `renderEmphasis` in `src/lib/emphasis.tsx`.
+Text with an odd number of `**` markers renders literally.
+
+## Education and skills
+
+Education lives in `src/data/education.ts` (school, degree, detail,
+honor, certification name and issuer) and skills in
+`src/data/skills.ts` (an ordered list of `{ category, items }`).
+About renders them as an Education row and a `<dl>` of text rows,
+the items joined with ", "; edit the data and no JSX changes.
+
 ## Navigation
 
 The navbar uses plain HTML anchor links (`href="#section-id"`). No
@@ -110,6 +135,12 @@ The active link is measured on scroll and resize: `pickActive` in
 `src/lib/activeSection.ts` picks the last section whose top is at or
 above the bar's height plus 8px, the last section at the page bottom,
 and none above the first. The link gets `aria-current="location"`.
+
+The sections run Hero, Experience, Hackathons, Projects, About,
+Contact, and the navbar lists Experience, Projects, About, Contact in
+that order. Hackathons has no nav entry, so Experience stays current
+while it is on screen. The scroll-spy reads the `links` array in
+order, so it must follow the document order in `App.tsx`.
 
 To add a new section:
 1. Create the component in `src/sections/` with a unique `id` on the
@@ -140,6 +171,18 @@ in `index.css`:
 | `--color-border` | Subtle element borders |
 | `--font-display` | Jost, then the OS sans |
 | `--font-body` | Source Serif 4, then the OS serif |
+
+Layout: Experience and Education are resume-style ledger rows in an
+880px column. From 720px each row is a grid (`11rem minmax(0, 1fr)`,
+gap `0.5rem 2.5rem`): period and location (or "Graduated ...") on
+the left, company or school and bullets on the right; below 720px one
+column in DOM order. Experience has the grid in its module;
+Education uses the global `.ledger-row` / `.ledger-meta` classes in
+`index.css`. The h2 of Experience, Hackathons, Projects and About is aligned to
+that column by one rule in `index.css` keyed on their ids; Hero and
+Contact headings stay centred. Skills are a `<dl>` with an `8rem`
+label column from 480px and the ledger's `11rem` / `2.5rem` columns
+from 720px, so every right-hand column shares one left edge.
 
 Type: Jost, an open Futura revival, is the display and UI face for
 the name, headings, nav, buttons, pills, labels and dates. Source
@@ -223,6 +266,33 @@ gh workflow enable "Deploy to GitHub Pages"
 
 Actions are pinned to commit SHAs. Dependabot opens one grouped PR a
 month for GitHub Actions and one for npm.
+
+## Hackathons and Projects sections
+
+Hackathons (`id="hackathons"`) is its own section between Experience
+and Projects, in the same 880px column as its heading: a lede, a
+takeaway paragraph, and three entries (three columns from 720px with
+the "Code" link rows aligned at the bottom, stacked below), each
+marked "2nd". Events are h3 under the section h2.
+
+Projects (`id="projects"`) has two blocks in that column:
+
+1. **Featured projects**: ledger rows like Experience, with the
+   period and the stack list on the left and the title, highlights
+   and "Code" link on the right.
+2. **Also on GitHub**: cards for the generated pins that are not
+   already shown above or in Hackathons. The block, heading
+   included, is absent when none remain.
+
+Hackathon and featured data live in `src/data/work.ts` (`hackathons`
+and `featured`; shapes are typed there). To add one, append an
+object. Wrap the numbers worth noticing in `**double asterisks**`.
+A `repoUrl` adds a "Code" link; leave it out for a private repo.
+
+De-duplication: `remainingPins` in `src/lib/pins.ts` removes every
+generated pin whose `repoUrl` equals the `repoUrl` of a hackathon or
+featured project, ignoring case, a trailing slash and `.git`. A
+renamed repository shows twice until `work.ts` is updated.
 
 ## Projects data
 

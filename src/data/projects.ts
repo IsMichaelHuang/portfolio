@@ -42,14 +42,6 @@ export const projects: Project[] = [
     "description": "Modular LaTeX resume system with Python build pipeline, .env secret injection, configurable section ordering, and 33 pytest tests. Assembles tailored single-page resumes from shared sections."
   },
   {
-    "id": "ismichaelhuang-betterwealth",
-    "title": "BetterWealth",
-    "tags": [
-      "TypeScript"
-    ],
-    "repoUrl": "https://github.com/IsMichaelHuang/BetterWealth"
-  },
-  {
     "id": "ismichaelhuang-live-fact-checker",
     "title": "Live Fact Checker",
     "tags": [

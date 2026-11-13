@@ -2,7 +2,8 @@
  * Hero Section
  *
  * The full-viewport introductory section at the top of the page:
- * the logo mark (decorative), name, role, a one-line summary, and
+ * the logo mark (decorative), name, role, a one-line summary, a
+ * "Now" line (current role and a headline result), and
  * links (resume, GitHub, LinkedIn, email). Children fade and rise once on
  * load; reduced motion turns that off.
  *
@@ -36,6 +37,11 @@ function Hero() {
       <p className={styles.blurb}>
         Applied AI engineer — multi-agent systems and LLM
         infrastructure.
+      </p>
+      <p className={styles.now}>
+        <span className={styles.nowLabel}>Now:</span> Contract AI
+        Engineer at Intuit Credit Karma in Oakland, CA. Built an AI
+        code review agent that reviews about 70 pull requests a day.
       </p>
       <div className={styles.links}>
         <ExternalLink

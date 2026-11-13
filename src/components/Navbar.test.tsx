@@ -10,9 +10,9 @@ describe('Navbar', () => {
       .map((a) => a.getAttribute('href'))
       .filter((h) => h !== '#hero')
     expect(hrefs).toEqual([
-      '#about',
       '#experience',
       '#projects',
+      '#about',
       '#contact',
     ])
   })

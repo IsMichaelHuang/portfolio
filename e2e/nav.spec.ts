@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test'
 
-const ids = ['about', 'experience', 'projects', 'contact']
+const ids = ['experience', 'projects', 'about', 'contact']
 const current = (page: Page) => page.locator('nav [aria-current]')
 
 test.beforeEach(async ({ page }) => {

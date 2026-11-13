@@ -7,17 +7,36 @@ async function open(page: Page, width: number, height = 800) {
   await page.evaluate(() => document.fonts.ready)
 }
 
-// Cards are the h3 parents inside #projects (class names are hashed).
+// Cards are the h4 parents inside #pinned (class names are hashed).
 const cards = (page: Page) =>
-  page.locator('#projects h3').locator('xpath=..')
+  page.locator('#pinned h4').locator('xpath=..')
 
-test('last odd card is centred, 450px wide at 1280px', async ({ page }) => {
+// Clone a card until there are `n`; skip when no pins are rendered.
+async function ensureCards(page: Page, n: number) {
+  const have = await page.locator('#pinned h4').count()
+  test.skip(have === 0, '#pinned is absent: no pins left to test')
+  await page.evaluate((n) => {
+    const first = document.querySelector('#pinned h4')!.parentElement!
+    while (document.querySelectorAll('#pinned h4').length < n)
+      first.parentElement!.append(first.cloneNode(true))
+  }, n)
+}
+
+test('last odd card is centred, one column wide at 1280px', async ({
+  page,
+}) => {
   await open(page, 1280)
+  await ensureCards(page, 3)
+  // drop to exactly three cards so the last one is odd
+  await page.evaluate(() => {
+    const hs = document.querySelectorAll('#pinned h4')
+    for (let i = hs.length - 1; i >= 3; i--) hs[i].parentElement!.remove()
+  })
   const all = await cards(page).all()
   expect(all.length % 2).toBe(1)
   const last = (await all[all.length - 1].boundingBox())!
   const grid = (await cards(page).first().locator('xpath=..').boundingBox())!
-  expect(last.width).toBe(450)
+  expect(last.width).toBe(428)
   expect(
     Math.abs(last.x + last.width / 2 - (grid.x + grid.width / 2)),
   ).toBeLessThanOrEqual(1)
@@ -27,6 +46,7 @@ test('row-mates match height and align their link rows', async ({
   page,
 }) => {
   await open(page, 1280)
+  await ensureCards(page, 2)
   const all = await cards(page).all()
   const [a, b] = [await all[0].boundingBox(), await all[1].boundingBox()]
   expect(a!.height).toBe(b!.height)
@@ -40,8 +60,9 @@ test('row-mates match height and align their link rows', async ({
 
 test('cards without descriptions have no forced void', async ({ page }) => {
   await open(page, 1280)
+  await ensureCards(page, 4)
   await page.evaluate(() => {
-    const all = Array.from(document.querySelectorAll('#projects h3')).map(
+    const all = Array.from(document.querySelectorAll('#pinned h4')).map(
       (h) => h.parentElement!,
     )
     for (const c of [all[2], all[3]]) c.querySelector('p')?.remove()
@@ -54,6 +75,7 @@ test('cards without descriptions have no forced void', async ({ page }) => {
 
 test('last card matches the others at 375px', async ({ page }) => {
   await open(page, 375)
+  await ensureCards(page, 3)
   const all = await cards(page).all()
   const first = (await all[0].boundingBox())!
   const last = (await all[all.length - 1].boundingBox())!
@@ -83,7 +105,9 @@ test('links are 44px tall on phones, no scroll at 320px', async ({
   page,
 }) => {
   await open(page, 375)
-  const links = page.locator('nav a, #projects a, #contact a, footer a')
+  const links = page.locator(
+    'nav a, #hackathons a, #projects a, #contact a, footer a',
+  )
   expect(await links.count()).toBeGreaterThan(8)
   for (const el of await links.all()) {
     expect((await el.boundingBox())!.height).toBeGreaterThanOrEqual(44)
@@ -122,7 +146,7 @@ test('About lead paragraph and prose typography', async ({ page }) => {
   expect(p1.color).not.toBe(p2.color)
   expect(p1.size).toBeGreaterThan(p2.size)
   const nowrap = await page
-    .locator('#experience h3 + *')
+    .locator('#experience article span', { hasText: /20\d\d/ })
     .evaluateAll((els) => els.map((e) => getComputedStyle(e).whiteSpace))
   expect(nowrap.length).toBeGreaterThan(0)
   for (const w of nowrap) expect(w).toBe('nowrap')
@@ -132,10 +156,30 @@ test('About lead paragraph and prose typography', async ({ page }) => {
   for (const s of sizes) expect(s).toBe('16px')
 })
 
-test('About heading peeks into the first phone screen', async ({ page }) => {
+test('hero is no taller than the phone viewport', async ({ page }) => {
   await open(page, 375, 812)
-  const top = await page
-    .locator('#about h2')
-    .evaluate((el) => el.getBoundingClientRect().top)
-  expect(top).toBeLessThan(812)
+  const h = await page
+    .locator('#hero')
+    .evaluate((el) => el.getBoundingClientRect().height)
+  expect(h).toBeLessThanOrEqual(812)
+})
+
+test('hero links form two rows of two, 44px tall, at 375px', async ({
+  page,
+}) => {
+  await open(page, 375, 812)
+  const boxes = await page
+    .locator('#hero a')
+    .evaluateAll((els) =>
+      els.map((e) => {
+        const r = e.getBoundingClientRect()
+        return { top: Math.round(r.top), width: r.width, h: r.height }
+      }),
+    )
+  expect(boxes).toHaveLength(4)
+  expect(new Set(boxes.map((b) => b.top)).size).toBe(2)
+  expect(boxes[0].top).toBe(boxes[1].top)
+  expect(boxes[2].top).toBe(boxes[3].top)
+  expect(Math.abs(boxes[0].width - boxes[1].width)).toBeLessThan(1)
+  for (const b of boxes) expect(b.h).toBeGreaterThanOrEqual(44)
 })

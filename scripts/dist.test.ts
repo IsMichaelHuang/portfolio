@@ -1,8 +1,12 @@
 import { existsSync, readFileSync } from 'node:fs'
+import { inflateSync } from 'node:zlib'
 import { describe, expect, it } from 'vitest'
 
 const SITE = 'https://ismichaelhuang.github.io/portfolio/'
 const OG = SITE + 'og.png'
+const SHORT =
+  'Applied AI engineer: multi-agent systems and LLM infrastructure. ' +
+  'Now at Intuit Credit Karma.'
 const EMAIL = 'michael.micah.huang@gmail.com'
 
 const indexPath = 'dist/index.html'
@@ -45,6 +49,11 @@ describe('dist/index.html', () => {
     expect(d.length).toBeLessThanOrEqual(160)
     expect(d).toContain('Michael Huang')
     expect(d).toContain('AI')
+    expect(d).toBe(
+      'Michael Huang is a software engineer in Oakland, CA building ' +
+        'applied AI: multi-agent systems and LLM infrastructure. Now ' +
+        'at Intuit Credit Karma.',
+    )
   })
 
   it('has the canonical link', () => {
@@ -54,7 +63,7 @@ describe('dist/index.html', () => {
   it('has Open Graph tags', () => {
     expect(meta('property', 'og:type')).toBe('website')
     expect(meta('property', 'og:title')).toBeTruthy()
-    expect(meta('property', 'og:description')).toBeTruthy()
+    expect(meta('property', 'og:description')).toBe(SHORT)
     expect(meta('property', 'og:url')).toBe(SITE)
     expect(meta('property', 'og:image')).toBe(OG)
     expect(meta('property', 'og:image:width')).toBe('1200')
@@ -66,7 +75,7 @@ describe('dist/index.html', () => {
   it('has Twitter card tags', () => {
     expect(meta('name', 'twitter:card')).toBe('summary_large_image')
     expect(meta('name', 'twitter:title')).toBeTruthy()
-    expect(meta('name', 'twitter:description')).toBeTruthy()
+    expect(meta('name', 'twitter:description')).toBe(SHORT)
     expect(meta('name', 'twitter:image')).toBe(OG)
   })
 
@@ -104,6 +113,21 @@ describe('dist/index.html', () => {
 
   it('keeps the resume', () => {
     expect(existsSync('dist/resume.pdf')).toBe(true)
+  })
+
+  it('ships the current resume', () => {
+    const pdf = readFileSync('dist/resume.pdf').toString('latin1')
+    const text = [...pdf.matchAll(/stream\r?\n([\s\S]*?)endstream/g)]
+      .flatMap((m) => {
+        try {
+          return [inflateSync(Buffer.from(m[1], 'latin1')).toString('latin1')]
+        } catch {
+          return []
+        }
+      })
+      .join('\n')
+      .replace(/\)\s*-?\d+(\.\d+)?\s*\(/g, '')
+    expect(text).toMatch(/Credit\s*Karma/)
   })
 })
 
