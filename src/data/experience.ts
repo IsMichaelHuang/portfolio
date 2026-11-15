@@ -11,6 +11,12 @@
  * renders them in bold (see lib/emphasis.tsx).
  */
 
+/** The one number that leads an entry, shown large above its unit. */
+export interface Figure {
+  value: string;
+  unit: string;
+}
+
 export interface Experience {
   /** Unique identifier, used as the React key when rendering the list */
   id: string;
@@ -24,11 +30,22 @@ export interface Experience {
   location: string;
   /** Bullet points describing what you did — each string is one bullet */
   highlights: string[];
+  /** Optional lead number; its value is a bold run in `highlights` */
+  figure?: Figure;
 }
+
+/** The hero figure; its value is a bold run of the credit-karma entry */
+export const heroFigure: Figure = {
+  value: "~70",
+  unit:
+    "pull requests a day, reviewed by an AI code review agent I built " +
+    "at Intuit Credit Karma.",
+};
 
 export const experience: Experience[] = [
   {
     id: "credit-karma",
+    figure: { value: "~15,000", unit: "AI workflow runs per day" },
     role: "Contract AI Engineer",
     company: "Intuit Credit Karma",
     period: "Apr 2026 — Present",
@@ -46,6 +63,7 @@ export const experience: Experience[] = [
   },
   {
     id: "dynamic-experts",
+    figure: { value: "157", unit: "unit tests" },
     role: "Contract AI Engineer",
     company: "Dynamic Experts",
     period: "Dec 2025 — Jan 2026",
@@ -63,6 +81,7 @@ export const experience: Experience[] = [
   },
   {
     id: "solidigm",
+    figure: { value: "~30%", unit: "fewer false-positive failures" },
     role: "Automation and Product Engineering Intern",
     company: "Solidigm (Formerly Intel NAND)",
     period: "Jun 2022 — Aug 2023",

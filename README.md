@@ -102,7 +102,9 @@ sitemap.
 
 Work history lives in `src/data/experience.ts`. To add a role, append
 an object (most recent first) with `id`, `company`, `role`, `period`,
-`location` and `highlights`; no JSX changes are needed. Wrap the
+`location` and `highlights`, plus an optional `figure` (`value` and
+`unit`; the value is a bold run in `highlights`); no JSX changes are
+needed. Wrap the
 numbers worth noticing in a bullet in `**double asterisks**` and they
 render in bold through `renderEmphasis` in `src/lib/emphasis.tsx`.
 Text with an odd number of `**` markers renders literally.
@@ -284,6 +286,8 @@ Projects (`id="projects"`) has two blocks in that column:
 1. **Featured projects**: ledger rows like Experience, with the
    period and the stack list on the left and the title, highlights
    and "Code" link on the right.
+   A featured project may carry an optional `figure` (`value` and
+   `unit`; the value is a bold run in its `highlights`).
 2. **Also on GitHub**: cards for the generated pins that are not
    already shown above or in Hackathons. The block, heading
    included, is absent when none remain.
