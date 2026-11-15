@@ -11,7 +11,7 @@
  *
  * Type: two self-hosted faces (@fontsource-variable, no third-party
  * requests). Jost, an open Futura revival, is the display/UI face
- * (--font-display: headings, nav, buttons, pills, labels, dates).
+ * (--font-display: headings, nav, buttons, labels, dates).
  * Source Serif 4, roman and italic, is the prose face (--font-body:
  * bio, bullets, descriptions). font-synthesis is none, so italics
  * come from the real italic file.
@@ -269,20 +269,6 @@ h3 {
     padding-top: 0.4rem;
     white-space: nowrap;
   }
-}
-
-/* --- Shared Pill Style --- */
-
-/*
- * Reusable pill/badge pattern for tags and skills.
- * Applied via a data attribute (data-pill) to avoid CSS Module
- * scoping issues while keeping markup semantic.
- */
-[data-pill] {
-  font-size: 0.85rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 4px;
-  border: 1px solid var(--color-border);
 }
 
 /* --- Accessibility Utilities --- */

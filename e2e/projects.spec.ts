@@ -60,8 +60,8 @@ for (const [width, left] of [
   [1280, true],
   [375, false],
 ] as const) {
-  const where = left ? 'left of' : 'below'
-  test(`featured stack sits ${where} title at ${width}px`, async ({
+  const where = left ? 'left of' : 'above'
+  test(`featured figure sits ${where} title at ${width}px`, async ({
     page,
   }) => {
     await open(page, width, 812)
@@ -71,18 +71,26 @@ for (const [width, left] of [
         as.map((a) => {
           const h = a.querySelector('h3')!.getBoundingClientRect()
           const s = a.querySelector('ul')!.getBoundingClientRect()
+          const f = a
+            .querySelector('[data-figure]')
+            ?.getBoundingClientRect()
           return {
             hLeft: h.left,
+            hTop: h.top,
             hBottom: h.bottom,
-            sRight: s.right,
             sTop: s.top,
+            fRight: f?.right,
+            fBottom: f?.bottom,
           }
         }),
       )
     expect(rows).toHaveLength(3)
+    expect(rows.filter((r) => r.fRight !== undefined)).toHaveLength(2)
     for (const r of rows) {
-      if (left) expect(r.sRight).toBeLessThan(r.hLeft)
-      else expect(r.sTop).toBeGreaterThanOrEqual(r.hBottom)
+      expect(r.sTop).toBeGreaterThanOrEqual(r.hBottom)
+      if (r.fRight === undefined) continue
+      if (left) expect(r.fRight).toBeLessThan(r.hLeft)
+      else expect(r.fBottom).toBeLessThanOrEqual(r.hTop)
     }
   })
 }

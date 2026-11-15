@@ -201,7 +201,7 @@ with an `8rem` label column from 480px and the same `--row-cols` /
 edge. The "Also on GitHub" block keeps an 880px column.
 
 Type: Jost, an open Futura revival, is the display and UI face for
-the name, headings, nav, buttons, pills, labels and dates. Source
+the name, headings, nav, buttons, labels and dates. Source
 Serif 4 (roman and italic) is the prose face for the bio, highlights,
 project descriptions and contact message. Both ship as variable
 fonts from `@fontsource-variable/*`, self-hosted with no third-party
@@ -295,13 +295,14 @@ marked "2nd". Events are h3 under the section h2.
 
 Projects (`id="projects"`) has two blocks in that column:
 
-1. **Featured projects**: ledger rows like Experience, with the
-   period and the stack list on the left and the title, highlights
-   and "Code" link on the right.
+1. **Featured projects**: figure-led ledger rows like Experience: the
+   figure on the left from 720px (above the title below), and the
+   title, period, stack, highlights and "Code" link on the right.
    A featured project may carry an optional `figure` (`value` and
    `unit`; the value is a bold run in its `highlights`).
-2. **Also on GitHub**: cards for the generated pins that are not
-   already shown above or in Hackathons. The block, heading
+2. **Also on GitHub**: unboxed entries (a hairline above each, no
+   tags) for the generated pins that are not already shown above or
+   in Hackathons, in two columns from 988px. The block, heading
    included, is absent when none remain.
 
 Hackathon and featured data live in `src/data/work.ts` (`hackathons`

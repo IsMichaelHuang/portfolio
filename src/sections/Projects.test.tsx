@@ -87,7 +87,10 @@ describe('Projects', () => {
   it('bolds the numbers', () => {
     render(<Projects />)
     for (const t of ['249', '.env secret injection', '61 pytest tests']) {
-      expect(screen.getByText(t).tagName).toBe('STRONG')
+      const hit = screen
+        .getAllByText(t)
+        .filter((e) => e.tagName === 'STRONG')
+      expect(hit).toHaveLength(1)
     }
   })
 
@@ -120,5 +123,24 @@ describe('Projects', () => {
     expect(within(pinned as HTMLElement).getByText('About alpha'))
       .toBeInTheDocument()
     expect(pinned.querySelectorAll('p')).toHaveLength(1)
+  })
+
+  it('leads a row with its decorative figure when it has one', () => {
+    render(<Projects />)
+    const row = (n: string) =>
+      screen.getByRole('heading', { name: n }).closest('article')!
+    for (const n of ['BudgetTracker', 'Modular Resume Build System']) {
+      const first = row(n).firstElementChild!
+      expect(first).toHaveAttribute('data-figure')
+      expect(first).toHaveAttribute('aria-hidden', 'true')
+    }
+    const none = row('Laser-Based Audio Injection ("Light Commands")')
+    expect(none.querySelector('[data-figure]')).toBeNull()
+  })
+
+  it('renders no tags on the pins', () => {
+    const { container } = render(<Projects />)
+    expect(container.querySelector('[data-pill]')).toBeNull()
+    expect(screen.queryByText('t')).toBeNull()
   })
 })
