@@ -1,22 +1,33 @@
 /**
  * About Section Styles
  *
- * Starts at the page grid's left edge, as the h2 does: the bio at
- * a comfortable measure, an Education ledger row (grid values in
- * index.css as .ledger-row / .ledger-meta), then skills as a <dl>
- * of text rows.
+ * The bio at a comfortable measure on the page grid, an Education
+ * ledger row (grid values in index.css as .ledger-row /
+ * .ledger-meta), then skills as a <dl> of text rows.
  */
 
-/* Bio wrapper — constrains text to a comfortable reading width */
+/* Bio: from 720px the paragraphs take the grid's right column, so
+   their left edge matches the entry titles; one column below */
 .bio {
-  max-width: 44rem;
+  display: grid;
 }
 
-/* Individual bio paragraph */
+@media (min-width: 720px) {
+  .bio {
+    grid-template-columns: var(--row-cols);
+    column-gap: var(--row-gap);
+  }
+
+  .bio > * {
+    grid-column: 2;
+  }
+}
+
 .paragraph {
+  max-width: 40rem;
   font-size: 1.125rem;
   font-family: var(--font-body);
-  line-height: 1.75;
+  line-height: 1.6;
   margin: 0 0 1.25rem;
   color: var(--color-text-muted);
   text-align: left;
@@ -26,14 +37,7 @@
 /* The first paragraph leads: brighter and larger */
 .paragraph:first-child {
   color: var(--color-text);
-  font-size: 1.25rem;
-  line-height: 1.6;
-}
-
-@media (max-width: 599px) {
-  .paragraph:first-child {
-    font-size: 1.125rem;
-  }
+  font-size: 1.375rem;
 }
 
 .paragraph:last-child {
@@ -45,7 +49,7 @@
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
-  margin: 3rem 0 1.25rem;
+  margin: var(--space-group) 0 1.25rem;
 }
 
 /* School — the prominent line of the Education row */

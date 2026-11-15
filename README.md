@@ -24,7 +24,7 @@ src/
 │   ├── Navbar.tsx          # Fixed top navigation bar
 │   ├── Navbar.module.css
 │   ├── Navbar.test.tsx     # Unit test
-│   ├── Footer.tsx          # Page footer: stack credit, source link
+│   ├── Footer.tsx          # Ink-ground footer: stack credit, source link
 │   ├── Footer.module.css
 │   ├── Footer.test.tsx     # Unit test
 │   ├── ExternalLink.tsx    # New-tab link with sr-only notice
@@ -42,8 +42,8 @@ src/
 │   ├── Experience.tsx      # Work history ledger (id="experience")
 │   ├── Hackathons.tsx      # Lede, takeaway, three entries (id="hackathons")
 │   ├── Projects.tsx        # Featured work and pins (id="projects")
-│   ├── About.tsx           # Bio, Education, Skills (id="about")
-│   └── Contact.tsx         # Contact links (id="contact")
+│   ├── About.tsx           # Bio column, Education, Skills (id="about")
+│   └── Contact.tsx         # Ink-ground email and links (id="contact")
 ├── data/                   # experience, education, skills, work,
 │                           # projects (generated)
 ├── test/
@@ -56,6 +56,7 @@ src/
 e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
 ├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
+├── closing.spec.ts         # About column, ink Contact and footer
 ├── projects.spec.ts        # Hackathon pinning, featured rows, links
 ├── fold.spec.ts            # First screen, hero clears nav, phone rhythm
 ├── noscript.spec.ts        # Name, role and links with JS off

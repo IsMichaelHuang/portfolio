@@ -24,4 +24,12 @@ describe('Footer', () => {
     expect(a).toHaveAttribute('rel', 'noopener noreferrer')
     expect(a).toHaveAccessibleName(/^Source on GitHub.*\(opens in new tab\)$/)
   })
+
+  it('footer carries data-ground ink', () => {
+    render(<App />)
+    expect(screen.getByRole('contentinfo')).toHaveAttribute(
+      'data-ground',
+      'ink',
+    )
+  })
 })

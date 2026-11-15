@@ -1,92 +1,57 @@
 /**
  * Contact Section Styles
  *
- * Centered, minimal layout that draws focus to the email CTA.
- * Uses ink for the primary action and theme variables
- * for consistent visual language.
- *
- * Heading styles are inherited from global section rules in index.css.
- * Section max-width is overridden here to be narrower than the default.
+ * Left-aligned on the page grid over the ink ground (set by
+ * data-ground in Contact.tsx). The email address is the display
+ * moment. Heading styles and section padding come from index.css.
  */
 
-/* Section override — narrower than the full-bleed default for focused layout */
-.section {
-  max-width: 700px;
-  margin-inline: auto; /* sections are no longer centred globally */
-  text-align: center;
-}
-
-/* Heading override — tighter bottom margin for Contact's compact layout */
 .heading {
   margin-bottom: 1rem;
 }
 
-/* Invitation message — muted supporting text */
 .message {
+  max-width: 34rem;
   font-size: 1.125rem;
   font-family: var(--font-body);
   line-height: 1.75;
-  margin: 0 0 2rem;
-  color: var(--color-text-muted);
+  margin: 0 0 var(--space-group);
+  color: var(--color-text);
   text-wrap: pretty;
 }
 
-/*
- * Email link — primary CTA with an ink border.
- * Stands out against the muted surroundings as the key action.
- */
+/* The address itself, set large and underlined */
 .emailLink {
   display: inline-block;
-  font-size: 1.1rem;
-  padding: 0.6rem 1.5rem;
-  border: 1px solid var(--color-text);
-  border-radius: 4px;
-  margin-bottom: 2rem;
-  color: var(--color-text);
-  overflow-wrap: anywhere; /* the address must not overflow at 320px */
-  transition: color 0.2s;
-}
-
-@media (max-width: 599px) {
-  .emailLink {
-    font-size: 1rem;
-    padding: 0.6rem 1rem;
-    min-height: 44px;
-  }
-}
-
-.emailLink:hover {
+  min-height: 44px;
+  margin-bottom: var(--space-group);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 4.6vw, 4.5rem);
+  line-height: 1.2;
   text-decoration: underline;
-  text-underline-offset: 0.25em;
-  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 2px;
+  overflow-wrap: anywhere; /* the address must not overflow at 320px */
 }
 
-/* Profile links row — secondary to the email CTA */
 .links {
   display: flex;
-  justify-content: center;
   gap: 1.5rem;
 }
 
-/* Individual profile link — muted by default; ink and underlined
-   on hover (the shared plain-text-link hover) */
 .link {
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 1.05rem;
   color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
   transition: color 0.2s;
 }
 
 .link:hover {
   color: var(--color-text);
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-  text-decoration-thickness: 1px;
-}
-
-@media (max-width: 599px) {
-  .link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-  }
 }
