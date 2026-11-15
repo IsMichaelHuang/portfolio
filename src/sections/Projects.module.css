@@ -1,9 +1,9 @@
 /**
  * Projects Section Styles
  *
- * Everything sits in one 880px left-aligned column shared with the
- * section heading. Featured projects: ledger rows matching
- * Experience (11rem metadata column + content, hairline between
+ * Starts at the page grid's left edge, as the heading does; the
+ * Also on GitHub block keeps an 880px column. Featured projects:
+ * ledger rows (11rem metadata column + content, hairline between
  * rows; 1.5rem row padding and 1.6 bullet leading on phones). Also on
  * GitHub: a two-up card grid filling the column, a single 450px
  * column at 987px and below; an odd last card is centred at the
@@ -12,11 +12,6 @@
  *
  * Base section layout and heading styles come from index.css.
  */
-
-.column {
-  max-width: 880px;
-  margin: 0 auto;
-}
 
 /* h3 for Also on GitHub */
 .blockHeading {
@@ -179,6 +174,7 @@
 /* --- Also on GitHub --- */
 
 .pinned {
+  max-width: 880px;
   margin-top: 4rem;
 }
 

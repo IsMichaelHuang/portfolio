@@ -181,21 +181,24 @@ Everything is defined through CSS custom properties in `index.css`:
 | `--color-border` | Element borders |
 | `--gutter` | Inline section padding; content stays within 1360px |
 | `--space-in`, `--space-group`, `--space-section` | Spacing scale |
+| `--row-cols`, `--row-gap` | Shared two-column row grid, from 720px |
 | `--nav-h` | Fixed navbar height, used by `scroll-padding-top` |
 | `--font-display` | Jost, then the OS sans |
 | `--font-body` | Source Serif 4, then the OS serif |
 
-Layout: Experience and Education are resume-style ledger rows in an
-880px column. From 720px each row is a grid (`11rem minmax(0, 1fr)`,
-gap `0.5rem 2.5rem`): period and location (or "Graduated ...") on
-the left, company or school and bullets on the right; below 720px one
-column in DOM order. Experience has the grid in its module;
-Education uses the global `.ledger-row` / `.ledger-meta` classes in
-`index.css`. The h2 of Experience, Hackathons, Projects and About is aligned to
-that column by one rule in `index.css` keyed on their ids; Hero and
-Contact headings stay centred. Skills are a `<dl>` with an `8rem`
-label column from 480px and the ledger's `11rem` / `2.5rem` columns
-from 720px, so every right-hand column shares one left edge.
+Layout: every section starts at the page grid's left edge (the
+section's `padding-inline`, content within 1360px); h2s are left-aligned
+direct children. Experience and Education are resume-style ledger rows
+on the global `.ledger-row` class in `index.css`, a size container at
+every width. From 720px a row is a grid on `--row-cols`
+(`minmax(0, 5fr) minmax(0, 7fr)`) with `--row-gap` (`3.5rem`): the
+`[data-figure]` or `.ledger-meta` takes column 1 across the rows,
+everything else column 2; below 720px one column in DOM order. An
+Experience entry is its figure, company, role, period and location,
+then 18px bullets, rows separated by a hairline. Skills are a `<dl>`
+with an `8rem` label column from 480px and the same `--row-cols` /
+`--row-gap` from 720px, so every right-hand column shares one left
+edge. The "Also on GitHub" block keeps an 880px column.
 
 Type: Jost, an open Futura revival, is the display and UI face for
 the name, headings, nav, buttons, pills, labels and dates. Source
@@ -285,7 +288,7 @@ month for GitHub Actions and one for npm.
 ## Hackathons and Projects sections
 
 Hackathons (`id="hackathons"`) is its own section between Experience
-and Projects, in the same 880px column as its heading: a lede, a
+and Projects, at the same left edge as its heading: a lede, a
 takeaway paragraph, and three entries (three columns from 720px with
 the "Code" link rows aligned at the bottom, stacked below), each
 marked "2nd". Events are h3 under the section h2.

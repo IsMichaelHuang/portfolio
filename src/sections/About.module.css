@@ -1,16 +1,11 @@
 /**
  * About Section Styles
  *
- * One 880px left-aligned column (the h2 shares it via index.css):
- * the bio at a comfortable measure, an Education ledger row (grid
- * values in index.css as .ledger-row / .ledger-meta), then skills as
- * a <dl> of text rows.
+ * Starts at the page grid's left edge, as the h2 does: the bio at
+ * a comfortable measure, an Education ledger row (grid values in
+ * index.css as .ledger-row / .ledger-meta), then skills as a <dl>
+ * of text rows.
  */
-
-.column {
-  max-width: 880px;
-  margin: 0 auto;
-}
 
 /* Bio wrapper — constrains text to a comfortable reading width */
 .bio {
@@ -113,11 +108,11 @@
   }
 }
 
-/* From 720px the labels share the ledger's 11rem column so every
+/* From 720px the labels share the ledger's --row-cols column so every
    right-hand column on the page starts on one left edge */
 @media (min-width: 720px) {
   .group {
-    grid-template-columns: 11rem minmax(0, 1fr);
-    column-gap: 2.5rem;
+    grid-template-columns: var(--row-cols);
+    column-gap: var(--row-gap);
   }
 }

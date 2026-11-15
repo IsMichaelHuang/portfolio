@@ -1,7 +1,7 @@
 /**
  * Hackathons Section Styles
  *
- * One 880px left-aligned column shared with the section heading.
+ * Content starts at the page grid's left edge, as the heading does.
  * Three entries in equal columns from 720px (2.5rem apart), stacked
  * below; each sits under a hairline. On phones the place and event
  * share a baseline row. From 720px each entry is a flex column and
@@ -9,11 +9,6 @@
  *
  * Base section layout and heading styles come from index.css.
  */
-
-.column {
-  max-width: 880px;
-  margin: 0 auto;
-}
 
 .lede,
 .takeaway {

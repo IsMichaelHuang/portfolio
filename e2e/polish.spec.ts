@@ -155,7 +155,7 @@ test('About lead paragraph and prose typography', async ({ page }) => {
   const sizes = await page
     .locator('#experience li')
     .evaluateAll((els) => els.map((e) => getComputedStyle(e).fontSize))
-  for (const s of sizes) expect(s).toBe('16px')
+  for (const s of sizes) expect(s).toBe('18px')
 })
 
 test('hero is no taller than the phone viewport', async ({ page }) => {

@@ -85,3 +85,52 @@ test('AC4 long unbroken text grows the card at 320px', async ({ page }) => {
   ])
   expect(sw).toBeLessThanOrEqual(cw)
 })
+
+// Row figures: the visible numeral stays inside its grid cell.
+const SPACING = `* { line-height: 1.5 !important;
+  letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+  p { margin-bottom: 2em !important; }`
+
+async function figuresFit(page: Page) {
+  return page.locator('#experience article').evaluateAll((as) =>
+    as.flatMap((a) => {
+      const f = a.querySelector('[data-figure]')
+      if (!f) return []
+      // the numeral is a block: measure its glyphs, not its box
+      const rg = document.createRange()
+      rg.selectNodeContents(f.querySelector('[aria-hidden="true"]')!)
+      const n = rg.getBoundingClientRect()
+      const h = a.querySelector('h3')!.getBoundingClientRect()
+      return [
+        {
+          over: n.right - f.getBoundingClientRect().right,
+          hOver: innerWidth >= 720 ? n.right - h.left : -1,
+        },
+      ]
+    }),
+  )
+}
+
+for (const [width, spacing] of [
+  [320, false],
+  [375, false],
+  [768, false],
+  [1280, false],
+  [1920, false],
+  [320, true],
+  [720, true],
+  [768, true],
+] as const) {
+  test(`F5 row figures fit at ${width}px${spacing ? ' spaced' : ''}`, async ({
+    page,
+  }) => {
+    await open(page, width)
+    if (spacing) await page.addStyleTag({ content: SPACING })
+    const fits = await figuresFit(page)
+    expect(fits.length).toBeGreaterThan(0)
+    for (const f of fits) {
+      expect(f.over).toBeLessThanOrEqual(0.5)
+      expect(f.hOver).toBeLessThanOrEqual(0)
+    }
+  })
+}

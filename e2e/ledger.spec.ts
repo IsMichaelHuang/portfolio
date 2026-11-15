@@ -23,19 +23,21 @@ const dds = [
   'Git, Linux, Vitest, pytest, Firecrawl, Jira, Confluence, Agile/Scrum',
 ]
 
-test('experience rows are ledgers at 1280px', async ({ page }) => {
+test('experience figures sit left of the title at 1280px', async ({
+  page,
+}) => {
   await open(page, 1280)
   const rows = await page.locator('#experience article').evaluateAll((as) =>
     as.map((a) => {
       const h = a.querySelector('h3')!.getBoundingClientRect()
-      const p = a.querySelector('span')!.getBoundingClientRect()
-      return { hLeft: h.left, hTop: h.top, pRight: p.right, pTop: p.top }
+      const f = a.querySelector('[data-figure]')!.getBoundingClientRect()
+      return { hLeft: h.left, hTop: h.top, fRight: f.right, fTop: f.top }
     }),
   )
   expect(rows).toHaveLength(3)
   for (const r of rows) {
-    expect(r.pRight).toBeLessThan(r.hLeft)
-    expect(Math.abs(r.pTop - r.hTop)).toBeLessThanOrEqual(8)
+    expect(r.fRight).toBeLessThan(r.hLeft)
+    expect(Math.abs(r.fTop - r.hTop)).toBeLessThanOrEqual(24)
     expect(Math.abs(r.hLeft - rows[0].hLeft)).toBeLessThanOrEqual(1)
   }
 })
@@ -43,9 +45,12 @@ test('experience rows are ledgers at 1280px', async ({ page }) => {
 test('experience entry stacks at 375px', async ({ page }) => {
   await open(page, 375, 812)
   const r = await page.locator('#experience article').first().evaluate((a) => ({
+    f: a.querySelector('[data-figure]')!.getBoundingClientRect().bottom,
     h: a.querySelector('h3')!.getBoundingClientRect().bottom,
-    p: a.querySelector('span')!.getBoundingClientRect().top,
+    ht: a.querySelector('h3')!.getBoundingClientRect().top,
+    p: a.querySelector('div > span')!.getBoundingClientRect().top,
   }))
+  expect(r.f).toBeLessThan(r.ht)
   expect(r.h).toBeLessThan(r.p)
 })
 
