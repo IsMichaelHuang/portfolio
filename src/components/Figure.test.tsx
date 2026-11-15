@@ -24,6 +24,16 @@ describe('Figure', () => {
     expect(setup({}).querySelector('.sr-only')?.textContent).toBe('157')
   })
 
+  it('sets a leading ~ in its own span, only when present', () => {
+    const c = setup({ value: '~70' })
+    const visible = c.querySelector('span[aria-hidden="true"]')!
+    expect(visible.children).toHaveLength(1)
+    expect(visible.children[0].textContent).toBe('~')
+    expect(visible.textContent).toBe('~70')
+    const plain = setup({}).querySelector('span[aria-hidden="true"]')!
+    expect(plain.children).toHaveLength(0)
+  })
+
   it('renders the unit only when given', () => {
     const withUnit = setup({ unit: 'hours saved' })
     expect(withUnit).toHaveTextContent('hours saved')

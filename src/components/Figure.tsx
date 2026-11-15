@@ -11,6 +11,7 @@ interface Props {
 /** One very large number with an optional unit beside it. */
 function Figure({ value, unit, size, decorative }: Props) {
   const spoken = value.replace(/^~/, "about ");
+  const approx = value.startsWith("~");
   return (
     <p
       className={styles.figure}
@@ -20,7 +21,8 @@ function Figure({ value, unit, size, decorative }: Props) {
     >
       <span className="sr-only">{spoken}</span>
       <span className={styles.numeral} aria-hidden="true">
-        {value}
+        {approx && <span className={styles.approx}>~</span>}
+        {approx ? value.slice(1) : value}
       </span>
       {unit && <span className={styles.unit}>{unit}</span>}
     </p>
