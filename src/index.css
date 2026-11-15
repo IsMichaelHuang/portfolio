@@ -287,7 +287,9 @@ h4 {
 /* --- Accessibility Utilities --- */
 
 :focus-visible {
-  outline: 2px solid currentColor;
+  /* The ground's text colour, not the element's: a filled button's
+     own colour is the ground, which would hide the ring. */
+  outline: 2px solid var(--color-text);
   outline-offset: 2px;
 }
 

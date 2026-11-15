@@ -235,10 +235,11 @@ Code and Live links are muted at rest and turn ink with a thin
 underline offset 0.25em on hover; the Contact profile links and the
 footer link are underlined at rest and turn ink on hover. `a:active`
 dims every link. The Resume button in the hero is the lead
-action and the only filled link (ink fill, white text); the other
-hero links are outlined. The focus ring is a 2px solid outline in
-the current text colour. Links and buttons are at least 24px in both
-dimensions on desktop and at least 44px tall on phones.
+action and the only filled link (ink fill, text in the ground's
+colour); the other hero links are outlined. The focus ring is a 2px
+solid outline in the text colour of the ground it sits on, so it
+shows on a filled link too. Links and buttons are at least 24px in
+both dimensions on desktop and at least 44px tall on phones.
 
 `src/contrast.test.ts` reads the palette tokens and fails if any
 text and ground pair drops below 4.5:1, or muted text on white below
