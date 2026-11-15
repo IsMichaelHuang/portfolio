@@ -91,14 +91,16 @@ for (const width of [375, 1280]) {
   })
 }
 
-test('Resume is the lead hero action', async ({ page }) => {
+test('Resume is the only filled hero link', async ({ page }) => {
   await open(page, 1280)
-  const border = (name: string) =>
-    page
-      .locator('#hero a', { hasText: name })
-      .evaluate((el) => getComputedStyle(el).borderTopColor)
-  expect(await border('Resume')).toBe('rgb(74, 108, 247)')
-  expect(await border('GitHub')).not.toBe('rgb(74, 108, 247)')
+  const bgs = await page
+    .locator('#hero a')
+    .evaluateAll((els) =>
+      els.map((el) => [el.textContent, getComputedStyle(el).backgroundColor]),
+    )
+  const filled = bgs.filter(([, c]) => c === 'rgb(20, 17, 15)')
+  expect(filled.length).toBe(1)
+  expect(filled[0][0]).toContain('Resume')
 })
 
 test('links are 44px tall on phones, no scroll at 320px', async ({
@@ -126,7 +128,7 @@ test('project links share one hover language', async ({ page }) => {
   await link.hover()
   await expect
     .poll(() => link.evaluate((el) => getComputedStyle(el).color))
-    .toBe('rgb(128, 152, 255)')
+    .toBe('rgb(20, 17, 15)')
   const s = await link.evaluate((el) => {
     const c = getComputedStyle(el)
     return [c.textDecorationLine, c.textShadow]

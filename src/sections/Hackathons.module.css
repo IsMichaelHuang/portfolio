@@ -1,5 +1,5 @@
 /**
- * Hackathons Section Styles — Space Theme
+ * Hackathons Section Styles
  *
  * One 880px left-aligned column shared with the section heading.
  * Three entries in equal columns from 720px (2.5rem apart), stacked
@@ -113,7 +113,7 @@
   padding-top: 0.5rem;
 }
 
-/* Code link: muted, accent and underlined on hover; 44px tap
+/* Code link: muted, ink and underlined on hover; 44px tap
    target on phones */
 .link {
   display: inline-block;
@@ -123,7 +123,7 @@
 }
 
 .link:hover {
-  color: var(--color-accent-text);
+  color: var(--color-text);
   text-decoration: underline;
   text-underline-offset: 0.25em;
   text-decoration-thickness: 1px;

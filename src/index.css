@@ -1,16 +1,13 @@
 /**
- * Global Styles — Space Theme
+ * Global Styles
  *
  * Base-level resets, CSS custom properties, and defaults applied
  * site-wide via main.tsx. All component/section-specific styles
  * live in co-located CSS Modules.
  *
- * Theme: minimalistic deep-space aesthetic. Dark only — no light
- * mode override. Colors are defined as CSS custom properties so
- * components can reference them without hardcoding values.
- *
- * Stars: a static scattering of small dots tiles over the body
- * background (no image, no JS, no animation).
+ * Theme: light. Ink on white, with amber, teal and ink grounds
+ * chosen per block by a data-ground attribute. Colors are CSS
+ * custom properties so components never hardcode values.
  *
  * Type: two self-hosted faces (@fontsource-variable, no third-party
  * requests). Jost, an open Futura revival, is the display/UI face
@@ -18,36 +15,36 @@
  * Source Serif 4, roman and italic, is the prose face (--font-body:
  * bio, bullets, descriptions). font-synthesis is none, so italics
  * come from the real italic file.
- *
- * Color philosophy:
- *   - Deep blue-black background evokes the void of space
- *   - Text is soft cool white, never harsh pure white
- *   - A single accent color (distant-star blue) used sparingly
- *   - Surfaces and borders use ultra-low-opacity white tints
  */
 
 /* --- Theme Variables & Typography --- */
 
 :root {
-  /* --- Color Palette --- */
+  /* --- Palette --- */
 
-  /** Deep space background — near-black with a subtle blue undertone */
-  --color-bg: #0a0a0f;
-  /** Primary text — soft cool white, easy on the eyes against deep dark */
-  --color-text: rgba(230, 235, 245, 0.9);
-  /** De-emphasized text — for subtitles, labels, secondary content */
-  --color-text-muted: rgba(230, 235, 245, 0.62);
-  /** Accent — a cool blue like a distant star, used for interactive elements */
-  --color-accent: #4a6cf7;
-  /** Accent for TEXT — lighter tint of the accent, at least 4.5:1 on
-      bg and surface (--color-accent stays for borders and fills) */
-  --color-accent-text: #8098ff;
-  /** Surface — barely-visible white tint for cards, pills, and borders */
-  --color-surface: rgba(255, 255, 255, 0.05);
-  /** Border — subtle separation between elements */
-  --color-border: rgba(255, 255, 255, 0.1);
-  /** Focus ring — light blue, at least 3:1 against bg and surface */
-  --color-focus: #b4c2ff;
+  --ink: #14110f;
+  --white: #ffffff;
+  --amber: #eca358;
+  --teal: #47c2c0;
+  /** Muted text on white, at least 5.5:1 */
+  --muted: #5c5650;
+  /** Muted text on ink, at least 4.5:1 */
+  --muted-on-ink: #c9c4bd;
+
+  /* --- Roles (re-pointed per ground by [data-ground]) --- */
+
+  --color-bg: var(--white);
+  --color-text: var(--ink);
+  --color-text-muted: var(--muted);
+  --color-border: var(--ink);
+
+  /* --- Spacing (defined, applied by later layout work) --- */
+
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --space-in: 1rem;
+  --space-group: 3.5rem;
+  --space-section: 9rem;
+
   /** Fixed navbar height; keep at or below the bar's real height */
   --nav-h: 4rem;
 
@@ -64,8 +61,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /* Dark only — no light mode */
-  color-scheme: dark;
+  color-scheme: light;
 
   /* Apply theme colors */
   color: var(--color-text);
@@ -90,6 +86,7 @@ html {
 @media (max-width: 599px) {
   :root {
     --nav-h: 3.25rem;
+    --space-section: 5.5rem;
   }
 }
 
@@ -127,36 +124,7 @@ body {
   margin: 0;
   /* Prevent horizontal scroll on very narrow viewports */
   min-width: 320px;
-  /* Static starfield: small dots in three tile sizes so the repeat is
-     not obvious. Default scroll attachment (fixed repaints under the
-     blurred navbar). */
   background-color: var(--color-bg);
-  background-image:
-    radial-gradient(1px 1px at 12% 18%, rgba(220, 230, 255, 0.6), transparent),
-    radial-gradient(1px 1px at 58% 64%, rgba(220, 230, 255, 0.4), transparent),
-    radial-gradient(1px 1px at 84% 38%, rgba(220, 230, 255, 0.5), transparent),
-    radial-gradient(1px 1px at 31% 88%, rgba(220, 230, 255, 0.3), transparent),
-    radial-gradient(1px 1px at 22% 46%, rgba(220, 230, 255, 0.35), transparent),
-    radial-gradient(1px 1px at 71% 12%, rgba(220, 230, 255, 0.55), transparent),
-    radial-gradient(1px 1px at 90% 80%, rgba(220, 230, 255, 0.3), transparent),
-    radial-gradient(2px 2px at 46% 30%, rgba(220, 230, 255, 0.45), transparent),
-    radial-gradient(1px 1px at 8% 70%, rgba(220, 230, 255, 0.3), transparent),
-    radial-gradient(1px 1px at 63% 52%, rgba(220, 230, 255, 0.4), transparent),
-    radial-gradient(2px 2px at 37% 8%, rgba(220, 230, 255, 0.65), transparent),
-    radial-gradient(1px 1px at 80% 92%, rgba(220, 230, 255, 0.7), transparent);
-  background-size:
-    420px 420px,
-    420px 420px,
-    420px 420px,
-    420px 420px,
-    610px 610px,
-    610px 610px,
-    610px 610px,
-    610px 610px,
-    830px 830px,
-    830px 830px,
-    830px 830px,
-    830px 830px;
 }
 
 /*
@@ -174,31 +142,53 @@ a:active {
 
 /* Themed text selection */
 ::selection {
-  background: rgba(74, 108, 247, 0.35);
-  color: #fff;
+  background: var(--ink);
+  color: var(--white);
+}
+
+[data-ground="ink"] ::selection {
+  background: var(--amber);
+  color: var(--ink);
+}
+
+/* A block that sets its own ground (amber, teal, ink) */
+[data-ground] {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+[data-ground="amber"] {
+  --color-bg: var(--amber);
+  --color-text-muted: var(--ink);
+}
+
+[data-ground="teal"] {
+  --color-bg: var(--teal);
+  --color-text-muted: var(--ink);
+}
+
+[data-ground="ink"] {
+  --color-bg: var(--ink);
+  --color-text: var(--white);
+  --color-text-muted: var(--muted-on-ink);
+  --color-border: var(--white);
 }
 
 /* --- Shared Section Layout --- */
 
 /*
  * Base section styling applied to all <section> elements.
- * Constrains content width, centers horizontally, and adds
- * consistent vertical/horizontal padding. Individual sections
- * can override max-width in their CSS Modules if needed
- * (e.g. Contact uses a narrower width, Hero uses full viewport).
+ * Sections are full-bleed; the inline padding keeps content inside
+ * a 1360px column, never closer than --gutter to the edge.
  */
 section {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 4rem max(var(--gutter), (100% - 1360px) / 2);
 }
 
 @media (max-width: 599px) {
   section {
     padding-top: 3rem;
     padding-bottom: 3rem;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
   }
 }
 
@@ -283,14 +273,13 @@ h3 {
   font-size: 0.85rem;
   padding: 0.25rem 0.7rem;
   border-radius: 4px;
-  background: var(--color-surface);
   border: 1px solid var(--color-border);
 }
 
 /* --- Accessibility Utilities --- */
 
 :focus-visible {
-  outline: 2px solid var(--color-focus);
+  outline: 2px solid currentColor;
   outline-offset: 2px;
 }
 
@@ -317,7 +306,7 @@ main:focus {
   z-index: 200;
   padding: 0.5rem 1rem;
   background: var(--color-bg);
-  border: 1px solid var(--color-focus);
+  border: 1px solid var(--color-text);
   border-radius: 4px;
   transform: translateY(-200%);
 }

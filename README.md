@@ -151,24 +151,26 @@ To add a new section:
 
 ## Theme
 
-The page sits on a static starfield: a dozen small dots layered on the
-`body` background in three tile sizes, so there is no image file or
-script. The hero opens with the logo mark above the name.
+The page is light: ink on white, with amber, teal and ink grounds
+that a block selects with a `data-ground` attribute (`amber`, `teal`
+or `ink`). The hero opens with the logo mark above the name. There is
+no background image.
 
-Dark space aesthetic defined entirely through CSS custom properties
-in `index.css`:
+Everything is defined through CSS custom properties in `index.css`:
 
 | Variable | Purpose |
 |---|---|
-| `--color-bg` | Page background (`#0a0a0f`) |
+| `--ink`, `--white` | Palette (`#14110f`, `#ffffff`) |
+| `--amber`, `--teal` | Palette grounds (`#eca358`, `#47c2c0`) |
+| `--muted` | Muted text on white, at least 5.5:1 |
+| `--muted-on-ink` | Muted text on ink |
+| `--color-bg` | Page background; `data-ground` re-points it |
 | `--color-text` | Primary text |
-| `--color-text-muted` | Secondary text; at least 5.5:1 on `--color-bg` |
-| `--color-accent` | Borders and fills only (`#4a6cf7`) |
-| `--color-accent-text` | Accent text; at least 4.5:1 on bg and surface |
-| `--color-focus` | The 2px `:focus-visible` ring |
+| `--color-text-muted` | Secondary text |
+| `--color-border` | Element borders |
+| `--gutter` | Inline section padding; content stays within 1360px |
+| `--space-in`, `--space-group`, `--space-section` | Spacing scale |
 | `--nav-h` | Fixed navbar height, used by `scroll-padding-top` |
-| `--color-surface` | Card / pill backgrounds |
-| `--color-border` | Subtle element borders |
 | `--font-display` | Jost, then the OS sans |
 | `--font-body` | Source Serif 4, then the OS serif |
 
@@ -193,14 +195,16 @@ requests; `unicode-range` makes the browser fetch only the subsets
 the page's characters need.
 
 Plain text links (project Code and Live, Contact profiles, footer)
-share one hover: accent-text colour with a thin underline offset
-0.25em, and `a:active` dims them. The Resume button in the hero is
-the lead action: it keeps the accent border and text at rest, like the
-Contact email button, while the other hero links stay neutral. Links
-and buttons are at least 44px tall on phones.
+share one hover: ink text with a thin underline offset 0.25em, and
+`a:active` dims them. The Resume button in the hero is the lead
+action and the only filled link (ink fill, white text); the other
+hero links are outlined. The focus ring is a 2px solid outline in
+the current text colour. Links and buttons are at least 44px tall on
+phones.
 
-`src/contrast.test.ts` reads these tokens and fails if text, muted
-or accent-text drop below the ratios above.
+`src/contrast.test.ts` reads the palette tokens and fails if any
+text and ground pair drops below 4.5:1, or muted text on white below
+5.5:1.
 
 ## Getting started
 

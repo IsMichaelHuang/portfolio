@@ -35,15 +35,12 @@ test('load animation ends with the heading visible', async ({ page }) => {
   await expect(page.locator('#hero h1')).toHaveCSS('opacity', '1')
 })
 
-test('starfield is a scrolling body background', async ({ page }) => {
+test('body has no background image', async ({ page }) => {
   await page.goto('./')
-  const css = await page.evaluate(() => {
-    const s = getComputedStyle(document.body)
-    return { att: s.backgroundAttachment, img: s.backgroundImage }
-  })
-  const parts = css.att.split(',').map((s) => s.trim())
-  expect(new Set(parts)).toEqual(new Set(['scroll']))
-  expect(css.img).not.toBe('none')
+  const img = await page.evaluate(
+    () => getComputedStyle(document.body).backgroundImage,
+  )
+  expect(img).toBe('none')
 })
 
 test('no horizontal scroll at 320px', async ({ page }) => {

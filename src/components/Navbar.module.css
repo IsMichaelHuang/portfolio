@@ -1,10 +1,8 @@
 /**
- * Navbar Styles — Space Theme
+ * Navbar Styles
  *
  * The bar is fixed to the viewport top so it persists during scroll.
- * A translucent background with `backdrop-filter: blur` creates a
- * frosted-glass effect that lets the page content show through while
- * keeping the text legible — consistent with the deep-space aesthetic.
+ * The background is the opaque page colour so text stays legible.
  *
  * z-index: 100 places the bar above all section content. If any section
  * introduces a stacking context with a higher z-index, raise this value.
@@ -31,9 +29,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: rgba(10, 10, 15, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -42,8 +38,7 @@
  *
  * Links to #hero so clicking it scrolls back to the top of the page.
  * Styled at full text weight to visually distinguish it from nav links.
- * Accent color on hover signals interactivity without adding underlines,
- * keeping the minimal aesthetic intact.
+ * Hover underlines the brand.
  */
 .brand {
   font-size: 1rem;
@@ -53,7 +48,8 @@
 }
 
 .brand:hover {
-  color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 
 /*
@@ -77,7 +73,7 @@
  *
  * Uses --color-text-muted at rest to create visual hierarchy: the brand
  * name draws the eye first, then the nav links. On hover, color shifts
- * to full --color-text (not accent) to indicate position without
+ * to full --color-text to indicate position without
  * competing with the brand hover treatment.
  */
 .link {
@@ -96,12 +92,14 @@
 /*
  * .active — applied to the link whose target section is currently in view.
  *
- * Uses accent color to match the brand hover treatment, making it clear
+ * Uses ink and an underline to match the brand hover, making it clear
  * which section the user is reading. The selector is intentionally separate
  * from :hover so both states can coexist independently.
  */
 .active {
-  color: var(--color-accent-text);
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 
 /* The mark sits beside the text brand from 600px up. */

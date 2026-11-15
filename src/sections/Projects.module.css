@@ -1,5 +1,5 @@
 /**
- * Projects Section Styles — Space Theme
+ * Projects Section Styles
  *
  * Everything sits in one 880px left-aligned column shared with the
  * section heading. Featured projects: ledger rows matching
@@ -148,7 +148,7 @@
   margin-bottom: 0;
 }
 
-/* Code links: muted, accent and underlined on hover (the shared
+/* Code links: muted, ink and underlined on hover (the shared
    plain-text-link hover); 44px tap target on phones */
 .link {
   font-size: 0.9rem;
@@ -162,7 +162,7 @@
 }
 
 .link:hover {
-  color: var(--color-accent-text);
+  color: var(--color-text);
   text-decoration: underline;
   text-underline-offset: 0.25em;
   text-decoration-thickness: 1px;
@@ -210,7 +210,6 @@
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 8px;
 }

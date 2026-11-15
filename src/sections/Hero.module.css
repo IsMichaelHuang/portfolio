@@ -1,5 +1,5 @@
 /**
- * Hero Section Styles — Space Theme
+ * Hero Section Styles
  *
  * Centers the mark, name, role, summary, Now line and links in a
  * container as tall as the viewport, up to 44rem, so the Experience
@@ -22,12 +22,11 @@
   text-align: center;
 }
 
-/* Logo mark — soft accent glow, not neon */
+/* Logo mark */
 .mark {
   width: 128px;
   height: 128px;
   margin: 0 0 1.5rem;
-  filter: drop-shadow(0 0 24px rgba(74, 108, 247, 0.25));
 }
 
 /* Primary heading — largest text on the page */
@@ -82,7 +81,7 @@
 
 /*
  * Individual CTA link — bordered button using theme border color.
- * Accent color on hover provides a subtle interactive glow.
+ * Hover underlines the label.
  */
 .link {
   display: inline-flex;
@@ -96,8 +95,9 @@
 }
 
 .link:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
 }
 
 /* Phones: smaller mark, and the four buttons as a 2 x 2 grid */
@@ -120,14 +120,15 @@
   }
 }
 
-/* Resume is the lead action: accent border and text at rest */
+/* Resume is the lead action and the one filled link */
 .link:first-child {
-  border-color: var(--color-accent);
-  color: var(--color-accent-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
 }
 
 .link:first-child:hover {
-  background-color: rgba(74, 108, 247, 0.12);
+  opacity: 0.85;
 }
 
 /* The one load animation: each child fades and rises, 70ms apart */
