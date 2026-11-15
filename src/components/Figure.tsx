@@ -13,6 +13,14 @@ interface Props {
 const DURATION = 800;
 const ease = (t: number) => 1 - (1 - t) ** 3;
 
+/** Is at least 30% of the element inside the viewport right now? */
+function inView(el: Element) {
+  const r = el.getBoundingClientRect();
+  const w = Math.min(r.right, window.innerWidth) - Math.max(r.left, 0);
+  const h = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+  return w > 0 && h > 0 && w * h >= 0.3 * r.width * r.height;
+}
+
 /** One very large number with an optional unit beside it. */
 function Figure({ value, unit, size, decorative }: Props) {
   const spoken = value.replace(/^~/, "about ");
@@ -42,16 +50,22 @@ function Figure({ value, unit, size, decorative }: Props) {
       show(countFrame(value, ease(t)));
       if (t < 1) raf = requestAnimationFrame(run(from));
     };
-    show(countFrame(value, 0));
+    // Only a figure that is counting shows anything but its value.
+    const begin = () => {
+      show(countFrame(value, 0));
+      raf = requestAnimationFrame(run());
+    };
     const io = new IntersectionObserver(
       (entries) => {
         if (!entries.some((e) => e.intersectionRatio >= 0.3)) return;
         io.disconnect();
-        raf = requestAnimationFrame(run());
+        begin();
       },
       { threshold: 0.3 },
     );
-    io.observe(numeral.current!);
+    // Already in view at mount: no frame at the final value first.
+    if (inView(numeral.current!)) begin();
+    else io.observe(numeral.current!);
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
