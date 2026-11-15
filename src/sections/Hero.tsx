@@ -1,11 +1,11 @@
 /**
  * Hero Section
  *
- * The full-viewport introductory section at the top of the page:
- * the logo mark (decorative), name, role, a one-line summary, a
- * "Now" line (current role and a headline result), and
- * links (resume, GitHub, LinkedIn, email). Children fade and rise once on
- * load; reduced motion turns that off.
+ * The first view: the figure "~70" at a scale that owns the viewport,
+ * on the amber ground, captioned by what it counts. Beside the caption
+ * sit the name (the page's one h1), a one-line summary and the links
+ * (resume, GitHub, LinkedIn, email). Blocks fade and rise once on load;
+ * reduced motion turns that off.
  *
  * The id="hero" attribute serves as a scroll anchor, allowing
  * navigation links elsewhere on the page to jump here via href="#hero".
@@ -14,34 +14,26 @@
  * class name collisions with other components.
  */
 
-import mark from "../assets/mark.webp";
 import styles from "./Hero.module.css";
 import ExternalLink from "../components/ExternalLink";
+import Figure from "../components/Figure";
+import { heroFigure } from "../data/experience";
 
 function Hero() {
   return (
-    <section id="hero" className={styles.hero}>
-      <img
-        src={mark}
-        alt=""
-        width={128}
-        height={128}
-        fetchPriority="high"
-        decoding="async"
-        className={styles.mark}
+    <section id="hero" data-ground="amber" className={styles.hero}>
+      <Figure
+        value={heroFigure.value}
+        unit={heroFigure.unit}
+        size="hero"
       />
+      <div className={styles.body}>
       {/* h1 is used exactly once per page for the primary heading
           (accessibility & SEO) */}
       <h1 className={styles.name}>Michael Huang</h1>
-      <p className={styles.title}>Software Engineer</p>
       <p className={styles.blurb}>
         Applied AI engineer — multi-agent systems and LLM
         infrastructure.
-      </p>
-      <p className={styles.now}>
-        <span className={styles.nowLabel}>Now:</span> Contract AI
-        Engineer at Intuit Credit Karma in Oakland, CA. Built an AI
-        code review agent that reviews about 70 pull requests a day.
       </p>
       <div className={styles.links}>
         <ExternalLink
@@ -69,6 +61,7 @@ function Hero() {
         >
           Email
         </a>
+      </div>
       </div>
     </section>
   );

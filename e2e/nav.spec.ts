@@ -23,6 +23,26 @@ for (const id of ids) {
   })
 }
 
+for (const id of ids) {
+  test(`#${id} heading lands one group gap below the nav`, async ({
+    page,
+  }) => {
+    await page.locator(`nav a[href="#${id}"]`).click()
+    await page.waitForTimeout(300)
+    const m = await page.evaluate((i) => {
+      const h = document.querySelector(`#${i} > h2`)!.getBoundingClientRect()
+      const n = document.querySelector('nav')!.getBoundingClientRect()
+      return { top: h.top, nav: n.bottom, vh: innerHeight }
+    }, id)
+    if (id === 'contact') {
+      expect(m.top).toBeGreaterThanOrEqual(0)
+      expect(m.top).toBeLessThan(m.vh)
+    } else {
+      expect(Math.abs(m.top - m.nav - 56)).toBeLessThanOrEqual(8)
+    }
+  })
+}
+
 test('bottom marks Contact; top clears it', async ({ page }) => {
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
   await expect(page.locator('nav a[href="#contact"]')).toHaveAttribute(

@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test'
 
-test('hero mark is visible and sharp on 2x screens', async ({ page }) => {
+test('nav mark is visible and sharp on 2x screens', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('./')
-  const img = page.locator('#hero img')
+  const img = page.locator('nav img')
   await expect(img).toBeVisible()
   const m = await img.evaluate((el: HTMLImageElement) => ({
     natural: el.naturalWidth,
@@ -11,6 +11,14 @@ test('hero mark is visible and sharp on 2x screens', async ({ page }) => {
   }))
   expect(m.natural).toBeGreaterThan(0)
   expect(m.natural).toBeGreaterThanOrEqual(2 * m.rendered)
+})
+
+test('hero sits on the amber ground', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.locator('#hero')).toHaveCSS(
+    'background-color',
+    'rgb(236, 163, 88)',
+  )
 })
 
 test('reduced motion: hero does not animate', async ({ page }) => {

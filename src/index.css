@@ -182,14 +182,16 @@ a:active {
  * a 1360px column, never closer than --gutter to the edge.
  */
 section {
-  padding: 4rem max(var(--gutter), (100% - 1360px) / 2);
+  padding: var(--space-section) max(var(--gutter), (100% - 1360px) / 2);
 }
 
-@media (max-width: 599px) {
-  section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
+/* A nav jump lands the heading one group gap below the nav */
+#experience,
+#hackathons,
+#projects,
+#about,
+#contact {
+  scroll-margin-top: calc(var(--space-group) - var(--space-section));
 }
 
 /*

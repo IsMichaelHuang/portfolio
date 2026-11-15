@@ -32,13 +32,13 @@ src/
 │   ├── Figure.module.css
 │   └── Figure.test.tsx
 ├── assets/
-│   └── mark.webp           # Hero logo mark
+│   └── mark.webp           # Navbar logo mark
 ├── lib/
 │   ├── activeSection.ts    # Pure scroll-spy picker
 │   ├── emphasis.tsx        # Renders **bold** markers in data strings
 │   └── pins.ts             # Drops pins already shown as featured work
 ├── sections/
-│   ├── Hero.tsx            # Full-viewport intro (id="hero")
+│   ├── Hero.tsx            # Figure-led first view (id="hero")
 │   ├── Experience.tsx      # Work history ledger (id="experience")
 │   ├── Hackathons.tsx      # Lede, takeaway, three entries (id="hackathons")
 │   ├── Projects.tsx        # Featured work and pins (id="projects")
@@ -158,8 +158,10 @@ To add a new section:
 
 The page is light: ink on white, with amber, teal and ink grounds
 that a block selects with a `data-ground` attribute (`amber`, `teal`
-or `ink`). The hero opens with the logo mark above the name. There is
-no background image.
+or `ink`). The hero is one amber figure, `~70`, at viewport scale, with the
+name, summary and links beside its caption. There is no background
+image. Sections pad `--space-section` top and bottom, and a nav
+jump lands a heading one `--space-group` below the bar.
 
 Everything is defined through CSS custom properties in `index.css`:
 
