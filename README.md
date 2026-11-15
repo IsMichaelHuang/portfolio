@@ -36,6 +36,7 @@ src/
 ├── lib/
 │   ├── activeSection.ts    # Pure scroll-spy picker
 │   ├── emphasis.tsx        # Renders **bold** markers in data strings
+│   ├── figure.ts           # Count-up frames for a figure's number
 │   └── pins.ts             # Drops pins already shown as featured work
 ├── sections/
 │   ├── Hero.tsx            # Figure-led first view (id="hero")
@@ -164,8 +165,10 @@ To add a new section:
 The page is light: ink on white, with amber, teal and ink grounds
 that a block selects with a `data-ground` attribute (`amber`, `teal`
 or `ink`). The hero is one amber figure, `~70`, at viewport scale, with the
-name, summary and links beside its caption. There is no background
-image. Sections pad `--space-section` top and bottom, and a nav
+name, summary and links beside its caption. A figure of 10 or more
+counts up once, in under a second, as it scrolls into view and rests
+on its exact value; under reduced motion it never counts. There is no
+background image. Sections pad `--space-section` top and bottom, and a nav
 jump lands a heading one `--space-group` below the bar.
 
 Everything is defined through CSS custom properties in `index.css`:

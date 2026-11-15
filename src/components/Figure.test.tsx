@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import Figure from './Figure'
 
 function setup(props: Partial<Parameters<typeof Figure>[0]> = {}) {
@@ -55,5 +55,112 @@ describe('Figure', () => {
 
   it('never uses <strong>', () => {
     expect(setup({ unit: 'x' }).querySelector('strong')).toBeNull()
+  })
+})
+
+describe('Figure count-up', () => {
+  type IO = { cb: IntersectionObserverCallback; disconnect: () => void }
+  let io: IO | undefined
+  let frames: FrameRequestCallback[]
+  let cancelled: number[]
+  let reduced: boolean
+
+  function stub() {
+    io = undefined
+    frames = []
+    cancelled = []
+    vi.stubGlobal('matchMedia', () => ({ matches: reduced }))
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(cb: IntersectionObserverCallback) {
+          io = { cb, disconnect: vi.fn() }
+        }
+        observe() {}
+        disconnect() {
+          io!.disconnect()
+        }
+      },
+    )
+    vi.stubGlobal('requestAnimationFrame', (f: FrameRequestCallback) => {
+      frames.push(f)
+      return frames.length
+    })
+    vi.stubGlobal('cancelAnimationFrame', (id: number) => {
+      cancelled.push(id)
+    })
+  }
+  const numeral = (c: HTMLElement) =>
+    c.querySelector('span[aria-hidden="true"]')!
+  const fire = () =>
+    act(() =>
+      io!.cb(
+        [
+          {
+            isIntersecting: true,
+            intersectionRatio: 1,
+          } as IntersectionObserverEntry,
+        ],
+        {} as IntersectionObserver,
+      ),
+    )
+  const tick = (ms: number) => act(() => frames.shift()!(ms))
+
+  beforeEach(() => {
+    reduced = false
+  })
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  it('shows the final value without the browser APIs', () => {
+    const c = setup({ value: '~15,000' })
+    expect(numeral(c)).toHaveTextContent('~15,000')
+  })
+
+  it('counts up once seen and ends on the exact value', () => {
+    stub()
+    const c = setup({ value: '~15,000' })
+    expect(numeral(c).textContent).toBe('~0')
+    expect(numeral(c).children[0].textContent).toBe('~')
+    fire()
+    tick(0)
+    tick(400)
+    const mid = numeral(c).textContent!
+    expect(mid).not.toBe('~0')
+    expect(mid).not.toBe('~15,000')
+    expect(c.querySelector('.sr-only')).toHaveTextContent('about 15,000')
+    tick(900)
+    expect(numeral(c).textContent).toBe('~15,000')
+    expect(frames).toHaveLength(0)
+  })
+
+  it('never leaves the final value under reduced motion', () => {
+    reduced = true
+    stub()
+    const c = setup({ value: '157' })
+    expect(numeral(c).textContent).toBe('157')
+    expect(io).toBeUndefined()
+  })
+
+  it('leaves values with nothing to count alone', () => {
+    stub()
+    const c = setup({ value: '2nd' })
+    expect(numeral(c).textContent).toBe('2nd')
+    expect(io).toBeUndefined()
+  })
+
+  it('cancels the frame and restores the value on unmount', () => {
+    stub()
+    const { container, unmount } = render(
+      <Figure value="157" size="hero" />,
+    )
+    fire()
+    tick(0)
+    expect(numeral(container).textContent).not.toBe('157')
+    unmount()
+    expect(cancelled).toHaveLength(1)
+    expect(io!.disconnect).toHaveBeenCalled()
   })
 })
