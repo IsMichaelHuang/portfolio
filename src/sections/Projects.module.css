@@ -169,7 +169,7 @@
 }
 
 /* A pin: no box, only a hairline above it */
-.card {
+.pin {
   display: flex;
   flex-direction: column;
   padding-block: 1.5rem;
@@ -177,7 +177,7 @@
 }
 
 /* Project name */
-.cardTitle {
+.pinTitle {
   overflow-wrap: anywhere;
   font-size: var(--text-lead);
   margin: 0 0 0.5rem;

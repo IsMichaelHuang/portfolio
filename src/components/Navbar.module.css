@@ -15,9 +15,7 @@
  * .nav — the outermost <nav> element.
  *
  * `position: fixed` with top/left/right: 0 pins the bar to the viewport.
- * `backdrop-filter` is a progressive enhancement: browsers that don't
- * support it fall back to the solid-ish semi-transparent background.
- * The -webkit- prefix covers Safari.
+ * The background is opaque; a hairline border closes the bar.
  */
 .nav {
   position: fixed;

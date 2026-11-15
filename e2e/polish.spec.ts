@@ -171,3 +171,21 @@ test('hero links form two rows of two, 44px tall, at 375px', async ({
   expect(Math.abs(boxes[0].width - boxes[1].width)).toBeLessThan(1)
   for (const b of boxes) expect(b.h).toBeGreaterThanOrEqual(44)
 })
+
+test('every link and button is at least 24px at 1280px', async ({
+  page,
+}) => {
+  await open(page, 1280)
+  const small = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('a, button'))
+      .filter((el) => !el.closest('.sr-only, .skip-link'))
+      .map((el) => ({
+        text: el.textContent!.trim(),
+        r: el.getBoundingClientRect(),
+      }))
+      .filter(({ r }) => r.width && r.height)
+      .filter(({ r }) => r.width < 24 || r.height < 24)
+      .map(({ text, r }) => `${text} ${r.width}x${r.height}`),
+  )
+  expect(small).toEqual([])
+})

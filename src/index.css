@@ -38,7 +38,7 @@
   --color-text-muted: var(--muted);
   --color-border: var(--ink);
 
-  /* --- Spacing (defined, applied by later layout work) --- */
+  /* --- Spacing and layout --- */
 
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --space-in: 1rem;
