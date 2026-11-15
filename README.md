@@ -27,7 +27,10 @@ src/
 │   ├── Footer.tsx          # Page footer: stack credit, source link
 │   ├── Footer.module.css
 │   ├── Footer.test.tsx     # Unit test
-│   └── ExternalLink.tsx    # New-tab link with sr-only notice
+│   ├── ExternalLink.tsx    # New-tab link with sr-only notice
+│   ├── Figure.tsx          # Large number with optional unit
+│   ├── Figure.module.css
+│   └── Figure.test.tsx
 ├── assets/
 │   └── mark.webp           # Hero logo mark
 ├── lib/

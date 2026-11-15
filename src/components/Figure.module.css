@@ -1,0 +1,42 @@
+.figure {
+  margin: 0;
+}
+
+.numeral {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.unit {
+  display: block;
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  max-width: 24ch;
+}
+
+[data-size="hero"] .numeral {
+  font-size: clamp(11rem, 44vw, 45rem);
+}
+
+[data-size="row"] .numeral {
+  font-size: clamp(3.5rem, 10cqi, 10.5rem);
+}
+
+[data-size="band"] .numeral {
+  font-size: clamp(7.5rem, 22vw, 21rem);
+}
+
+[data-size="hero"] .unit {
+  margin-top: 2.5rem;
+  font-weight: 500;
+  font-size: clamp(1.625rem, 3vw, 2.75rem);
+  line-height: 1.12;
+  max-width: 20ch;
+}
