@@ -31,7 +31,7 @@
 }
 
 [data-size="hero"] .numeral {
-  font-size: clamp(7.5rem, 44vw, 45rem);
+  font-size: clamp(7.5rem, min(44vw, calc(125svh - 28rem)), 45rem);
 }
 
 /* Phones: leave room for WCAG 1.4.12 letter spacing at 320px */
