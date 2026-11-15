@@ -12,7 +12,7 @@
 
 .message {
   max-width: 34rem;
-  font-size: 1.125rem;
+  font-size: var(--text-body);
   font-family: var(--font-body);
   line-height: 1.75;
   margin: 0 0 var(--space-group);
@@ -27,7 +27,7 @@
   margin-bottom: var(--space-group);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1.5rem, 4.6vw, 4.5rem);
+  font-size: var(--text-statement);
   line-height: 1.2;
   text-decoration: underline;
   text-underline-offset: 0.15em;
@@ -44,7 +44,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 1.05rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
   text-decoration: underline;
   text-underline-offset: 0.25em;

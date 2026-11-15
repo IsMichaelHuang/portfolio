@@ -13,7 +13,7 @@
 /* h3 for Also on GitHub */
 .blockHeading {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-lead);
   font-weight: 600;
   color: var(--color-text);
   margin: 0 0 0.75rem;
@@ -45,7 +45,7 @@
 
 .title {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-lead);
   font-weight: 600;
   color: var(--color-text);
   margin: 0;
@@ -55,7 +55,7 @@
 /* Period, then the stack: inline and comma-separated at every width */
 .meta {
   margin: 0.25rem 0 0.75rem;
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
   line-height: 1.5;
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
@@ -91,7 +91,7 @@
 }
 
 .highlight {
-  font-size: 1.125rem;
+  font-size: var(--text-body);
   text-wrap: pretty;
   font-family: var(--font-body);
   line-height: 1.7;
@@ -118,7 +118,7 @@
 /* Code links: muted, ink and underlined on hover (the shared
    plain-text-link hover); 44px tap target on phones */
 .link {
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
   transition: color 0.2s;
 }
@@ -179,7 +179,7 @@
 /* Project name */
 .cardTitle {
   overflow-wrap: anywhere;
-  font-size: 1.25rem;
+  font-size: var(--text-lead);
   margin: 0 0 0.5rem;
 }
 
@@ -187,7 +187,7 @@
 .description {
   overflow-wrap: anywhere;
   text-wrap: pretty;
-  font-size: 1rem;
+  font-size: var(--text-body);
   margin: 0 0 1rem;
   color: var(--color-text-muted);
   font-family: var(--font-body);

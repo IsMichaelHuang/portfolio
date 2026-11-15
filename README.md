@@ -189,6 +189,11 @@ Everything is defined through CSS custom properties in `index.css`:
 | `--nav-h` | Fixed navbar height, used by `scroll-padding-top` |
 | `--font-display` | Jost, then the OS sans |
 | `--font-body` | Source Serif 4, then the OS serif |
+| `--text-meta` | 16px: nav, links, role, period, units |
+| `--text-body` | 18px: prose, bullets, descriptions |
+| `--text-lead` | 22px: h3 and h4, takeaway, first About paragraph |
+| `--text-heading` | 28px: the h1 and every section h2 |
+| `--text-statement` | Fluid: hero caption and the email link |
 
 Layout: every section starts at the page grid's left edge (the
 section's `padding-inline`, content within 1360px); h2s are left-aligned
@@ -210,7 +215,10 @@ Serif 4 (roman and italic) is the prose face for the bio, highlights,
 project descriptions and contact message. Both ship as variable
 fonts from `@fontsource-variable/*`, self-hosted with no third-party
 requests; `unicode-range` makes the browser fetch only the subsets
-the page's characters need.
+the page's characters need. Every text size comes from the five
+`--text-*` tokens (the nav links drop to 0.9rem below 600px so four
+fit a 320px screen); the `Figure` numerals add their own sizes, so
+at most ten distinct sizes render at 1280px.
 
 Plain text links (project Code and Live, Contact profiles, footer)
 share one hover: ink text with a thin underline offset 0.25em, and
