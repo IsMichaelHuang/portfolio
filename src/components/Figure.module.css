@@ -53,8 +53,10 @@
   }
 }
 
+/* cqi is the pinned block's width; 2nd is 1.66em wide, 2.14em with
+   WCAG letter spacing, so 45cqi fits */
 [data-size="band"] .numeral {
-  font-size: clamp(7.5rem, 22vw, 21rem);
+  font-size: clamp(6rem, 45cqi, 21rem);
 }
 
 [data-size="hero"] .unit {

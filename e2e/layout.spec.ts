@@ -113,6 +113,19 @@ async function figuresFit(page: Page) {
   )
 }
 
+// The band figure's glyphs stay inside its column (the viewport
+// below 720px, where the column is the full width).
+async function bandFits(page: Page) {
+  return page.evaluate(() => {
+    const f = document.querySelector('#hackathons [data-figure]')!
+    const rg = document.createRange()
+    rg.selectNodeContents(f.querySelector('[aria-hidden="true"]')!)
+    const n = rg.getBoundingClientRect()
+    const col = f.parentElement!.getBoundingClientRect()
+    return { over: n.right - col.right, vOver: n.right - innerWidth }
+  })
+}
+
 for (const [width, spacing] of [
   [320, false],
   [375, false],
@@ -134,5 +147,8 @@ for (const [width, spacing] of [
       expect(f.over).toBeLessThanOrEqual(0.5)
       expect(f.hOver).toBeLessThanOrEqual(0)
     }
+    const b = await bandFits(page)
+    expect(b.over).toBeLessThanOrEqual(0.5)
+    expect(b.vOver).toBeLessThanOrEqual(0)
   })
 }

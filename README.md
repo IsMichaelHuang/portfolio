@@ -56,7 +56,7 @@ src/
 e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
 ├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
-├── projects.spec.ts        # Hackathon columns, featured rows, links
+├── projects.spec.ts        # Hackathon pinning, featured rows, links
 ├── fold.spec.ts            # First screen, hero clears nav, phone rhythm
 ├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
@@ -288,10 +288,12 @@ month for GitHub Actions and one for npm.
 ## Hackathons and Projects sections
 
 Hackathons (`id="hackathons"`) is its own section between Experience
-and Projects, at the same left edge as its heading: a lede, a
-takeaway paragraph, and three entries (three columns from 720px with
-the "Code" link rows aligned at the bottom, stacked below), each
-marked "2nd". Events are h3 under the section h2.
+and Projects, a teal band. From 720px a very large "2nd" and the
+lede stay pinned under the nav (CSS `position: sticky`, so no
+ancestor may set `overflow`) while the takeaway and the three
+entries, stacked, scroll past on the right; below that everything
+stacks. Each entry's text starts with "2nd" (visually hidden).
+Events are h3 under the section h2.
 
 Projects (`id="projects"`) has two blocks in that column:
 

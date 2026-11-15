@@ -201,14 +201,13 @@ section {
 
 /*
  * Shared section heading style for any <h2> that is a direct
- * child of a <section>. Provides consistent font size, centering,
+ * child of a <section>. Provides consistent font size, left alignment,
  * and bottom spacing across all sections.
  */
 section > h2 {
   font-size: clamp(1.75rem, 1.55rem + 1vw, 2.25rem);
   font-weight: 600;
   line-height: 1.2;
-  text-align: center;
   text-wrap: balance;
   margin: 0 0 2.5rem;
 }
