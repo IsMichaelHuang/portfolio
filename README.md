@@ -24,10 +24,11 @@ src/
 │   ├── Navbar.tsx          # Fixed top navigation bar
 │   ├── Navbar.module.css
 │   ├── Navbar.test.tsx     # Unit test
-│   ├── Footer.tsx          # Ink-ground footer: stack credit, source link
+│   ├── Footer.tsx          # Ink-ground footer: credit, source link
 │   ├── Footer.module.css
 │   ├── Footer.test.tsx     # Unit test
 │   ├── ExternalLink.tsx    # New-tab link with sr-only notice
+│   ├── ExternalLink.test.tsx
 │   ├── Figure.tsx          # Large number with optional unit
 │   ├── Figure.module.css
 │   └── Figure.test.tsx
@@ -37,7 +38,8 @@ src/
 │   ├── activeSection.ts    # Pure scroll-spy picker
 │   ├── emphasis.tsx        # Renders **bold** markers in data strings
 │   ├── figure.ts           # Count-up frames for a figure's number
-│   └── pins.ts             # Drops pins already shown as featured work
+│   ├── pins.ts             # Drops pins already shown as featured work
+│   └── *.test.ts(x)        # Unit tests beside each module
 ├── sections/
 │   ├── Hero.tsx            # Figure-led first view (id="hero")
 │   ├── Experience.tsx      # Work history ledger (id="experience")
@@ -46,31 +48,38 @@ src/
 │   ├── About.tsx           # Bio column, Education, Skills (id="about")
 │   └── Contact.tsx         # Ink-ground email and links (id="contact")
 ├── data/                   # experience, education, skills, work,
-│                           # projects (generated)
+│                           # projects (generated), with tests
 ├── test/
 │   └── setup.ts            # Vitest setup (jest-dom)
 ├── App.tsx                 # Composition root — section order lives here
 ├── App.test.tsx            # Unit tests for the composed page
+├── landmarks.test.tsx      # One main holding six sections
 ├── contrast.test.ts        # Colour-token contrast ratios
 ├── main.tsx                # React entry point
 └── index.css               # Global styles, theme variables, shared patterns
 e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
-├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
-├── closing.spec.ts         # About column, ink Contact and footer
-├── projects.spec.ts        # Hackathon pinning, featured rows, links
+├── hero.spec.ts            # Amber hero, nav mark, ~ glyph position
 ├── fold.spec.ts            # First screen, hero clears nav, phone rhythm
+├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
+├── projects.spec.ts        # Hackathon pinning, featured rows, links
+├── closing.spec.ts         # About column, ink Contact and footer
 ├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
-├── nav.spec.ts             # Scroll-spy / aria-current
+├── type.spec.ts            # Type scale ceiling, 12px floor, selection
+├── fonts.spec.ts           # Self-hosted faces, same-origin requests
+├── polish.spec.ts          # Link size and hover, pins, prose type
+├── nav.spec.ts             # Scroll-spy / aria-current / nav ground
 ├── keyboard.spec.ts        # Skip link and focus ring
-├── motion.spec.ts          # prefers-reduced-motion
+├── motion.spec.ts          # prefers-reduced-motion, count-up
 └── a11y.spec.ts            # axe (WCAG 2.2 AA) and text spacing
 scripts/
 ├── fetch-pinned.ts         # Writes src/data/projects.ts from pinned repos
 ├── pinned.ts               # Pure mapping/validation helpers for the above
+├── check-limits.sh         # File size and line width check
 ├── dist.test.ts            # Checks the built dist/: metadata, 404, icons
-└── readme.test.ts          # Fails if a package.json script is undocumented
+├── readme.test.ts          # Fails if a package.json script is undocumented
+└── *.test.ts               # Tests for the scripts and the workflows
 playwright.config.ts        # Playwright config (preview on port 4173)
 public/
 ├── resume.pdf              # Served statically; linked from Hero
@@ -87,13 +96,15 @@ link, Open Graph and Twitter card tags (absolute URLs under
 `https://ismichaelhuang.github.io/portfolio/`), `theme-color`,
 `color-scheme`, a referrer policy, and a minimal Person JSON-LD block
 (name, job title, URL, GitHub and LinkedIn). A `<noscript>` block
-shows the name, role, focus line and Resume, GitHub, LinkedIn and
+shows the name, role, summary line and Resume, GitHub, LinkedIn and
 Email links when JavaScript is off. Long `content` values wrap
 across lines in the source; the `single-line-meta` plugin in
 `vite.config.ts` joins them at build time.
 
 Images live in `public/`: `favicon.png` (square, 64x64),
-`apple-touch-icon.png` (180x180) and `og.png` (1200x630). Vite
+`apple-touch-icon.png` (180x180) and `og.png` (1200x630, a screenshot
+of the built hero at that size, so the caption runs past the bottom
+edge). Vite
 rewrites root-absolute `/favicon.png` style links in `index.html`
 with the base path. `public/404.html` is copied verbatim, so it
 hard-codes `/portfolio/`; update it if the deploy path changes.
@@ -135,7 +146,7 @@ On `html` in `index.css`:
   under `prefers-reduced-motion: reduce`
 - `scroll-padding-top: var(--nav-h)` — keeps scroll targets and
   focused elements clear of the fixed bar. `--nav-h` is set in CSS
-  only (4rem, 3.5rem below 600px) and must stay at or below the
+  only (4rem, 3.25rem below 600px) and must stay at or below the
   bar's real height
 
 The active link is measured on scroll and resize: `pickActive` in
@@ -164,12 +175,12 @@ To add a new section:
 
 The page is light: ink on white, with amber, teal and ink grounds
 that a block selects with a `data-ground` attribute (`amber`, `teal`
-or `ink`). The hero is one amber figure, `~70`, at viewport scale, with the
-name, summary and links beside its caption. A figure of 10 or more
+or `ink`). The hero is one amber figure, `~70`, at viewport scale, with
+the name, summary and links beside its caption. A figure of 10 or more
 counts up once, in under a second, as it scrolls into view and rests
 on its exact value; under reduced motion it never counts. There is no
-background image. Sections pad `--space-section` top and bottom, and a nav
-jump lands a heading one `--space-group` below the bar.
+background image. Sections pad `--space-section` top and bottom, and
+a nav jump lands a heading one `--space-group` below the bar.
 
 Everything is defined through CSS custom properties in `index.css`:
 
@@ -207,7 +218,7 @@ Experience entry is its figure, company, role, period and location,
 then 18px bullets, rows separated by a hairline. Skills are a `<dl>`
 with an `8rem` label column from 480px and the same `--row-cols` /
 `--row-gap` from 720px, so every right-hand column shares one left
-edge. The "Also on GitHub" block keeps an 880px column.
+edge.
 
 Type: Jost, an open Futura revival, is the display and UI face for
 the name, headings, nav, buttons, labels and dates. Source
@@ -220,13 +231,14 @@ the page's characters need. Every text size comes from the five
 fit a 320px screen); the `Figure` numerals add their own sizes, so
 at most ten distinct sizes render at 1280px.
 
-Plain text links (project Code and Live, Contact profiles, footer)
-share one hover: ink text with a thin underline offset 0.25em, and
-`a:active` dims them. The Resume button in the hero is the lead
+Code and Live links are muted at rest and turn ink with a thin
+underline offset 0.25em on hover; the Contact profile links and the
+footer link are underlined at rest and turn ink on hover. `a:active`
+dims every link. The Resume button in the hero is the lead
 action and the only filled link (ink fill, white text); the other
 hero links are outlined. The focus ring is a 2px solid outline in
-the current text colour. Links and buttons are at least 44px tall on
-phones.
+the current text colour. Links and buttons are at least 24px in both
+dimensions on desktop and at least 44px tall on phones.
 
 `src/contrast.test.ts` reads the palette tokens and fails if any
 text and ground pair drops below 4.5:1, or muted text on white below
