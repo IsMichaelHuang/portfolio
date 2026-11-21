@@ -11,6 +11,8 @@
  * for work whose repository is not public.
  */
 
+import type { Figure } from "./experience";
+
 export interface Hackathon {
   /** Unique identifier, used as the React key */
   id: string;
@@ -34,6 +36,8 @@ export interface Featured {
   period?: string;
   repoUrl?: string;
   highlights: string[];
+  /** Optional lead number; its value is a bold run in `highlights` */
+  figure?: Figure;
 }
 
 export const hackathons: Hackathon[] = [
@@ -77,6 +81,7 @@ export const hackathons: Hackathon[] = [
 export const featured: Featured[] = [
   {
     id: "budget-tracker",
+    figure: { value: "249", unit: "Vitest and Supertest tests" },
     title: "BudgetTracker",
     stack: [
       "React 19",
@@ -100,6 +105,7 @@ export const featured: Featured[] = [
   },
   {
     id: "resume-builder",
+    figure: { value: "61", unit: "pytest tests" },
     title: "Modular Resume Build System",
     stack: ["Python", "LaTeX", "pytest"],
     repoUrl: "https://github.com/IsMichaelHuang/resumeBuilder",

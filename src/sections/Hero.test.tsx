@@ -1,21 +1,19 @@
 import { render, screen } from '@testing-library/react'
 import Hero from './Hero'
+import { heroFigure } from '../data/experience'
 
 describe('Hero', () => {
-  it('renders a decorative sized mark', () => {
+  it('has no image', () => {
     const { container } = render(<Hero />)
-    const img = container.querySelector('img')!
-    expect(img).toHaveAttribute('alt', '')
-    expect(Number(img.getAttribute('width'))).toBeGreaterThan(0)
-    expect(Number(img.getAttribute('height'))).toBeGreaterThan(0)
+    expect(container.querySelector('img')).toBeNull()
   })
 
-  it('renders name, role and summary', () => {
+  it('renders name and summary', () => {
     render(<Hero />)
     expect(
       screen.getByRole('heading', { level: 1, name: 'Michael Huang' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument()
+    expect(screen.queryByText('Software Engineer')).toBeNull()
     expect(
       screen.getByText(
         'Applied AI engineer — multi-agent systems and LLM ' +
@@ -24,18 +22,16 @@ describe('Hero', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders the Now line under the summary', () => {
+  it('opens on the hero figure, with no Now line', () => {
     const { container } = render(<Hero />)
-    const now =
-      'Now: Contract AI Engineer at Intuit Credit Karma in Oakland, ' +
-      'CA. Built an AI code review agent that reviews about 70 pull ' +
-      'requests a day.'
-    const el = screen.getByText('Now:').parentElement!
-    expect(el.textContent).toBe(now)
-    expect(el.previousElementSibling).toHaveTextContent(
-      /^Applied AI engineer/,
-    )
-    expect(container.querySelectorAll('h1, h2')).toHaveLength(1)
+    const fig = container.querySelector('[data-figure]')!
+    expect(fig).not.toBeNull()
+    expect(fig).not.toHaveAttribute('aria-hidden')
+    expect(fig).toHaveTextContent('about 70')
+    expect(fig).toHaveTextContent(heroFigure.unit!)
+    expect(screen.queryByText(/Now:/)).toBeNull()
+    expect(container.querySelectorAll('h1')).toHaveLength(1)
+    expect(container.querySelectorAll('h2')).toHaveLength(0)
   })
 
   it('renders the four links in order', () => {

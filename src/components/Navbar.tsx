@@ -12,7 +12,7 @@
  *
  * Styles are scoped via CSS Modules (Navbar.module.css).
  */
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import styles from "./Navbar.module.css";
 import mark from "../assets/mark.webp";
 import { pickActive } from "../lib/activeSection";
@@ -36,6 +36,16 @@ const links = [
   { label: "Contact", href: "#contact" },
 ];
 
+/** All sections, in order; the bar takes the ground of the one under it. */
+const groundIds = [
+  "hero",
+  "experience",
+  "hackathons",
+  "projects",
+  "about",
+  "contact",
+];
+
 /** Section ids derived from the links array, used to query DOM targets. */
 const sectionIds = links.map(({ href }) => href.slice(1));
 
@@ -43,19 +53,33 @@ function Navbar() {
   const [activeId, setActiveId] = useState<string>("");
   const navRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const update = () => {
-      const tops = sectionIds.flatMap((id) => {
+  // Layout effect: the first update runs before paint, so the bar
+  // never flashes white over the amber hero.
+  useLayoutEffect(() => {
+    const measure = (ids: string[]) =>
+      ids.flatMap((id) => {
         const el = document.getElementById(id);
         return el ? [{ id, top: el.getBoundingClientRect().top }] : [];
       });
+    const nav = navRef.current;
+    const update = () => {
+      const tops = measure(sectionIds);
       const offset = (navRef.current?.offsetHeight ?? 0) + 8;
       const atBottom =
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 2;
       setActiveId(pickActive(tops, offset, atBottom));
+      const under = pickActive(measure(groundIds), offset, false);
+      const ground = document.getElementById(under)?.dataset.ground;
+      if (ground) nav?.setAttribute("data-ground", ground);
+      else nav?.removeAttribute("data-ground");
     };
+    // First pass: measuring has already styled the bar white, so skip
+    // transitions or the colours would fade in from white at load.
+    nav?.classList.add(styles.boot);
     update();
+    void nav?.offsetHeight;
+    nav?.classList.remove(styles.boot);
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update, { passive: true });
     return () => {

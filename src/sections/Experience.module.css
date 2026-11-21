@@ -1,42 +1,46 @@
 /**
  * Experience Section Styles
  *
- * Resume-style ledger. From 720px each entry is a two-column grid:
- * period and location on the left, company, role and bullets on the
- * right. Below 720px it is one column in DOM order, with 1.5rem row
- * padding and 1.6 bullet leading on phones.
+ * Resume-style ledger on the global .ledger-row grid: the figure in
+ * the left column from 720px, company, role, period and location,
+ * and 18px bullets in the right. Below 720px it is one column in DOM
+ * order, with 2.5rem row padding and 1.6 bullet leading on phones.
  *
  * Base section layout and heading styles are inherited from
  * global section rules in index.css.
  */
 
-/* Entries container — the 880px ledger column, left-aligned content */
-.list {
-  max-width: 880px;
-  margin: 0 auto;
-}
-
 /*
- * Individual entry — a hairline and 2rem of air separate rows; no
- * outer border, dots or vertical lines.
+ * Individual entry — the grid comes from the global .ledger-row. A
+ * hairline and 3.5rem of air separate rows; none above the first or
+ * below the last.
  */
 .entry {
-  padding-bottom: 2rem;
+  padding-block: 3.5rem;
 }
 
 .entry + .entry {
-  padding-top: 2rem;
   border-top: 1px solid var(--color-border);
+}
+
+.entry:first-of-type {
+  padding-top: 0;
 }
 
 .entry:last-child {
   padding-bottom: 0;
 }
 
+@media (max-width: 599px) {
+  .entry {
+    padding-block: 2.5rem;
+  }
+}
+
 /* Company — the prominent line; recruiters scan employers */
 .company {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-lead);
   font-weight: 600;
   color: var(--color-text);
   margin: 0;
@@ -46,59 +50,29 @@
 /* Role — muted, under the company */
 .role {
   margin: 0.25rem 0 0;
-  font-size: 1rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
 }
 
-/* Period and location on one line under the role (phones) */
+/* Period and location on one line under the role, a dot between */
 .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 1rem;
-  margin: 0.25rem 0 0.75rem;
-  font-size: 0.9rem;
+  gap: 0 0.5rem;
+  margin: 0;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
+}
+
+.period::after {
+  content: "·";
+  margin-left: 0.5rem;
 }
 
 /* Never broken across lines */
 .period {
   white-space: nowrap;
-}
-
-/*
- * From 720px each entry is a two-column grid. DOM order stays
- * company, role, meta, bullets; the meta block is placed in column 1
- * across all three rows. padding-top levels its first baseline with
- * the company heading's.
- */
-@media (min-width: 720px) {
-  .entry {
-    display: grid;
-    grid-template-columns: 11rem minmax(0, 1fr);
-    column-gap: 2.5rem;
-    row-gap: 0.5rem;
-  }
-
-  .entry > :not(.meta) {
-    grid-column: 2;
-  }
-
-  .role {
-    margin: 0;
-  }
-
-  .meta {
-    display: block;
-    grid-column: 1;
-    grid-row: 1 / span 3;
-    margin: 0;
-    padding-top: 0.4rem;
-  }
-
-  .period {
-    display: block;
-  }
 }
 
 /* Bullet list — slight left padding instead of default browser indent */
@@ -109,7 +83,7 @@
 
 /* Individual bullet — comfortable spacing between items */
 .highlight {
-  font-size: 1rem;
+  font-size: var(--text-body);
   text-wrap: pretty;
   font-family: var(--font-body);
   line-height: 1.7;
@@ -118,14 +92,6 @@
 }
 
 @media (max-width: 599px) {
-  .entry {
-    padding-bottom: 1.5rem;
-  }
-
-  .entry + .entry {
-    padding-top: 1.5rem;
-  }
-
   .highlight {
     line-height: 1.6;
   }

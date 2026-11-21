@@ -1,18 +1,42 @@
 /**
  * Hackathons Section Styles
  *
- * One 880px left-aligned column shared with the section heading.
- * Three entries in equal columns from 720px (2.5rem apart), stacked
- * below; each sits under a hairline. On phones the place and event
- * share a baseline row. From 720px each entry is a flex column and
- * the Code link row is pinned to its bottom, so link rows align.
+ * A teal band (data-ground remaps the role colours to ink). From
+ * 720px the grid is the shared row grid: the left block (figure and
+ * lede) is sticky under the nav, the right column scrolls. No
+ * ancestor may set overflow or sticky stops working. Below that,
+ * one column: figure, lede, takeaway, entries.
  *
  * Base section layout and heading styles come from index.css.
  */
 
-.column {
-  max-width: 880px;
-  margin: 0 auto;
+.band {
+  display: grid;
+  gap: 2rem;
+}
+
+.pin {
+  container-type: inline-size;
+}
+
+.rest {
+  min-width: 0;
+}
+
+@media (min-width: 720px) {
+  .band {
+    grid-template-columns: var(--row-cols);
+    column-gap: var(--row-gap);
+  }
+}
+
+/* Short windows keep the figure in the flow */
+@media (min-width: 720px) and (min-height: 600px) {
+  .pin {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-group));
+    align-self: start;
+  }
 }
 
 .lede,
@@ -24,92 +48,56 @@
 }
 
 .lede {
+  margin-top: 1.5rem;
   color: var(--color-text-muted);
 }
 
-/* Plain paragraph, a little larger than body, primary colour */
 .takeaway {
-  font-size: 1.125rem;
+  font-size: var(--text-lead);
   color: var(--color-text);
   margin-bottom: 2rem;
 }
 
 .hackathons {
   display: grid;
-  gap: 2rem;
-}
-
-@media (min-width: 720px) {
-  .hackathons {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 2.5rem;
-  }
 }
 
 .hackathon {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 1rem;
-  align-items: baseline;
-  align-content: start;
-  padding-top: 1rem;
+  padding-block: 2.5rem;
   border-top: 1px solid var(--color-border);
 }
 
-.hackathon > :not(.place, .event) {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 720px) {
-  .hackathon {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-/* Light numeral, muted, lining figures */
-.place {
+.event {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  line-height: 1.1;
-  color: var(--color-text-muted);
-  font-variant-numeric: lining-nums;
-}
-
-.event {
-  margin: 0.25rem 0 0;
-  font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: var(--text-lead);
   font-weight: 600;
   color: var(--color-text);
 }
 
 .detail {
   margin: 0.25rem 0 0;
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
 }
 
 .project {
   margin: 0.75rem 0 0.25rem;
   font-family: var(--font-display);
+  font-size: var(--text-body);
   font-weight: 500;
 }
 
 .text {
   margin: 0 0 0.5rem;
   font-family: var(--font-body);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   line-height: 1.65;
   text-wrap: pretty;
   color: var(--color-text-muted);
 }
 
-/* Pinned to the entry bottom from 720px; a plain row on phones */
 .linkRow {
-  margin-top: auto;
   padding-top: 0.5rem;
 }
 
@@ -117,7 +105,7 @@
    target on phones */
 .link {
   display: inline-block;
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
   transition: color 0.2s;
 }

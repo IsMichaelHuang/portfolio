@@ -10,7 +10,7 @@ import ExternalLink from "./ExternalLink";
 
 function Footer() {
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} data-ground="ink">
       <p className={styles.text}>
         Built by Michael Huang with React, TypeScript, and Vite.
       </p>

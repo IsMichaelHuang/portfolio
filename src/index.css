@@ -11,7 +11,7 @@
  *
  * Type: two self-hosted faces (@fontsource-variable, no third-party
  * requests). Jost, an open Futura revival, is the display/UI face
- * (--font-display: headings, nav, buttons, pills, labels, dates).
+ * (--font-display: headings, nav, buttons, labels, dates).
  * Source Serif 4, roman and italic, is the prose face (--font-body:
  * bio, bullets, descriptions). font-synthesis is none, so italics
  * come from the real italic file.
@@ -38,12 +38,23 @@
   --color-text-muted: var(--muted);
   --color-border: var(--ink);
 
-  /* --- Spacing (defined, applied by later layout work) --- */
+  /* --- Spacing and layout --- */
 
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --space-in: 1rem;
   --space-group: 3.5rem;
   --space-section: 9rem;
+  /** Two-column row shared by Experience, Education and Skills */
+  --row-cols: minmax(0, 5fr) minmax(0, 7fr);
+  --row-gap: 3.5rem;
+
+  /* --- Type scale: the only text sizes (Figure adds numerals) --- */
+
+  --text-meta: 1rem;
+  --text-body: 1.125rem;
+  --text-lead: 1.375rem;
+  --text-heading: 1.75rem;
+  --text-statement: clamp(1.625rem, 3vw, 2.75rem);
 
   /** Fixed navbar height; keep at or below the bar's real height */
   --nav-h: 4rem;
@@ -91,7 +102,9 @@ html {
 }
 
 /* Honour the OS "reduce motion" setting: no smooth scroll, no
-   animated transitions or animations */
+   transitions or animations. transition-property defaults to "all",
+   so any non-zero duration (even 0.01ms) would start a transition on
+   every computed-style change; 0s creates none. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -102,7 +115,7 @@ html {
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
   }
 }
 
@@ -182,104 +195,101 @@ a:active {
  * a 1360px column, never closer than --gutter to the edge.
  */
 section {
-  padding: 4rem max(var(--gutter), (100% - 1360px) / 2);
+  padding: var(--space-section) max(var(--gutter), (100% - 1360px) / 2);
 }
 
-@media (max-width: 599px) {
-  section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
+/* A nav jump lands the heading one group gap below the nav */
+#experience,
+#hackathons,
+#projects,
+#about,
+#contact {
+  scroll-margin-top: calc(var(--space-group) - var(--space-section));
 }
 
 /*
  * Shared section heading style for any <h2> that is a direct
- * child of a <section>. Provides consistent font size, centering,
+ * child of a <section>. Provides consistent font size, left alignment,
  * and bottom spacing across all sections.
  */
 section > h2 {
-  font-size: clamp(1.75rem, 1.55rem + 1vw, 2.25rem);
+  font-size: var(--text-heading);
   font-weight: 600;
   line-height: 1.2;
-  text-align: center;
   text-wrap: balance;
   margin: 0 0 2.5rem;
 }
 
-/*
- * Experience, Hackathons, Projects and About run a left-aligned 880px column.
- * Their h2 shares that column so its left edge meets the rows below.
- * Hero and Contact stay centred. IDs outrank section > h2.
- */
-#experience > h2,
-#hackathons > h2,
-#projects > h2,
-#about > h2 {
-  max-width: 880px;
-  margin: 0 auto 2.5rem;
-  text-align: left;
-}
-
 h1,
 h2,
-h3 {
+h3,
+h4 {
   font-weight: 600;
+}
+
+h3,
+h4 {
+  font-size: var(--text-lead);
 }
 
 /* --- Shared Ledger Row --- */
 
 /*
- * Resume-style row used by About's Education block (Experience has
- * the same values in its module). DOM order is heading, meta, rest;
- * from 720px the meta block takes column 1 across the four rows.
- * Phones read in DOM order.
+ * Resume-style row (Experience, About's Education). A size container
+ * at every width so a figure can size itself from the row. From 720px
+ * a two-column grid on --row-cols: the figure or meta block takes
+ * column 1 across all rows, everything else column 2. Phones read in
+ * DOM order.
  */
+.ledger-row {
+  container-type: inline-size;
+}
+
 .ledger-meta {
   margin: 0.25rem 0 0.75rem;
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
+}
+
+/* Stacked on phones: air between the figure and the title */
+.ledger-row > [data-figure] {
+  margin-bottom: 1.25rem;
 }
 
 @media (min-width: 720px) {
   .ledger-row {
     display: grid;
-    grid-template-columns: 11rem minmax(0, 1fr);
-    column-gap: 2.5rem;
+    grid-template-columns: var(--row-cols);
+    column-gap: var(--row-gap);
     row-gap: 0.5rem;
   }
 
-  .ledger-row > :not(.ledger-meta) {
+  .ledger-row > * {
     grid-column: 2;
   }
 
-  .ledger-meta {
+  .ledger-row > [data-figure],
+  .ledger-row > .ledger-meta {
     grid-column: 1;
     grid-row: 1 / span 4;
+    align-self: start;
+    margin-bottom: 0;
+  }
+
+  .ledger-meta {
     margin: 0;
     padding-top: 0.4rem;
     white-space: nowrap;
   }
 }
 
-/* --- Shared Pill Style --- */
-
-/*
- * Reusable pill/badge pattern for tags and skills.
- * Applied via a data attribute (data-pill) to avoid CSS Module
- * scoping issues while keeping markup semantic.
- */
-[data-pill] {
-  font-size: 0.85rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 4px;
-  border: 1px solid var(--color-border);
-}
-
 /* --- Accessibility Utilities --- */
 
 :focus-visible {
-  outline: 2px solid currentColor;
+  /* The ground's text colour, not the element's: a filled button's
+     own colour is the ground, which would hide the ring. */
+  outline: 2px solid var(--color-text);
   outline-offset: 2px;
 }
 

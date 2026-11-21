@@ -1,88 +1,65 @@
 /**
  * Hero Section Styles
  *
- * Centers the mark, name, role, summary, Now line and links in a
- * container as tall as the viewport, up to 44rem, so the Experience
- * heading shows on the first screen. The Resume link is the lead action,
- * styled like the Contact email button. Phones get a 96px mark and
- * a 2 x 2 button grid. Children fade and rise once on load, staggered; content
- * has no base opacity, so it shows even if the animation never runs.
+ * Fills the first view on the amber ground, content anchored to the
+ * bottom. The figure's root is display: contents, so its numeral and
+ * caption are grid items: from 720px the numeral spans the full width
+ * and, under it, the caption sits left and the name block right, bottoms
+ * aligned. Below 720px everything stacks. All text is ink. The Resume
+ * link is the lead action; phones get a 2 x 2 link grid. Blocks fade
+ * and rise once on load; there is no base opacity, so content shows
+ * even if the animation never runs.
  */
 
-/* Full-viewport centered container */
 .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: end;
+  gap: var(--space-in);
+  min-height: 100vh;   /* Fallback for browsers without svh */
+  min-height: 100svh;  /* Ignores the mobile URL bar */
+  /* Clear the fixed nav; inline padding comes from the global rule */
+  padding-top: calc(var(--nav-h) + 1.5rem);
+  padding-bottom: var(--space-group);
+}
+
+/* Numeral and caption become grid items of the hero */
+.hero > [data-figure] {
+  display: contents;
+}
+
+.body {
   display: flex;
   flex-direction: column;
-  align-items: center;       /* Horizontal centering */
-  justify-content: center;   /* Vertical centering */
-  min-height: min(100vh, 44rem);   /* Fallback for browsers without svh */
-  min-height: min(100svh, 44rem);  /* Ignores the mobile URL bar */
-  /* Clear the fixed nav; keep content off the viewport edges */
-  padding: calc(var(--nav-h) + 1.5rem) 2rem 2rem;
-  text-align: center;
+  align-items: flex-start;
+  gap: var(--space-in);
+  margin-top: var(--space-in);
 }
 
-/* Logo mark */
-.mark {
-  width: 128px;
-  height: 128px;
-  margin: 0 0 1.5rem;
-}
-
-/* Primary heading — largest text on the page */
+/* Name: the page's one h1 */
 .name {
-  font-size: clamp(2.75rem, 2rem + 3.6vw, 4.75rem);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  margin: 0 0 0.5rem;
-}
-
-/* Role/title subtitle — muted for visual hierarchy */
-.title {
-  font-size: 1.25rem;
-  margin: 0 0 1rem;
-  color: var(--color-text-muted);
-}
-
-/* Short description — most de-emphasized; a 34rem balanced measure */
-.blurb {
-  font-size: 1.125rem;
-  margin: 0 0 2rem;
-  max-width: 34rem;
-  color: var(--color-text-muted);
-  /* Even line lengths, so the last word never sits alone */
-  text-wrap: balance;
-}
-
-/* Now line — the label reads as a lead-in */
-.now {
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  margin: -1rem 0 2rem;
-  max-width: 34rem;
-  color: var(--color-text-muted);
-  text-wrap: balance;
-}
-
-.nowLabel {
   font-family: var(--font-display);
-  font-weight: 500;
-  color: var(--color-text);
+  font-size: var(--text-heading);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
 }
 
-/* CTA link row — wraps on narrow screens; gap gives even spacing */
+.blurb {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  margin: 0;
+  max-width: 34rem;
+  text-wrap: balance;
+}
+
+/* Link row: wraps; gap gives even spacing */
 .links {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 1rem 1.5rem;
 }
 
-/*
- * Individual CTA link — bordered button using theme border color.
- * Hover underlines the label.
- */
 .link {
   display: inline-flex;
   align-items: center;
@@ -90,7 +67,7 @@
   padding: 0.5rem 1.25rem;
   border: 1px solid var(--color-border);
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: var(--text-meta);
   transition: border-color 0.2s, color 0.2s;
 }
 
@@ -100,13 +77,8 @@
   text-decoration-thickness: 1px;
 }
 
-/* Phones: smaller mark, and the four buttons as a 2 x 2 grid */
-@media (max-width: 599px) {
-  .mark {
-    width: 96px;
-    height: 96px;
-  }
-
+/* Phones: the four buttons as a 2 x 2 grid */
+@media (max-width: 719px) {
   .links {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -117,6 +89,29 @@
 
   .link {
     justify-content: center;
+  }
+}
+
+/* Numeral on its own row; caption left, name block right */
+@media (min-width: 720px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    align-items: end;
+  }
+
+  .hero > [data-figure] > span[aria-hidden] {
+    grid-column: 1 / -1;
+  }
+
+  .hero > [data-figure] > span:last-child {
+    grid-column: 1;
+    margin-top: 0;
+  }
+
+  .body {
+    grid-column: 2;
+    margin-top: 0;
   }
 }
 
@@ -131,7 +126,7 @@
   opacity: 0.85;
 }
 
-/* The one load animation: each child fades and rises, 70ms apart */
+/* The one load animation: numeral, caption, then the name block */
 @keyframes rise {
   from {
     opacity: 0;
@@ -139,20 +134,20 @@
   }
 }
 
-.hero > * {
+.hero > [data-figure] > span[aria-hidden],
+.hero > [data-figure] > span:last-child,
+.body {
   animation: rise 350ms ease-out backwards;
 }
 
-.hero > :nth-child(2) { animation-delay: 70ms; }
-.hero > :nth-child(3) { animation-delay: 140ms; }
-.hero > :nth-child(4) { animation-delay: 210ms; }
-.hero > :nth-child(5) { animation-delay: 280ms; }
-.hero > :nth-child(6) { animation-delay: 350ms; }
-.hero > :nth-child(7) { animation-delay: 420ms; }
+.hero > [data-figure] > span:last-child { animation-delay: 100ms; }
+.body { animation-delay: 200ms; }
 
 /* Delays would otherwise leave animations "running" */
 @media (prefers-reduced-motion: reduce) {
-  .hero > * {
+  .hero > [data-figure] > span[aria-hidden],
+  .hero > [data-figure] > span:last-child,
+  .body {
     animation: none;
   }
 }

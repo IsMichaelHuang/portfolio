@@ -101,14 +101,28 @@ describe('Experience section', () => {
     )
   })
 
-  it('orders each entry: company, role, metadata, bullets', () => {
+  it('leads each entry with a decorative figure', () => {
     render(<Experience />)
     const article = screen
       .getByRole('heading', { name: 'Intuit Credit Karma' })
       .closest('article')!
     const kids = [...article.children]
-    expect(kids.map((k) => k.tagName)).toEqual(['H3', 'P', 'DIV', 'UL'])
-    expect(kids[2]).toHaveTextContent('Apr 2026 — PresentOakland, CA')
-    expect(kids[2].children).toHaveLength(2)
+    expect(kids.map((k) => k.tagName)).toEqual([
+      'P', 'H3', 'P', 'DIV', 'UL',
+    ])
+    expect(kids[0]).toHaveAttribute('data-figure')
+    expect(kids[0]).toHaveAttribute('aria-hidden', 'true')
+    expect(kids[3]).toHaveTextContent('Apr 2026 — PresentOakland, CA')
+    expect(kids[3].children).toHaveLength(2)
+  })
+
+  it('keeps H3, P, DIV, UL for an entry without a figure', () => {
+    render(<Experience />)
+    for (const a of document.querySelectorAll('article')) {
+      if (a.querySelector('[data-figure]')) continue
+      expect([...a.children].map((k) => k.tagName)).toEqual([
+        'H3', 'P', 'DIV', 'UL',
+      ])
+    }
   })
 })

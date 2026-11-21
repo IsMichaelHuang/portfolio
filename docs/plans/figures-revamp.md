@@ -336,4 +336,5 @@ the row with no figure (left empty, judged on capture).
 
 ## The four questions
 
-Answered in the tasks file after the build.
+Answered in `figures-revamp-tasks.md`, with the verification
+record and the deviations from this plan.
