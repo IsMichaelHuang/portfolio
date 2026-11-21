@@ -1,19 +1,14 @@
 import { test, expect } from '@playwright/test'
 
-const behavior = () =>
-  getComputedStyle(document.documentElement).scrollBehavior
+const behavior = () => getComputedStyle(document.documentElement).scrollBehavior
 
-test('reduced motion: auto scrolling, nothing animating', async ({
-  page,
-}) => {
+test('reduced motion: auto scrolling, nothing animating', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('./')
   expect(await page.evaluate(behavior)).toBe('auto')
   const running = await page.evaluate(
     () =>
-      document
-        .getAnimations()
-        .filter((a) => a.playState === 'running').length,
+      document.getAnimations().filter((a) => a.playState === 'running').length,
   )
   expect(running).toBe(0)
 })
@@ -57,12 +52,13 @@ const record = () => {
 
 const seen = () =>
   Object.fromEntries(
-    [...(window as unknown as { __seen: Map<Element, string[]> })
-      .__seen].map(([el, texts]) => [
-      `${el.closest('section')?.id}:` +
-        el.querySelector('[aria-hidden="true"]')?.textContent,
-      texts,
-    ]),
+    [...(window as unknown as { __seen: Map<Element, string[]> }).__seen].map(
+      ([el, texts]) => [
+        `${el.closest('section')?.id}:` +
+          el.querySelector('[aria-hidden="true"]')?.textContent,
+        texts,
+      ],
+    ),
   )
 
 test('reduced motion: every figure only ever shows its final value', async ({
@@ -92,12 +88,68 @@ test('motion: hero counts up to ~70, a row figure to its value', async ({
   const all = await page.evaluate(seen)
   const texts = Object.entries(all).find(([k]) => k.startsWith('hero:'))![1]
   expect(texts.some((t) => t !== '~70')).toBe(true)
-  await page.locator('#experience').scrollIntoViewIfNeeded()
-  await page.locator('#experience').evaluate((el) => el.scrollIntoView())
   const row = page
     .locator('#experience [data-figure] > [aria-hidden="true"]')
     .first()
   await expect(row).toHaveText('~15,000')
+  const before = await page.evaluate(seen)
+  expect(before['experience:~15,000']).toEqual(['~15,000'])
+  await page.locator('#experience').evaluate((el) => el.scrollIntoView())
+  await expect
+    .poll(async () =>
+      Object.entries(await page.evaluate(seen)).some(
+        ([k, texts]) =>
+          k.startsWith('experience:') && texts.some((t) => t !== '~15,000'),
+      ),
+    )
+    .toBe(true)
+  await expect(row).toHaveText('~15,000')
+})
+
+// every numeral's text, next to the final value held by its sr-only span
+const pairs = () =>
+  Array.from(document.querySelectorAll('[data-figure]')).map((fig) => ({
+    id: fig.closest('section')?.id,
+    low: fig.getBoundingClientRect().top > window.innerHeight,
+    shown: fig.querySelector('[aria-hidden="true"]')?.textContent,
+    final: fig.querySelector('.sr-only')?.textContent,
+  }))
+const same = (p: { shown?: string | null; final?: string | null }) =>
+  p.shown === p.final || p.shown === p.final?.replace(/^about /, '~')
+
+test('motion: figures below the fold rest on their final value', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.addInitScript(record)
+  await page.goto('./', { waitUntil: 'domcontentloaded' })
+  await page.evaluate(
+    () => new Promise((r) => requestAnimationFrame(() => r(null))),
+  )
+  const early = await page.evaluate(pairs)
+  expect(early.some((p) => p.low)).toBe(true)
+  for (const p of early.filter((p) => p.low)) expect(same(p)).toBe(true)
+  await expect(
+    page.locator('#hero [data-figure] > [aria-hidden="true"]'),
+  ).toHaveText('~70')
+  const now = await page.evaluate(pairs)
+  for (const p of now.filter((p) => p.low)) expect(same(p)).toBe(true)
+  const all = await page.evaluate(seen)
+  const lows = new Set(now.filter((p) => p.low).map((p) => p.id))
+  for (const [key, texts] of Object.entries(all)) {
+    if (!lows.has(key.split(':')[0])) continue
+    expect(texts.every((t) => t === key.slice(key.indexOf(':') + 1))).toBe(true)
+  }
+})
+
+test('print: every figure shows its final value', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference', media: 'print' })
+  await page.goto('./')
+  await page.waitForTimeout(1200)
+  const all = await page.evaluate(pairs)
+  expect(all.length).toBeGreaterThan(0)
+  for (const p of all) expect(same(p)).toBe(true)
 })
 
 test('motion: counting shifts nothing', async ({ page }) => {

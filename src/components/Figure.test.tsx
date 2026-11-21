@@ -2,9 +2,7 @@ import { act, render } from '@testing-library/react'
 import Figure from './Figure'
 
 function setup(props: Partial<Parameters<typeof Figure>[0]> = {}) {
-  const { container } = render(
-    <Figure value="157" size="hero" {...props} />,
-  )
+  const { container } = render(<Figure value="157" size="hero" {...props} />)
   return container
 }
 
@@ -64,6 +62,7 @@ describe('Figure count-up', () => {
   let frames: FrameRequestCallback[]
   let cancelled: number[]
   let reduced: boolean
+  let inView: boolean
 
   function stub() {
     io = undefined
@@ -108,6 +107,27 @@ describe('Figure count-up', () => {
 
   beforeEach(() => {
     reduced = false
+    inView = false
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+      () =>
+        (inView
+          ? {
+              top: 0,
+              left: 0,
+              bottom: 100,
+              right: 100,
+              width: 100,
+              height: 100,
+            }
+          : {
+              top: 5000,
+              left: 0,
+              bottom: 5100,
+              right: 100,
+              width: 100,
+              height: 100,
+            }) as DOMRect,
+    )
   })
   afterEach(() => {
     vi.unstubAllGlobals()
@@ -119,12 +139,14 @@ describe('Figure count-up', () => {
     expect(numeral(c)).toHaveTextContent('~15,000')
   })
 
-  it('counts up once seen and ends on the exact value', () => {
+  it('rests on the final value until seen, then counts up', () => {
     stub()
     const c = setup({ value: '~15,000' })
+    expect(numeral(c).textContent).toBe('~15,000')
+    expect(frames).toHaveLength(0)
+    fire()
     expect(numeral(c).textContent).toBe('~0')
     expect(numeral(c).children[0].textContent).toBe('~')
-    fire()
     tick(0)
     tick(400)
     const mid = numeral(c).textContent!
@@ -134,6 +156,17 @@ describe('Figure count-up', () => {
     tick(900)
     expect(numeral(c).textContent).toBe('~15,000')
     expect(frames).toHaveLength(0)
+  })
+
+  it('starts at frame 0 at once when already in view', () => {
+    inView = true
+    stub()
+    const c = setup({ value: '~15,000' })
+    expect(numeral(c).textContent).toBe('~0')
+    expect(frames).toHaveLength(1)
+    tick(0)
+    tick(900)
+    expect(numeral(c).textContent).toBe('~15,000')
   })
 
   it('never leaves the final value under reduced motion', () => {
@@ -153,9 +186,7 @@ describe('Figure count-up', () => {
 
   it('cancels the frame and restores the value on unmount', () => {
     stub()
-    const { container, unmount } = render(
-      <Figure value="157" size="hero" />,
-    )
+    const { container, unmount } = render(<Figure value="157" size="hero" />)
     fire()
     tick(0)
     expect(numeral(container).textContent).not.toBe('157')
