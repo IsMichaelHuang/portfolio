@@ -18,7 +18,7 @@ describe('Hackathons', () => {
     expect(screen.queryAllByRole('heading', { level: 4 })).toHaveLength(0)
   })
 
-  it('shows lede, takeaway and three 2nd', () => {
+  it('shows lede and takeaway', () => {
     render(<Hackathons />)
     expect(
       screen.getByText('Second place at three hackathons.'),
@@ -29,7 +29,18 @@ describe('Hackathons', () => {
           'wins. Simple idea, strong execution, clear story.',
       ),
     ).toBeInTheDocument()
-    expect(screen.getAllByText('2nd')).toHaveLength(3)
+  })
+
+  it('starts each entry with 2nd and pins one band figure', () => {
+    const { container } = render(<Hackathons />)
+    const arts = container.querySelectorAll('article')
+    expect(arts).toHaveLength(3)
+    for (const a of arts) expect(a.textContent).toMatch(/^2nd/)
+    const figs = container.querySelectorAll('[data-figure]')
+    expect(figs).toHaveLength(1)
+    expect(figs[0]).toHaveAttribute('data-size', 'band')
+    expect(figs[0]).toHaveAttribute('aria-hidden', 'true')
+    expect(figs[0]).toHaveTextContent('2nd')
   })
 
   it('links Code once, to the live fact checker', () => {

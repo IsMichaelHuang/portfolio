@@ -13,6 +13,10 @@ const top = (page: Page, sel: string) =>
 for (const [w, h] of [
   [1280, 800],
   [375, 812],
+  [1366, 768],
+  [1366, 650],
+  [1200, 630],
+  [1920, 1080],
 ]) {
   test(`hero fits the first view at ${w}x${h}`, async ({ page }) => {
     await open(page, w, h)
@@ -27,7 +31,7 @@ for (const [w, h] of [
         .first()
         .evaluate((e) => e.getBoundingClientRect().toJSON())
       expect(r.top, sel).toBeGreaterThanOrEqual(0)
-      expect(r.bottom, sel).toBeLessThanOrEqual(h)
+      expect(r.bottom, sel).toBeLessThanOrEqual(h - (w > 599 ? 24 : 0))
       expect(r.left, sel).toBeGreaterThanOrEqual(0)
       expect(r.right, sel).toBeLessThanOrEqual(w)
     }
@@ -62,5 +66,5 @@ test('phone sections and ledger rows are tight', async ({ page }) => {
   expect(await pad('section', 'padding-top')).toBe('88px')
   // second row of each ledger: its top padding is the row rhythm
   expect(await pad('#experience article', 'padding-top')).toBe('40px')
-  expect(await pad('#projects article', 'padding-top')).toBe('24px')
+  expect(await pad('#projects article', 'padding-top')).toBe('40px')
 })

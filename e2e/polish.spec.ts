@@ -22,64 +22,50 @@ async function ensureCards(page: Page, n: number) {
   }, n)
 }
 
-test('last odd card is centred, one column wide at 1280px', async ({
-  page,
-}) => {
+test('pins have no box and no pills', async ({ page }) => {
   await open(page, 1280)
-  await ensureCards(page, 3)
-  // drop to exactly three cards so the last one is odd
-  await page.evaluate(() => {
-    const hs = document.querySelectorAll('#pinned h4')
-    for (let i = hs.length - 1; i >= 3; i--) hs[i].parentElement!.remove()
-  })
-  const all = await cards(page).all()
-  expect(all.length % 2).toBe(1)
-  const last = (await all[all.length - 1].boundingBox())!
-  const grid = (await cards(page).first().locator('xpath=..').boundingBox())!
-  expect(last.width).toBe(428)
-  expect(
-    Math.abs(last.x + last.width / 2 - (grid.x + grid.width / 2)),
-  ).toBeLessThanOrEqual(1)
+  await ensureCards(page, 1)
+  for (const card of await cards(page).all()) {
+    const css = await card.evaluate((e) => {
+      const c = getComputedStyle(e)
+      return [
+        c.backgroundColor,
+        c.borderLeftWidth,
+        c.borderRightWidth,
+        c.borderBottomWidth,
+        c.borderTopWidth,
+        c.borderRadius,
+      ]
+    })
+    expect(css).toEqual([
+      'rgba(0, 0, 0, 0)',
+      '0px',
+      '0px',
+      '0px',
+      '1px',
+      '0px',
+    ])
+  }
+  await expect(page.locator('#projects [data-pill]')).toHaveCount(0)
 })
 
-test('row-mates match height and align their link rows', async ({
-  page,
-}) => {
+test('the first two pins share a top at 1280px', async ({ page }) => {
   await open(page, 1280)
   await ensureCards(page, 2)
   const all = await cards(page).all()
-  const [a, b] = [await all[0].boundingBox(), await all[1].boundingBox()]
-  expect(a!.height).toBe(b!.height)
-  const tops = await Promise.all(
-    [all[0], all[1]].map((c) =>
-      c.locator('a').first().evaluate((el) => el.getBoundingClientRect().top),
-    ),
-  )
-  expect(Math.abs(tops[0] - tops[1])).toBeLessThanOrEqual(1)
+  const a = (await all[0].boundingBox())!
+  const b = (await all[1].boundingBox())!
+  expect(a.y).toBe(b.y)
+  expect(a.x + a.width).toBeLessThanOrEqual(b.x)
 })
 
-test('cards without descriptions have no forced void', async ({ page }) => {
-  await open(page, 1280)
-  await ensureCards(page, 4)
-  await page.evaluate(() => {
-    const all = Array.from(document.querySelectorAll('#pinned h4')).map(
-      (h) => h.parentElement!,
-    )
-    for (const c of [all[2], all[3]]) c.querySelector('p')?.remove()
-  })
-  const all = await cards(page).all()
-  for (const i of [2, 3]) {
-    expect((await all[i].boundingBox())!.height).toBeLessThan(200)
-  }
-})
-
-test('last card matches the others at 375px', async ({ page }) => {
+test('the second pin is below the first at 375px', async ({ page }) => {
   await open(page, 375)
-  await ensureCards(page, 3)
+  await ensureCards(page, 2)
   const all = await cards(page).all()
-  const first = (await all[0].boundingBox())!
-  const last = (await all[all.length - 1].boundingBox())!
-  expect(last.width).toBe(first.width)
+  const a = (await all[0].boundingBox())!
+  const b = (await all[1].boundingBox())!
+  expect(b.y).toBeGreaterThanOrEqual(a.y + a.height)
 })
 
 for (const width of [375, 1280]) {
@@ -184,4 +170,22 @@ test('hero links form two rows of two, 44px tall, at 375px', async ({
   expect(boxes[2].top).toBe(boxes[3].top)
   expect(Math.abs(boxes[0].width - boxes[1].width)).toBeLessThan(1)
   for (const b of boxes) expect(b.h).toBeGreaterThanOrEqual(44)
+})
+
+test('every link and button is at least 24px at 1280px', async ({
+  page,
+}) => {
+  await open(page, 1280)
+  const small = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('a, button'))
+      .filter((el) => !el.closest('.sr-only, .skip-link'))
+      .map((el) => ({
+        text: el.textContent!.trim(),
+        r: el.getBoundingClientRect(),
+      }))
+      .filter(({ r }) => r.width && r.height)
+      .filter(({ r }) => r.width < 24 || r.height < 24)
+      .map(({ text, r }) => `${text} ${r.width}x${r.height}`),
+  )
+  expect(small).toEqual([])
 })

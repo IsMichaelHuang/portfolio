@@ -61,3 +61,38 @@ test('no horizontal scroll at 320px', async ({ page }) => {
   )
   expect(over).toBe(false)
 })
+
+test('the ~ glyph top meets the top of the digits', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('./')
+  await page.evaluate(() => document.fonts.ready)
+  const m = await page.evaluate(() => {
+    const num = document.querySelector(
+      '#hero [data-figure] > span[aria-hidden]',
+    )!
+    const markEl = num.firstElementChild as HTMLElement
+    const ctx = document.createElement('canvas').getContext('2d')!
+    // Glyph top = line-box top + font ascent - glyph ascent
+    const glyphTop = (n: Node, el: HTMLElement) => {
+      const cs = getComputedStyle(el)
+      ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`
+      const t = ctx.measureText(n.textContent!)
+      const r = document.createRange()
+      r.selectNodeContents(n)
+      return (
+        r.getBoundingClientRect().top +
+        t.fontBoundingBoxAscent -
+        t.actualBoundingBoxAscent
+      )
+    }
+    return {
+      mark: glyphTop(markEl.firstChild!, markEl),
+      digits: glyphTop(num.lastChild!, num as HTMLElement),
+      size: parseFloat(getComputedStyle(num).fontSize),
+      navBottom: document.querySelector('nav')!.getBoundingClientRect().bottom,
+    }
+  })
+  expect(Math.abs(m.mark - m.digits)).toBeLessThanOrEqual(0.04 * m.size)
+  expect(m.mark).toBeGreaterThanOrEqual(m.navBottom)
+})
