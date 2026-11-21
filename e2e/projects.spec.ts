@@ -10,37 +10,60 @@ async function open(page: Page, width: number, height = 800) {
 const hackathons = (page: Page) =>
   page.locator('#hackathons article').filter({ hasText: /^2nd/ })
 
-test('hackathons share a top at 1280px', async ({ page }) => {
+test('hackathons stack at 1280px', async ({ page }) => {
   await open(page, 1280)
-  const tops = await hackathons(page).evaluateAll((as) =>
-    as.map((a) => a.getBoundingClientRect().top),
+  const boxes = await hackathons(page).evaluateAll((as) =>
+    as.map((a) => {
+      const r = a.getBoundingClientRect()
+      return { top: r.top, bottom: r.bottom }
+    }),
   )
-  expect(tops).toHaveLength(3)
-  for (const t of tops) expect(Math.abs(t - tops[0])).toBeLessThanOrEqual(1)
+  expect(boxes).toHaveLength(3)
+  for (let i = 1; i < boxes.length; i++)
+    expect(boxes[i].top).toBeGreaterThanOrEqual(boxes[i - 1].bottom - 0.5)
 })
 
-test('hackathons have equal heights at 1280px', async ({ page }) => {
-  await open(page, 1280)
-  const hs = await hackathons(page).evaluateAll((as) =>
-    as.map((a) => a.getBoundingClientRect().height),
-  )
-  expect(hs).toHaveLength(3)
-  for (const h of hs) expect(Math.abs(h - hs[0])).toBeLessThanOrEqual(1)
+test('hackathon figure stays pinned at 1280x800', async ({ page }) => {
+  await open(page, 1280, 800)
+  const fig = () =>
+    page.locator('#hackathons [data-figure]').evaluate(
+      (f) => f.getBoundingClientRect().top,
+    )
+  const entryTop = (i: number) =>
+    hackathons(page).nth(i).evaluate((a) => a.getBoundingClientRect().top)
+  const bring = async (i: number, y: number) => {
+    const t = await entryTop(i)
+    await page.evaluate((d) => scrollBy(0, d), t - y)
+  }
+  // pin first, then bring entry 1 to the figure's top, then entry 2
+  await bring(0, 200)
+  const first = await fig()
+  await bring(0, first)
+  const e1 = await entryTop(0)
+  await bring(1, first)
+  expect(Math.abs((await fig()) - first)).toBeLessThanOrEqual(2)
+  expect(Math.abs((await entryTop(0)) - e1)).toBeGreaterThan(20)
 })
 
-test('hackathon Code links share a bottom at 1280px', async ({ page }) => {
+test('hackathon figure scrolls with the page at 375px', async ({ page }) => {
+  await open(page, 375, 812)
+  const fig = () =>
+    page.locator('#hackathons [data-figure]').evaluate(
+      (f) => f.getBoundingClientRect().top,
+    )
+  await page.locator('#hackathons [data-figure]').scrollIntoViewIfNeeded()
+  const before = await fig()
+  await page.evaluate(() => scrollBy(0, 200))
+  expect(before - (await fig())).toBeGreaterThan(180)
+  expect(before - (await fig())).toBeLessThan(220)
+})
+
+test('hackathons band is teal', async ({ page }) => {
   await open(page, 1280)
-  const [art, link] = await Promise.all([
-    hackathons(page).evaluateAll((as) =>
-      as.map((a) => a.getBoundingClientRect().bottom),
-    ),
-    page.locator('#hackathons a').evaluateAll((as) =>
-      as.map((a) => a.getBoundingClientRect().bottom),
-    ),
-  ])
-  // the one link row sits at the foot of its entry
-  expect(link).toHaveLength(1)
-  expect(art.some((b) => Math.abs(b - link[0]) <= 12)).toBe(true)
+  await expect(page.locator('#hackathons')).toHaveCSS(
+    'background-color',
+    'rgb(71, 194, 192)',
+  )
 })
 
 test('hackathons stack at 375px', async ({ page }) => {
@@ -53,15 +76,15 @@ test('hackathons stack at 375px', async ({ page }) => {
   )
   expect(boxes).toHaveLength(3)
   for (let i = 1; i < boxes.length; i++)
-    expect(boxes[i].top).toBeGreaterThan(boxes[i - 1].bottom)
+    expect(boxes[i].top).toBeGreaterThanOrEqual(boxes[i - 1].bottom - 0.5)
 })
 
 for (const [width, left] of [
   [1280, true],
   [375, false],
 ] as const) {
-  const where = left ? 'left of' : 'below'
-  test(`featured stack sits ${where} title at ${width}px`, async ({
+  const where = left ? 'left of' : 'above'
+  test(`featured figure sits ${where} title at ${width}px`, async ({
     page,
   }) => {
     await open(page, width, 812)
@@ -71,18 +94,26 @@ for (const [width, left] of [
         as.map((a) => {
           const h = a.querySelector('h3')!.getBoundingClientRect()
           const s = a.querySelector('ul')!.getBoundingClientRect()
+          const f = a
+            .querySelector('[data-figure]')
+            ?.getBoundingClientRect()
           return {
             hLeft: h.left,
+            hTop: h.top,
             hBottom: h.bottom,
-            sRight: s.right,
             sTop: s.top,
+            fRight: f?.right,
+            fBottom: f?.bottom,
           }
         }),
       )
     expect(rows).toHaveLength(3)
+    expect(rows.filter((r) => r.fRight !== undefined)).toHaveLength(2)
     for (const r of rows) {
-      if (left) expect(r.sRight).toBeLessThan(r.hLeft)
-      else expect(r.sTop).toBeGreaterThanOrEqual(r.hBottom)
+      expect(r.sTop).toBeGreaterThanOrEqual(r.hBottom)
+      if (r.fRight === undefined) continue
+      if (left) expect(r.fRight).toBeLessThan(r.hLeft)
+      else expect(r.fBottom).toBeLessThanOrEqual(r.hTop)
     }
   })
 }

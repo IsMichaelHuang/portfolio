@@ -38,27 +38,23 @@ function ratio(fg: RGBA, bg: RGBA) {
   return (hi + 0.05) / (lo + 0.05)
 }
 
-const bg = token('color-bg')
-const surface = over(token('color-surface'), bg)
-const text = token('color-text')
-const muted = token('color-text-muted')
-const accent = token('color-accent-text')
+const [ink, white, amber, teal] = ['ink', 'white', 'amber', 'teal'].map(token)
+const muted = token('muted')
+const mutedOnInk = token('muted-on-ink')
 
 describe('colour contrast', () => {
   it.each([
-    ['text', text],
-    ['text-muted', muted],
-    ['accent-text', accent],
-  ] as const)('%s is at least 4.5:1 on bg and surface', (_, fg) => {
+    ['ink on white', ink, white],
+    ['ink on amber', ink, amber],
+    ['ink on teal', ink, teal],
+    ['white on ink', white, ink],
+    ['muted on white', muted, white],
+    ['muted-on-ink on ink', mutedOnInk, ink],
+  ] as const)('%s is at least 4.5:1', (_, fg, bg) => {
     expect(ratio(fg, bg)).toBeGreaterThanOrEqual(4.5)
-    expect(ratio(fg, surface)).toBeGreaterThanOrEqual(4.5)
   })
 
-  it('text-muted is at least 5.5:1 on bg', () => {
-    expect(ratio(muted, bg)).toBeGreaterThanOrEqual(5.5)
-  })
-
-  it('text-muted stays visibly below text', () => {
-    expect(ratio(text, bg) - ratio(muted, bg)).toBeGreaterThanOrEqual(3)
+  it('muted on white is at least 5.5:1', () => {
+    expect(ratio(muted, white)).toBeGreaterThanOrEqual(5.5)
   })
 })

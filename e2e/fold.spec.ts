@@ -13,12 +13,37 @@ const top = (page: Page, sel: string) =>
 for (const [w, h] of [
   [1280, 800],
   [375, 812],
+  [1366, 768],
+  [1366, 650],
+  [1200, 630],
+  [1920, 1080],
 ]) {
-  test(`Experience heading is on the first screen at ${w}x${h}`, async ({
-    page,
-  }) => {
+  test(`hero fits the first view at ${w}x${h}`, async ({ page }) => {
     await open(page, w, h)
-    expect(await top(page, '#experience > h2')).toBeLessThan(h)
+    for (const sel of [
+      '#hero [data-figure] > span[aria-hidden]',
+      '#hero [data-figure] > span:last-child',
+      '#hero h1',
+      '#hero a >> nth=0',
+    ]) {
+      const r = await page
+        .locator(sel)
+        .first()
+        .evaluate((e) => e.getBoundingClientRect().toJSON())
+      expect(r.top, sel).toBeGreaterThanOrEqual(0)
+      expect(r.bottom, sel).toBeLessThanOrEqual(h - (w > 599 ? 24 : 0))
+      expect(r.left, sel).toBeGreaterThanOrEqual(0)
+      expect(r.right, sel).toBeLessThanOrEqual(w)
+    }
+    const m = await page.locator('#hero').evaluate((e) => ({
+      h: e.getBoundingClientRect().height,
+      f: parseFloat(
+        getComputedStyle(e.querySelector('[data-figure] [aria-hidden]')!)
+          .fontSize,
+      ),
+    }))
+    expect(m.f).toBeGreaterThanOrEqual(90)
+    if (w === 375) expect(m.h).toBeLessThanOrEqual(h)
   })
 
   test(`hero h1 clears the nav at ${w}x${h}`, async ({ page }) => {
@@ -31,12 +56,6 @@ for (const [w, h] of [
   })
 }
 
-test('role line is 20px', async ({ page }) => {
-  await open(page, 1280, 800)
-  const role = page.getByText('Software Engineer', { exact: true })
-  await expect(role).toHaveCSS('font-size', '20px')
-})
-
 test('phone sections and ledger rows are tight', async ({ page }) => {
   await open(page, 375, 812)
   const pad = (sel: string, side: string) =>
@@ -44,8 +63,8 @@ test('phone sections and ledger rows are tight', async ({ page }) => {
       .locator(sel)
       .nth(1)
       .evaluate((e, s) => getComputedStyle(e).getPropertyValue(s), side)
-  expect(await pad('section', 'padding-top')).toBe('48px')
+  expect(await pad('section', 'padding-top')).toBe('88px')
   // second row of each ledger: its top padding is the row rhythm
-  expect(await pad('#experience article', 'padding-top')).toBe('24px')
-  expect(await pad('#projects article', 'padding-top')).toBe('24px')
+  expect(await pad('#experience article', 'padding-top')).toBe('40px')
+  expect(await pad('#projects article', 'padding-top')).toBe('40px')
 })

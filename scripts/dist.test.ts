@@ -80,9 +80,18 @@ describe('dist/index.html', () => {
   })
 
   it('has theme, scheme and referrer metas', () => {
-    expect(meta('name', 'theme-color')).toBe('#0a0a0f')
-    expect(meta('name', 'color-scheme')).toBe('dark')
+    expect(meta('name', 'theme-color')).toBe('#eca358')
+    expect(meta('name', 'color-scheme')).toBe('light')
     expect(meta('name', 'referrer')).toBe('strict-origin-when-cross-origin')
+  })
+
+  it('declares light in 404.html and drops the dark colour', () => {
+    const nf = readFileSync('dist/404.html', 'utf8')
+    expect(nf).toMatch(/name="color-scheme"\s+content="light"/)
+    for (const f of ['index.html', '404.html']) {
+      const text = readFileSync('dist/' + f, 'utf8')
+      expect(text.toLowerCase()).not.toContain('#0a0a0f')
+    }
   })
 
   it('links the icons under the base path', () => {
