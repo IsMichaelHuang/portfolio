@@ -152,3 +152,13 @@ for (const width of [320, 720, 880, 1280]) {
     expect(over).toBeLessThanOrEqual(0)
   })
 }
+
+test('section headings are left-aligned', async ({ page }) => {
+  await open(page, 1280)
+  for (const id of ['experience', 'hackathons', 'projects', 'about'])
+    expect(
+      await page
+        .locator(`#${id} > h2`)
+        .evaluate((h) => getComputedStyle(h).textAlign),
+    ).toMatch(/^(left|start)$/)
+})

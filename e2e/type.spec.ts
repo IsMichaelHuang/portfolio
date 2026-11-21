@@ -20,10 +20,34 @@ test('distinct font sizes stay within the ratchet', async ({ page }) => {
     }
     return [...out]
   })
-  // Interim ceiling while sections move to the new scale: the row
-  // figure and its approximate mark add two sizes.
-  expect(sizes.length).toBeLessThanOrEqual(18)
+  // Three figure numerals, two approximate marks, five text sizes.
+  expect(sizes.length).toBeLessThanOrEqual(10)
 })
+
+for (const width of [320, 375, 768, 1280, 1920]) {
+  test(`no rendered text is under 12px at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 800 })
+    const small = await page.evaluate(() => {
+      const out: string[] = []
+      for (const el of Array.from(document.body.querySelectorAll('*'))) {
+        if (el.closest('.sr-only')) continue
+        const r = el.getBoundingClientRect()
+        if (!r.width || !r.height) continue
+        const own = Array.from(el.childNodes).some(
+          (n) => n.nodeType === 3 && n.textContent!.trim(),
+        )
+        const px = parseFloat(getComputedStyle(el).fontSize)
+        if (own && px < 12) {
+          out.push(`${el.className} "${el.textContent}" ${px}px`)
+        }
+      }
+      return out
+    })
+    expect(small).toEqual([])
+  })
+}
 
 for (const sel of ['#about p', 'footer']) {
   test(`::selection contrast on ${sel} is at least 4.5:1`, async ({

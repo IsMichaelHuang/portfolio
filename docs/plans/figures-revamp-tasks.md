@@ -179,8 +179,94 @@ reasoning ledger passes the skill's `ledger-check.mjs`.
 
 ## Verification record
 
-Filled per PR: suite counts, capture findings, audit counts.
+Final state, branch `feature/figures-ship`, run by the main agent:
+lint clean; 158 unit tests in 27 files; 136 end-to-end tests;
+`check:limits` clean. Built size: 213 KB script, 21 KB styles.
+
+Per PR the main agent captured 1440 and 390 with the skill's
+`capture.mjs` and opened the images. What that caught, each fixed
+test-first on the branch where it showed:
+
+- PR 2: the `~` rendered as large as the digits; it is a small
+  raised mark. Two reduced-motion tests flaked: under reduced motion
+  every style change started a 0.01ms transition; it is `0s` and a
+  test changes a style to prove no transition starts.
+- PR 3: the interim font-size ceiling of 16 was too low mid-stack;
+  raised to 18 for that stretch, then set to 10 in PR 8.
+- PR 5: section headings had centred once the 880px column went;
+  they are left-aligned with a test.
+- PR 8: on short laptop screens the hero ran past the first view and
+  the share image was cut; the numeral is bounded by height as well
+  as width (tests at 1366x768, 1366x650, 1200x630, 1920x1080).
+  Figures not yet scrolled to showed frame 0 in print and full-page
+  captures; a figure at rest shows its true value and drops to zero
+  only when its count starts (tests for below-the-fold and print).
+  The focus ring on the filled Resume link was amber on amber; the
+  ring takes the ground's text colour (test over every stop).
+
+Deviations from the plan:
+
+- F10 says nine font sizes; ten render at 1280. Five text sizes,
+  three numerals, and the two `~` marks, which are sizes of their
+  own. `type.spec.ts` asserts ten.
+- T12 and T13 ran as one dev task with three commits. The nine-size
+  tightening moved from T10 to that task.
+- Dropped from the plan before the build (review log): the Resume
+  link in the nav.
+
+Audit (`audit.mjs --strict` on the final capture): 0 blockers, 1
+major, 3 minor. Baseline was 0 blockers, 3 majors. Remaining
+findings, with reasons:
+
+- Major, smallest text 6.72px: a static reading of the `~` mark's
+  `0.42em` against 16px. Rendered, the smallest text is 14.4px (phone
+  nav) and 16px elsewhere; `type.spec.ts` checks five widths.
+- Minor, pure `#fff`: white is the palette's ground by decision.
+- Minor, uneven side margins: the figure is left-aligned on purpose.
+- Minor, 15 spacing values: three rhythm tokens govern sections and
+  groups; the rest are component gaps.
+- Capture notes kept: teal counted as a stock hue (it is sampled
+  from the logo); no imagery (none was provided; type is the image);
+  em dashes (they are in the resume copy).
+
+Neutral review (a fresh Sonnet agent, captures and brief only):
+first impression 8; art direction 7; type as image 7; whitespace 6;
+variety 6; primary action 7; words 7; wayfinding 6. Acted on: the
+frame-0 figures. Not acted on, for Michael to decide: a Resume link
+in the nav and in Contact; a larger Resume button; coloured bands
+and larger numerals in Experience and Projects; "Contract AI
+Engineer" in the hero subtitle (new copy).
+
+Keyboard pass at 1280: skip link, brand, four nav links, four hero
+links, four Code links, email, two profile links, source link, in
+that order. Reduced motion: no figure text changes, no transition
+starts, no animation runs.
 
 ## The four questions
 
-Answered after the build.
+1. **Regressions.** The hero no longer shows the logo, the
+   "Software Engineer" line, or the "Now:" line; pins no longer show
+   topic tags; all four are listed as removed in the plan. The
+   noscript block, title, description, JSON-LD, section ids, nav
+   links, and resume URL are unchanged and tested. Visitors with a
+   dark system theme get the light page (non-goal). Share previews
+   cached elsewhere keep the old image for a while. None found
+   beyond these accepted ones.
+2. **Security.** No new input, endpoint, dependency, secret, or
+   third-party request (`fonts.spec.ts` still asserts same-origin
+   requests). External links keep `rel="noopener noreferrer"`. The
+   count-up writes text nodes only, from data in the bundle. None
+   found.
+3. **Efficiency.** No dependency was added; the count-up is one
+   observer and one animation-frame loop per figure for under a
+   second, and nothing runs under reduced motion. The nav's scroll
+   handler measures ten rectangles per scroll event where it
+   measured four; merging the two passes would save six reads and
+   is not worth the coupling. The starfield's twelve gradients are
+   gone. No action.
+4. **More tests before prod.** Added while building: focus ring
+   against its ground, figures at rest and in print, the hero at
+   four short or wide viewports, no transitions under reduced
+   motion, no text under 12px, target sizes at 1280. Not covered and
+   not added: browsers other than Chromium (a project rule) and
+   pixel comparison (the project has none). No open action.
