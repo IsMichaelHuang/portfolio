@@ -74,8 +74,8 @@ function Projects() {
           <h3 className={styles.blockHeading}>Also on GitHub</h3>
           <div className={styles.grid}>
             {pins.map((project) => (
-              <div key={project.id} className={styles.card}>
-                <h4 className={styles.cardTitle}>{project.title}</h4>
+              <div key={project.id} className={styles.pin}>
+                <h4 className={styles.pinTitle}>{project.title}</h4>
                 {project.description && (
                   <p className={styles.description}>
                     {project.description}

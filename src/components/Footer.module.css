@@ -9,7 +9,7 @@
   padding: 2rem max(var(--gutter), (100% - 1360px) / 2) 3rem;
   border-top: 1px solid var(--color-border);
   font-family: var(--font-display);
-  font-size: 0.875rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
 }
 
