@@ -14,10 +14,8 @@ import ExternalLink from "../components/ExternalLink";
 
 function Contact() {
   return (
-    <section id="contact" className={styles.section}>
+    <section id="contact" data-ground="ink">
       <h2 className={styles.heading}>Get In Touch</h2>
-      {/* heading className overrides global section > h2 margin for
-          tighter spacing */}
       <p className={styles.message}>
         I'm currently open to new opportunities. Whether you have a question
         or just want to connect, feel free to reach out.

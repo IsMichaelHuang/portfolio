@@ -40,7 +40,7 @@
 /* Company — the prominent line; recruiters scan employers */
 .company {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-lead);
   font-weight: 600;
   color: var(--color-text);
   margin: 0;
@@ -50,7 +50,7 @@
 /* Role — muted, under the company */
 .role {
   margin: 0.25rem 0 0;
-  font-size: 1rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
 }
 
@@ -60,7 +60,7 @@
   flex-wrap: wrap;
   gap: 0 0.5rem;
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
 }
@@ -83,7 +83,7 @@
 
 /* Individual bullet — comfortable spacing between items */
 .highlight {
-  font-size: 1.125rem;
+  font-size: var(--text-body);
   text-wrap: pretty;
   font-family: var(--font-body);
   line-height: 1.7;

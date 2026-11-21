@@ -10,4 +10,12 @@ describe('Contact', () => {
     expect(a).toHaveAttribute('href', 'mailto:michael.micah.huang@gmail.com')
     expect(a).not.toHaveAttribute('target')
   })
+
+  it('section carries data-ground ink', () => {
+    const { container } = render(<Contact />)
+    expect(container.querySelector('section')).toHaveAttribute(
+      'data-ground',
+      'ink',
+    )
+  })
 })
