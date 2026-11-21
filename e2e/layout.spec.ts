@@ -45,20 +45,21 @@ test('AC2 brand and nav links fit at 320px', async ({ page }) => {
   }
 })
 
-test('AC3 cards fill the 880px column two per row, equal height', async ({
+test('pins sit in two columns from 988px and one below', async ({
   page,
 }) => {
   await open(page, 1280)
   await ensureCards(page, 2)
-  const all = await cards(page).all()
-  expect(all.length).toBeGreaterThanOrEqual(2)
+  let all = await cards(page).all()
   const a = (await all[0].boundingBox())!
   const b = (await all[1].boundingBox())!
-  // two columns of (880 - 24px gap) / 2
-  expect(a.width).toBe(428)
-  expect(b.width).toBe(428)
+  expect(a.x).not.toBe(b.x)
   expect(a.y).toBe(b.y)
-  expect(a.height).toBe(b.height)
+  await page.setViewportSize({ width: 900, height: 800 })
+  all = await cards(page).all()
+  const c = (await all[0].boundingBox())!
+  const d = (await all[1].boundingBox())!
+  expect(c.x).toBe(d.x)
 })
 
 test('AC4 long unbroken text grows the card at 320px', async ({ page }) => {
@@ -85,3 +86,69 @@ test('AC4 long unbroken text grows the card at 320px', async ({ page }) => {
   ])
   expect(sw).toBeLessThanOrEqual(cw)
 })
+
+// Row figures: the visible numeral stays inside its grid cell.
+const SPACING = `* { line-height: 1.5 !important;
+  letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+  p { margin-bottom: 2em !important; }`
+
+async function figuresFit(page: Page) {
+  const rows = page.locator('#experience article, #projects article')
+  return rows.evaluateAll((as) =>
+    as.flatMap((a) => {
+      const f = a.querySelector('[data-figure]')
+      if (!f) return []
+      // the numeral is a block: measure its glyphs, not its box
+      const rg = document.createRange()
+      rg.selectNodeContents(f.querySelector('[aria-hidden="true"]')!)
+      const n = rg.getBoundingClientRect()
+      const h = a.querySelector('h3')!.getBoundingClientRect()
+      return [
+        {
+          over: n.right - f.getBoundingClientRect().right,
+          hOver: innerWidth >= 720 ? n.right - h.left : -1,
+        },
+      ]
+    }),
+  )
+}
+
+// The band figure's glyphs stay inside its column (the viewport
+// below 720px, where the column is the full width).
+async function bandFits(page: Page) {
+  return page.evaluate(() => {
+    const f = document.querySelector('#hackathons [data-figure]')!
+    const rg = document.createRange()
+    rg.selectNodeContents(f.querySelector('[aria-hidden="true"]')!)
+    const n = rg.getBoundingClientRect()
+    const col = f.parentElement!.getBoundingClientRect()
+    return { over: n.right - col.right, vOver: n.right - innerWidth }
+  })
+}
+
+for (const [width, spacing] of [
+  [320, false],
+  [375, false],
+  [768, false],
+  [1280, false],
+  [1920, false],
+  [320, true],
+  [720, true],
+  [768, true],
+] as const) {
+  test(`F5 row figures fit at ${width}px${spacing ? ' spaced' : ''}`, async ({
+    page,
+  }) => {
+    await open(page, width)
+    if (spacing) await page.addStyleTag({ content: SPACING })
+    const fits = await figuresFit(page)
+    expect(fits.length).toBeGreaterThan(0)
+    for (const f of fits) {
+      expect(f.over).toBeLessThanOrEqual(0.5)
+      expect(f.hOver).toBeLessThanOrEqual(0)
+    }
+    const b = await bandFits(page)
+    expect(b.over).toBeLessThanOrEqual(0.5)
+    expect(b.vOver).toBeLessThanOrEqual(0)
+  })
+}

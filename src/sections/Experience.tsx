@@ -11,6 +11,7 @@
  */
 
 import { experience } from "../data/experience";
+import Figure from "../components/Figure";
 import { renderEmphasis } from "../lib/emphasis";
 import styles from "./Experience.module.css";
 
@@ -18,9 +19,16 @@ function Experience() {
   return (
     <section id="experience">
       <h2>Experience</h2>
-      <div className={styles.list}>
         {experience.map((entry) => (
-          <article key={entry.id} className={styles.entry}>
+          <article key={entry.id} className={`ledger-row ${styles.entry}`}>
+            {entry.figure && (
+              <Figure
+                decorative
+                size="row"
+                value={entry.figure.value}
+                unit={entry.figure.unit}
+              />
+            )}
             <h3 className={styles.company}>{entry.company}</h3>
             <p className={styles.role}>{entry.role}</p>
             <div className={styles.meta}>
@@ -38,7 +46,6 @@ function Experience() {
             </ul>
           </article>
         ))}
-      </div>
     </section>
   );
 }
