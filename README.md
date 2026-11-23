@@ -37,7 +37,7 @@ src/
 ├── lib/
 │   ├── activeSection.ts    # Pure scroll-spy picker
 │   ├── emphasis.tsx        # Renders **bold** markers in data strings
-│   ├── figure.ts           # Count-up frames for a figure's number
+│   ├── figure.ts           # Count-up frames and width of a figure
 │   ├── pins.ts             # Drops pins already shown as featured work
 │   └── *.test.ts(x)        # Unit tests beside each module
 ├── sections/
@@ -215,7 +215,10 @@ every width. From 720px a row is a grid on `--row-cols`
 `[data-figure]` or `.ledger-meta` takes column 1 across the rows,
 everything else column 2; below 720px one column in DOM order. An
 Experience entry is its figure, company, role, period and location,
-then 18px bullets, rows separated by a hairline. Skills are a `<dl>`
+then 18px bullets, rows separated by a hairline. A row figure
+fills its column: `figureWidth` gives its width in digit widths as
+`--w`, so a short figure renders larger than a long one (3.5rem to
+10.5rem). Its caption is 18px at weight 500. Skills are a `<dl>`
 with an `8rem` label column from 480px and the same `--row-cols` /
 `--row-gap` from 720px, so every right-hand column shares one left
 edge.
@@ -229,7 +232,8 @@ requests; `unicode-range` makes the browser fetch only the subsets
 the page's characters need. Every text size comes from the five
 `--text-*` tokens (the nav links drop to 0.9rem below 600px so four
 fit a 320px screen); the `Figure` numerals add their own sizes, so
-at most ten distinct sizes render at 1280px.
+at most eight distinct figure sizes render at 1280px and at most five
+sizes render outside figures.
 
 Code and Live links are muted at rest and turn ink with a thin
 underline offset 0.25em on hover; the Contact profile links and the

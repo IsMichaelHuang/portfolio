@@ -41,15 +41,15 @@
   }
 }
 
-/* cqi is the row's width: the numeral fills the left column from
-   720px (about 5/12 of the row) and the row below it */
+/* cqi is the row's width. --w is the figure's width in digit
+   widths, so every figure fills its column; short ones grow big */
 [data-size="row"] .numeral {
-  font-size: clamp(3.5rem, 20cqi, 10.5rem);
+  font-size: clamp(3.5rem, calc(115cqi / var(--w, 6)), 10.5rem);
 }
 
 @media (min-width: 720px) {
   [data-size="row"] .numeral {
-    font-size: clamp(3.5rem, 8cqi, 10.5rem);
+    font-size: clamp(3.5rem, calc(46cqi / var(--w, 6)), 10.5rem);
   }
 }
 
@@ -65,4 +65,10 @@
   font-size: var(--text-statement);
   line-height: 1.12;
   max-width: 20ch;
+}
+
+[data-size="row"] .unit {
+  margin-top: 1rem;
+  font-size: var(--text-body);
+  font-weight: 500;
 }

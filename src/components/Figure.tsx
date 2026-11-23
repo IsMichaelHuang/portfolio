@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef } from "react";
-import { countFrame } from "../lib/figure";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
+import { countFrame, figureWidth } from "../lib/figure";
 import styles from "./Figure.module.css";
 
 interface Props {
@@ -78,6 +78,11 @@ function Figure({ value, unit, size, decorative }: Props) {
       className={styles.figure}
       data-figure
       data-size={size}
+      style={
+        size === "row"
+          ? ({ "--w": figureWidth(value) } as CSSProperties)
+          : undefined
+      }
       aria-hidden={decorative ? "true" : undefined}
     >
       <span className="sr-only">{spoken}</span>

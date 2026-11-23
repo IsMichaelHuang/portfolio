@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
@@ -7,8 +7,10 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => document.fonts.ready)
 })
 
-test('distinct font sizes stay within the ratchet', async ({ page }) => {
-  const sizes = await page.evaluate(() => {
+// Visible elements that hold their own text, split by whether they
+// sit inside a figure numeral (those scale with their column).
+async function sizes(page: Page, inFigure: boolean) {
+  return page.evaluate((inFigure) => {
     const out = new Set<string>()
     for (const el of Array.from(document.body.querySelectorAll('*'))) {
       const r = el.getBoundingClientRect()
@@ -16,12 +18,19 @@ test('distinct font sizes stay within the ratchet', async ({ page }) => {
       const own = Array.from(el.childNodes).some(
         (n) => n.nodeType === 3 && n.textContent!.trim(),
       )
-      if (own) out.add(getComputedStyle(el).fontSize)
+      const fig = el.closest('[data-figure] [aria-hidden="true"]') !== null
+      if (own && fig === inFigure) out.add(getComputedStyle(el).fontSize)
     }
     return [...out]
-  })
-  // Three figure numerals, two approximate marks, five text sizes.
-  expect(sizes.length).toBeLessThanOrEqual(10)
+  }, inFigure)
+}
+
+test('text outside figures uses at most five sizes', async ({ page }) => {
+  expect((await sizes(page, false)).length).toBeLessThanOrEqual(5)
+})
+
+test('figure numerals use at most eight sizes', async ({ page }) => {
+  expect((await sizes(page, true)).length).toBeLessThanOrEqual(8)
 })
 
 for (const width of [320, 375, 768, 1280, 1920]) {

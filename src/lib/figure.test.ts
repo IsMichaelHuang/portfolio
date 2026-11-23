@@ -1,4 +1,4 @@
-import { countFrame } from './figure'
+import { countFrame, figureWidth } from './figure'
 
 const values = ['~15,000', '157', '~30%', '249', '61', '~70']
 const num = (s: string) => Number(s.replace(/[^\d]/g, ''))
@@ -38,5 +38,14 @@ describe('countFrame', () => {
   it('clamps t', () => {
     expect(countFrame('157', -3)).toBe('0')
     expect(countFrame('157', 4)).toBe('157')
+  })
+})
+
+describe('figureWidth', () => {
+  it('counts digits 1, commas and ~ 0.4, % 1.4', () => {
+    expect(figureWidth('157')).toBe(3)
+    expect(figureWidth('61')).toBe(2)
+    expect(figureWidth('~30%')).toBe(3.8)
+    expect(figureWidth('~15,000')).toBe(5.8)
   })
 })
