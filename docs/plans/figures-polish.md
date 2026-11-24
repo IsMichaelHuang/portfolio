@@ -292,8 +292,52 @@ the hero, and the first-view cases at short screens depend on it.
 
 ## Verification record
 
-Filled after the build.
+Final state, branch `feature/polish-type`, run by the main agent:
+lint clean. 160 unit tests in 27 files pass. 158 end-to-end tests
+pass. `check:limits` is clean.
+
+The main agent opened a screenshot of each section before the
+change, after T1, and after T3, at 1440px and at 390px.
+
+- T1: at 1280px `157`, `249` and `61` render at 168px, `~30%` at
+  143px and `~15,000` at 93px. Each figure spans a similar width, so
+  the uneven heights read well. The change stays.
+- T2: section headings compute 38px at 1280px and 28px at 375px.
+- T3: bullet text starts on the title's left edge from 720px. Bullet
+  text is ink. Code and Live links are underlined.
+
+Design audit, before and after: no blockers, one major and three
+minor findings both times. The spacing count is 15 both times. No
+new finding. The major finding is the static reading of the `~`
+mark at 6.72px. The smallest rendered text is 14.4px.
+
+The audit still notes default letter spacing on display text at
+720px. The headings now have negative spacing, and a test makes
+sure of that. The note is about other text and is not acted on.
+
+Keyboard pass at 1280px: 18 stops in page order. Each has a 2px
+solid ring, and no ring has the color of the ground under it.
+
+Identity: the before and after captures show the same colors,
+typefaces, layout, copy and figures.
+
+Deviations from the plan: none.
 
 ## The four questions
 
-Answered after the build.
+1. **Regressions.** The bullet text is ink, where it was gray. The
+   bold numbers keep their weight. The row gap is zero, and margins
+   replace it in Experience, Projects, Hackathons and About. The
+   About alignment cases and the padding cases pass unedited. None
+   found.
+2. **Security.** The change is CSS, one pure function and one inline
+   custom property that holds a number from bundled data. No new
+   input, dependency or request. None found.
+3. **Efficiency.** `figureWidth` runs one time per figure render.
+   The change adds no script that runs on scroll and no dependency.
+   No action.
+4. **More tests before prod.** Added in this change: figure size
+   ratio, caption size, heading size and spacing, letter spacing,
+   underlines at rest and on hover, bullet alignment, entry rhythm,
+   and the lede size. Not covered: browsers other than Chromium, as
+   before. No open action.
