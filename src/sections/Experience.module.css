@@ -59,7 +59,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0 0.5rem;
-  margin: 0;
+  margin: 0.25rem 0 0;
   font-size: var(--text-meta);
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
@@ -77,8 +77,16 @@
 
 /* Bullet list — slight left padding instead of default browser indent */
 .highlights {
-  margin: 0;
+  margin: 1rem 0 0;
   padding-left: 1.25rem;
+}
+
+/* From 720px the markers hang in the column gap and the text starts
+   at the title's left edge */
+@media (min-width: 720px) {
+  .highlights {
+    padding-left: 0;
+  }
 }
 
 /* Individual bullet — comfortable spacing between items */
@@ -87,8 +95,8 @@
   text-wrap: pretty;
   font-family: var(--font-body);
   line-height: 1.7;
-  margin-bottom: 0.4rem;
-  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
 }
 
 @media (max-width: 599px) {
@@ -99,7 +107,6 @@
 
 /* Numbers lead: bold runs read as the headline of the bullet */
 .highlight strong {
-  color: var(--color-text);
   font-weight: 600;
 }
 

@@ -37,7 +37,7 @@ src/
 ├── lib/
 │   ├── activeSection.ts    # Pure scroll-spy picker
 │   ├── emphasis.tsx        # Renders **bold** markers in data strings
-│   ├── figure.ts           # Count-up frames for a figure's number
+│   ├── figure.ts           # Count-up frames and width of a figure
 │   ├── pins.ts             # Drops pins already shown as featured work
 │   └── *.test.ts(x)        # Unit tests beside each module
 ├── sections/
@@ -61,14 +61,14 @@ e2e/
 ├── smoke.spec.ts           # Smoke test against vite preview
 ├── hero.spec.ts            # Amber hero, nav mark, ~ glyph position
 ├── fold.spec.ts            # First screen, hero clears nav, phone rhythm
-├── ledger.spec.ts          # Ledger rows, h2 alignment, About content
+├── ledger.spec.ts          # Ledger rows, bullets, rhythm, About content
 ├── projects.spec.ts        # Hackathon pinning, featured rows, links
 ├── closing.spec.ts         # About column, ink Contact and footer
 ├── noscript.spec.ts        # Name, role and links with JS off
 ├── layout.spec.ts          # Responsive layout, 320 to 1920px
 ├── type.spec.ts            # Type scale ceiling, 12px floor, selection
 ├── fonts.spec.ts           # Self-hosted faces, same-origin requests
-├── polish.spec.ts          # Link size and hover, pins, prose type
+├── polish.spec.ts          # Link size, underline and hover, pins, prose type
 ├── nav.spec.ts             # Scroll-spy / aria-current / nav ground
 ├── keyboard.spec.ts        # Skip link and focus ring
 ├── motion.spec.ts          # prefers-reduced-motion, count-up
@@ -203,8 +203,11 @@ Everything is defined through CSS custom properties in `index.css`:
 | `--text-meta` | 16px: nav, links, role, period, units |
 | `--text-body` | 18px: prose, bullets, descriptions |
 | `--text-lead` | 22px: h3 and h4, takeaway, first About paragraph |
-| `--text-heading` | 28px: the h1 and every section h2 |
-| `--text-statement` | Fluid: hero caption and the email link |
+| `--text-heading` | 28px: the h1, the Contact h2, phone h2s |
+| `--text-statement` | Fluid: hero caption, email link, content h2s |
+
+Statement text and content h2s use -0.02em letter spacing. The h1 to
+h4 use -0.01em.
 
 Layout: every section starts at the page grid's left edge (the
 section's `padding-inline`, content within 1360px); h2s are left-aligned
@@ -213,9 +216,16 @@ on the global `.ledger-row` class in `index.css`, a size container at
 every width. From 720px a row is a grid on `--row-cols`
 (`minmax(0, 5fr) minmax(0, 7fr)`) with `--row-gap` (`3.5rem`): the
 `[data-figure]` or `.ledger-meta` takes column 1 across the rows,
-everything else column 2; below 720px one column in DOM order. An
-Experience entry is its figure, company, role, period and location,
-then 18px bullets, rows separated by a hairline. Skills are a `<dl>`
+everything else column 2, with no row gap (margins own every
+vertical step: 4px inside the title block, 16px from the last meta
+line to the bullets, 8px between bullets); below 720px one column in
+DOM order. An Experience entry is its figure, company, role, period
+and location, then 18px bullets in the ink colour, rows separated by
+a hairline. From 720px the bullet markers hang in the column gap, so
+the text starts at the title's left edge. A row figure
+fills its column: `figureWidth` gives its width in digit widths as
+`--w`, so a short figure renders larger than a long one (3.5rem to
+10.5rem). Its caption is 18px at weight 500. Skills are a `<dl>`
 with an `8rem` label column from 480px and the same `--row-cols` /
 `--row-gap` from 720px, so every right-hand column shares one left
 edge.
@@ -229,11 +239,14 @@ requests; `unicode-range` makes the browser fetch only the subsets
 the page's characters need. Every text size comes from the five
 `--text-*` tokens (the nav links drop to 0.9rem below 600px so four
 fit a 320px screen); the `Figure` numerals add their own sizes, so
-at most ten distinct sizes render at 1280px.
+at most eight distinct figure sizes render at 1280px and at most five
+sizes render outside figures.
 
-Code and Live links are muted at rest and turn ink with a thin
-underline offset 0.25em on hover; the Contact profile links and the
-footer link are underlined at rest and turn ink on hover. `a:active`
+Every link in the page body and the footer is underlined at rest;
+the nav and hero links are not. Code and Live links are muted, with
+a 1px underline offset 0.2em, and turn ink with a 2px underline on
+hover; the Contact profile links and the footer link turn ink on
+hover. `a:active`
 dims every link. The Resume button in the hero is the lead
 action and the only filled link (ink fill, text in the ground's
 colour); the other hero links are outlined. The focus ring is a 2px

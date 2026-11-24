@@ -143,3 +143,14 @@ test('hackathon events are h3', async ({ page }) => {
   await expect(page.locator('#hackathons h3')).toHaveCount(3)
   await expect(page.locator('#hackathons h4')).toHaveCount(0)
 })
+
+test('hackathons lede is a 22px medium caption', async ({ page }) => {
+  await open(page, 1280)
+  const s = await page
+    .getByText('Second place at three hackathons.')
+    .evaluate((e) => {
+      const c = getComputedStyle(e)
+      return [c.fontSize, c.fontWeight]
+    })
+  expect(s).toEqual(['22px', '500'])
+})

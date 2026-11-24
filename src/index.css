@@ -225,6 +225,18 @@ h2,
 h3,
 h4 {
   font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Content headings step up to the hero caption size */
+#experience > h2,
+#hackathons > h2,
+#projects > h2,
+#about > h2 {
+  font-size: max(var(--text-heading), var(--text-statement));
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-group);
 }
 
 h3,
@@ -262,7 +274,7 @@ h4 {
     display: grid;
     grid-template-columns: var(--row-cols);
     column-gap: var(--row-gap);
-    row-gap: 0.5rem;
+    row-gap: 0;
   }
 
   .ledger-row > * {

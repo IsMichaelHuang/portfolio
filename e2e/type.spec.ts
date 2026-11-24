@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
@@ -7,8 +7,10 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => document.fonts.ready)
 })
 
-test('distinct font sizes stay within the ratchet', async ({ page }) => {
-  const sizes = await page.evaluate(() => {
+// Visible elements that hold their own text, split by whether they
+// sit inside a figure numeral (those scale with their column).
+async function sizes(page: Page, inFigure: boolean) {
+  return page.evaluate((inFigure) => {
     const out = new Set<string>()
     for (const el of Array.from(document.body.querySelectorAll('*'))) {
       const r = el.getBoundingClientRect()
@@ -16,12 +18,19 @@ test('distinct font sizes stay within the ratchet', async ({ page }) => {
       const own = Array.from(el.childNodes).some(
         (n) => n.nodeType === 3 && n.textContent!.trim(),
       )
-      if (own) out.add(getComputedStyle(el).fontSize)
+      const fig = el.closest('[data-figure] [aria-hidden="true"]') !== null
+      if (own && fig === inFigure) out.add(getComputedStyle(el).fontSize)
     }
     return [...out]
-  })
-  // Three figure numerals, two approximate marks, five text sizes.
-  expect(sizes.length).toBeLessThanOrEqual(10)
+  }, inFigure)
+}
+
+test('text outside figures uses at most five sizes', async ({ page }) => {
+  expect((await sizes(page, false)).length).toBeLessThanOrEqual(5)
+})
+
+test('figure numerals use at most eight sizes', async ({ page }) => {
+  expect((await sizes(page, true)).length).toBeLessThanOrEqual(8)
 })
 
 for (const width of [320, 375, 768, 1280, 1920]) {
@@ -70,3 +79,39 @@ for (const sel of ['#about p', 'footer']) {
     expect(ratio).toBeGreaterThanOrEqual(4.5)
   })
 }
+
+const heads = ['experience', 'hackathons', 'projects', 'about']
+
+test('section h2s match the hero caption at 1280px', async ({ page }) => {
+  const cap = await page
+    .locator('#hero [data-figure] > span:last-child')
+    .evaluate((e) => getComputedStyle(e).fontSize)
+  for (const id of heads) {
+    const s = await page
+      .locator(`#${id} > h2`)
+      .evaluate((e) => {
+        const c = getComputedStyle(e)
+        return [c.fontSize, c.marginBottom]
+      })
+    expect(s, id).toEqual([cap, '56px'])
+  }
+})
+
+test('section h2s are 28px at 375px', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 800 })
+  for (const id of heads) {
+    const px = await page
+      .locator(`#${id} > h2`)
+      .evaluate((e) => getComputedStyle(e).fontSize)
+    expect(px, id).toBe('28px')
+  }
+})
+
+test('every heading has negative letter spacing', async ({ page }) => {
+  const bad = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('h1, h2, h3, h4'))
+      .map((e) => [e.textContent, getComputedStyle(e).letterSpacing])
+      .filter(([, v]) => !(parseFloat(v!) < 0)),
+  )
+  expect(bad).toEqual([])
+})

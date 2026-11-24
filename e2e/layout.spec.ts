@@ -132,6 +132,7 @@ for (const [width, spacing] of [
   [768, false],
   [1280, false],
   [1920, false],
+  [720, false],
   [320, true],
   [720, true],
   [768, true],
@@ -152,3 +153,32 @@ for (const [width, spacing] of [
     expect(b.vOver).toBeLessThanOrEqual(0)
   })
 }
+
+// Experience numerals by final value; the sr-only span holds the words.
+const numeralSize = (page: Page, spoken: string) =>
+  page
+    .locator('#experience [data-figure]')
+    .filter({ has: page.locator('.sr-only', { hasText: spoken }) })
+    .locator('[aria-hidden="true"]')
+    .first()
+    .evaluate((el) => parseFloat(getComputedStyle(el).fontSize))
+
+test('K1 short row figures fill the column at 1280px', async ({ page }) => {
+  await open(page, 1280)
+  const short = await numeralSize(page, '157')
+  const long = await numeralSize(page, 'about 15,000')
+  expect(short).toBeGreaterThanOrEqual(1.5 * long)
+  expect(long).toBeGreaterThanOrEqual(85)
+})
+
+test('K3 a row figure caption is 18px at weight 500', async ({ page }) => {
+  await open(page, 1280)
+  const cap = await page
+    .locator('#experience [data-figure] > span:last-child')
+    .first()
+    .evaluate((el) => {
+      const c = getComputedStyle(el)
+      return [c.fontSize, c.fontWeight]
+    })
+  expect(cap).toEqual(['18px', '500'])
+})

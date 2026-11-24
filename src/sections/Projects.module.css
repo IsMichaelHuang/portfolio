@@ -54,7 +54,7 @@
 
 /* Period, then the stack: inline and comma-separated at every width */
 .meta {
-  margin: 0.25rem 0 0.75rem;
+  margin: 0.25rem 0 0;
   font-size: var(--text-meta);
   line-height: 1.5;
   color: var(--color-text-muted);
@@ -86,8 +86,16 @@
 }
 
 .highlights {
-  margin: 0;
+  margin: 1rem 0 0;
   padding-left: 1.25rem;
+}
+
+/* From 720px the markers hang in the column gap and the text starts
+   at the title's left edge */
+@media (min-width: 720px) {
+  .highlights {
+    padding-left: 0;
+  }
 }
 
 .highlight {
@@ -95,8 +103,8 @@
   text-wrap: pretty;
   font-family: var(--font-body);
   line-height: 1.7;
-  margin-bottom: 0.4rem;
-  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
 }
 
 @media (max-width: 599px) {
@@ -107,7 +115,6 @@
 
 /* Numbers lead */
 .highlight strong {
-  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -115,24 +122,25 @@
   margin-bottom: 0;
 }
 
-/* Code links: muted, ink and underlined on hover (the shared
-   plain-text-link hover); 44px tap target on phones */
+/* Code and Live links: underlined at rest, muted, ink and a 2px
+   underline on hover; 44px tap target on phones */
 .link {
   font-size: var(--text-meta);
   color: var(--color-text-muted);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
   transition: color 0.2s;
 }
 
 .row .link {
   display: inline-block;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .link:hover {
   color: var(--color-text);
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-  text-decoration-thickness: 1px;
+  text-decoration-thickness: 2px;
 }
 
 @media (max-width: 599px) {

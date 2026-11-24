@@ -29,6 +29,7 @@
   font-weight: 600;
   font-size: var(--text-statement);
   line-height: 1.2;
+  letter-spacing: -0.02em;
   text-decoration: underline;
   text-underline-offset: 0.15em;
   text-decoration-thickness: 2px;

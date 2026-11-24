@@ -162,3 +162,98 @@ test('section headings are left-aligned', async ({ page }) => {
         .evaluate((h) => getComputedStyle(h).textAlign),
     ).toMatch(/^(left|start)$/)
 })
+
+// The highlights list is the last ul of an entry (Projects has a stack
+// list before it); class names are hashed.
+for (const id of ['experience', 'projects']) {
+  const articles = `#${id} article`
+
+  test(`${id} bullet text starts at the title edge at 1280px`, async ({
+    page,
+  }) => {
+    await open(page, 1280)
+    const rows = await page.locator(articles).evaluateAll((as) =>
+      as.map((a) => {
+        const list = Array.from(a.querySelectorAll('ul')).pop()!
+        const li = list.querySelector('li')!
+        const range = document.createRange()
+        range.selectNodeContents(li)
+        const h = a.querySelector('h3')!
+        return {
+          text: range.getClientRects()[0].left,
+          title: h.getBoundingClientRect().left,
+          color: getComputedStyle(li).color,
+          hColor: getComputedStyle(h).color,
+        }
+      }),
+    )
+    expect(rows.length).toBeGreaterThan(0)
+    for (const r of rows) {
+      expect(Math.abs(r.text - r.title)).toBeLessThanOrEqual(1)
+      expect(r.color).toBe(r.hColor)
+    }
+  })
+
+  test(`${id} bullets stay clear of the figure at 720px`, async ({
+    page,
+  }) => {
+    await open(page, 720)
+    const hits = await page.locator(articles).evaluateAll((as) =>
+      as.flatMap((a) => {
+        const f = a.querySelector('[data-figure]')
+        if (!f) return []
+        const fr = f.getBoundingClientRect()
+        const hit = (e: Element) => {
+          const r = e.getBoundingClientRect()
+          return (
+            r.left < fr.right && r.right > fr.left &&
+            r.top < fr.bottom && r.bottom > fr.top
+          )
+        }
+        const list = Array.from(a.querySelectorAll('ul')).pop()!
+        return [list, ...Array.from(list.querySelectorAll('li'))]
+          .filter(hit)
+          .map((e) => e.tagName)
+      }),
+    )
+    expect(hits).toEqual([])
+  })
+
+  for (const width of [375, 1280]) {
+    test(`${id} entry rhythm is 4px and 16px at ${width}px`, async ({
+      page,
+    }) => {
+      await open(page, width, 812)
+      const gaps = await page.locator(articles).evaluateAll((as) =>
+        as.map((a) => {
+          const list = Array.from(a.querySelectorAll('ul')).pop()!
+          const meta = list.previousElementSibling!
+          const h = a.querySelector('h3')!
+          return {
+            title:
+              h.nextElementSibling!.getBoundingClientRect().top -
+              h.getBoundingClientRect().bottom,
+            list:
+              list.getBoundingClientRect().top -
+              meta.getBoundingClientRect().bottom,
+          }
+        }),
+      )
+      expect(gaps.length).toBeGreaterThan(0)
+      for (const g of gaps) {
+        expect(Math.abs(g.title - 4)).toBeLessThanOrEqual(1)
+        expect(Math.abs(g.list - 16)).toBeLessThanOrEqual(1)
+      }
+    })
+  }
+}
+
+test('no horizontal scroll at 320px with bullets', async ({ page }) => {
+  await open(page, 320)
+  const over = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
+  )
+  expect(over).toBeLessThanOrEqual(0)
+})

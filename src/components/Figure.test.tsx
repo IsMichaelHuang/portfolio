@@ -1,5 +1,6 @@
 import { act, render } from '@testing-library/react'
 import Figure from './Figure'
+import { figureWidth } from '../lib/figure'
 
 function setup(props: Partial<Parameters<typeof Figure>[0]> = {}) {
   const { container } = render(<Figure value="157" size="hero" {...props} />)
@@ -53,6 +54,18 @@ describe('Figure', () => {
 
   it('never uses <strong>', () => {
     expect(setup({ unit: 'x' }).querySelector('strong')).toBeNull()
+  })
+})
+
+describe('Figure --w', () => {
+  it('is set on a row figure only', () => {
+    const w = (size: 'hero' | 'row' | 'band') =>
+      setup({ value: '~15,000', size })
+        .querySelector<HTMLElement>('[data-figure]')!
+        .style.getPropertyValue('--w')
+    expect(w('row')).toBe(String(figureWidth('~15,000')))
+    expect(w('hero')).toBe('')
+    expect(w('band')).toBe('')
   })
 })
 

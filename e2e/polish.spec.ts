@@ -189,3 +189,44 @@ test('every link and button is at least 24px at 1280px', async ({
   )
   expect(small).toEqual([])
 })
+
+const decoration = (page: Page, sel: string) =>
+  page
+    .locator(sel)
+    .evaluateAll((els) =>
+      els.map((e) => [
+        e.textContent,
+        getComputedStyle(e).textDecorationLine,
+      ]),
+    )
+
+test('content and footer links are underlined at rest', async ({ page }) => {
+  await open(page, 1280)
+  const links = await decoration(page, 'main a:not(#hero a), footer a')
+  expect(links.length).toBeGreaterThan(4)
+  for (const [text, line] of links) expect([text, line]).toEqual([
+    text,
+    expect.stringContaining('underline'),
+  ])
+})
+
+test('nav and hero links are not underlined at rest', async ({ page }) => {
+  await open(page, 1280)
+  const links = await decoration(page, 'nav a, #hero a')
+  expect(links.length).toBeGreaterThan(4)
+  for (const [, line] of links) expect(line).not.toContain('underline')
+})
+
+for (const id of ['projects', 'hackathons', 'pinned']) {
+  test(`a ${id} link gets a 2px underline on hover`, async ({ page }) => {
+    await open(page, 1280)
+    const link = page.locator(`#${id} a`, { hasText: 'Code' }).first()
+    test.skip((await link.count()) === 0, `no Code link in #${id}`)
+    await link.hover()
+    await expect
+      .poll(() =>
+        link.evaluate((e) => getComputedStyle(e).textDecorationThickness),
+      )
+      .toBe('2px')
+  })
+}
