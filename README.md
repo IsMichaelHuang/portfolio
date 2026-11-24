@@ -203,8 +203,11 @@ Everything is defined through CSS custom properties in `index.css`:
 | `--text-meta` | 16px: nav, links, role, period, units |
 | `--text-body` | 18px: prose, bullets, descriptions |
 | `--text-lead` | 22px: h3 and h4, takeaway, first About paragraph |
-| `--text-heading` | 28px: the h1 and every section h2 |
-| `--text-statement` | Fluid: hero caption and the email link |
+| `--text-heading` | 28px: the h1, the Contact h2, phone h2s |
+| `--text-statement` | Fluid: hero caption, email link, content h2s |
+
+Statement text and content h2s use -0.02em letter spacing. The h1 to
+h4 use -0.01em.
 
 Layout: every section starts at the page grid's left edge (the
 section's `padding-inline`, content within 1360px); h2s are left-aligned

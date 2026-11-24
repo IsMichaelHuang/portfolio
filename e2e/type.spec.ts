@@ -79,3 +79,39 @@ for (const sel of ['#about p', 'footer']) {
     expect(ratio).toBeGreaterThanOrEqual(4.5)
   })
 }
+
+const heads = ['experience', 'hackathons', 'projects', 'about']
+
+test('section h2s match the hero caption at 1280px', async ({ page }) => {
+  const cap = await page
+    .locator('#hero [data-figure] > span:last-child')
+    .evaluate((e) => getComputedStyle(e).fontSize)
+  for (const id of heads) {
+    const s = await page
+      .locator(`#${id} > h2`)
+      .evaluate((e) => {
+        const c = getComputedStyle(e)
+        return [c.fontSize, c.marginBottom]
+      })
+    expect(s, id).toEqual([cap, '56px'])
+  }
+})
+
+test('section h2s are 28px at 375px', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 800 })
+  for (const id of heads) {
+    const px = await page
+      .locator(`#${id} > h2`)
+      .evaluate((e) => getComputedStyle(e).fontSize)
+    expect(px, id).toBe('28px')
+  }
+})
+
+test('every heading has negative letter spacing', async ({ page }) => {
+  const bad = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('h1, h2, h3, h4'))
+      .map((e) => [e.textContent, getComputedStyle(e).letterSpacing])
+      .filter(([, v]) => !(parseFloat(v!) < 0)),
+  )
+  expect(bad).toEqual([])
+})

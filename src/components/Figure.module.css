@@ -64,6 +64,7 @@
   font-weight: 500;
   font-size: var(--text-statement);
   line-height: 1.12;
+  letter-spacing: -0.02em;
   max-width: 20ch;
 }
 
