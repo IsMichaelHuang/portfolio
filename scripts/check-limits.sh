@@ -3,8 +3,8 @@
 # Usage: check-limits.sh [dir]   (default: repo root)
 # Exempt: binary files, package-lock.json, public/*, the generated
 # src/data/projects.ts, and SHA-pinned "uses:" lines, which cannot wrap
-# and must keep the
-# "owner/action@sha # vX.Y.Z" shape Dependabot rewrites.
+# and must keep the "owner/action@sha # vX.Y.Z" shape Dependabot
+# rewrites.
 cd "${1:-$(dirname "$0")/..}" || exit 2
 bad=0
 while IFS= read -r f; do

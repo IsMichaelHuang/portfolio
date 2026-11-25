@@ -7,12 +7,7 @@
 
 import type { Project } from "../data/projects";
 
-const norm = (url: string) =>
-  url
-    .toLowerCase()
-    .replace(/\/+$/, "")
-    .replace(/\.git$/, "")
-    .replace(/\/+$/, "");
+const norm = (url: string) => url.toLowerCase().replace(/(\.git)?\/*$/, "");
 
 /** Pins whose repoUrl matches none of `urls`; URL-less pins stay. */
 export function remainingPins(projects: Project[], urls: string[]) {

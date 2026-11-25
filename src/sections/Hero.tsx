@@ -6,12 +6,6 @@
  * sit the name (the page's one h1), a one-line summary and the links
  * (resume, GitHub, LinkedIn, email). Blocks fade and rise once on load;
  * reduced motion turns that off.
- *
- * The id="hero" attribute serves as a scroll anchor, allowing
- * navigation links elsewhere on the page to jump here via href="#hero".
- *
- * Styles are scoped via CSS Modules (Hero.module.css) to prevent
- * class name collisions with other components.
  */
 
 import styles from "./Hero.module.css";
@@ -28,8 +22,6 @@ function Hero() {
         size="hero"
       />
       <div className={styles.body}>
-      {/* h1 is used exactly once per page for the primary heading
-          (accessibility & SEO) */}
       <h1 className={styles.name}>Michael Huang</h1>
       <p className={styles.blurb}>
         Applied AI engineer — multi-agent systems and LLM

@@ -35,8 +35,6 @@ function Experience() {
               <span className={styles.period}>{entry.period}</span>
               <span>{entry.location}</span>
             </div>
-            {/* Semantic list for highlights — accessible and correct for
-                bullet-point content */}
             <ul className={styles.highlights}>
               {entry.highlights.map((item, index) => (
                 <li key={index} className={styles.highlight}>
