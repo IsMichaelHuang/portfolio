@@ -154,9 +154,11 @@ The active link is measured on scroll and resize: `pickActive` in
 above the bar's height plus 8px, the last section at the page bottom,
 and none above the first. The link gets `aria-current="location"`.
 
-The bar also takes the ground of the section under its bottom edge: the
-navbar sets `data-ground` on itself from that section's `data-ground`
-(none means white), so its colours follow the same role tokens.
+The bar also takes the ground of the section under its bottom edge. It
+reads the sections in `<main>` from the page, so no list needs updating.
+The navbar sets `data-ground` on itself from that section's
+`data-ground` (none means white), so its colours follow the same role
+tokens.
 
 The sections run Hero, Experience, Hackathons, Projects, About,
 Contact, and the navbar lists Experience, Projects, About, Contact in
@@ -167,9 +169,9 @@ order, so it must follow the document order in `App.tsx`.
 To add a new section:
 1. Create the component in `src/sections/` with a unique `id` on the
    root `<section>` element.
-2. Import and place it in `App.tsx`.
-3. Add a matching entry to the `links` array in `Navbar.tsx`; the
-   scroll-spy and skip link need nothing else.
+2. Import it and place it directly inside `<main>` in `App.tsx`.
+3. Add a matching entry to the `links` array in `Navbar.tsx` only if
+   the section has a nav link. The bar ground needs nothing else.
 
 ## Theme
 
