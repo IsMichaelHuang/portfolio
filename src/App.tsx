@@ -4,11 +4,9 @@
  * Defines the top-level page structure (Hero, Experience, Hackathons,
  * Projects, About, Contact): skip link, Navbar, the single
  * <main> landmark holding all sections, then the Footer. Contains no
- * state or logic; adding or reordering sections means editing only
- * this file.
- *
- * Wrapped in a React Fragment (<>) to avoid injecting an extra
- * DOM node — the sections themselves provide their own containers.
+ * state or logic. This file is the place to add or reorder sections.
+ * A section with a nav link also needs an entry in the Navbar `links`
+ * array.
  */
 
 import Navbar from "./components/Navbar";
