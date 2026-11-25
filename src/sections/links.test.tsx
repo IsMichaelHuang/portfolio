@@ -7,7 +7,6 @@ vi.mock('../data/projects', () => ({
     {
       id: 'a',
       title: 'Alpha',
-      tags: [],
       repoUrl: 'https://github.com/o/alpha',
       liveUrl: 'https://alpha.test',
     },

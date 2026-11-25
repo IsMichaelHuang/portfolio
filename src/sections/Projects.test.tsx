@@ -5,18 +5,17 @@ const RB = 'https://github.com/IsMichaelHuang/resumeBuilder'
 
 vi.mock('../data/projects', () => ({
   projects: [
+    // Alpha keeps tags so "renders no tags on the pins" stays meaningful.
     { id: 'a', title: 'Alpha', description: 'About alpha', tags: ['t'] },
-    { id: 'b', title: 'Beta', tags: [] },
+    { id: 'b', title: 'Beta' },
     {
       id: 'r',
       title: 'ResumeBuilder',
-      tags: [],
       repoUrl: 'https://github.com/ismichaelhuang/resumebuilder/',
     },
     {
       id: 'f',
       title: 'FactChecker',
-      tags: [],
       repoUrl: 'https://github.com/ismichaelhuang/live-fact-checker',
     },
   ],
