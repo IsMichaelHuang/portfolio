@@ -309,8 +309,52 @@ Rejected: none.
 
 ## Verification
 
-To be filled in after Phase 4.
+The main agent read every diff and ran each check on each branch,
+one branch at a time, and on a scratch copy of `main` with all four
+branches merged. The merge had no conflicts.
+
+| Branch | Unit tests | E2E | Lint | Limits |
+|--------|-----------|-----|------|--------|
+| `chore/drop-pin-tags` | 163 | 158 | pass | pass |
+| `chore/single-test-build` | 163 | 158 | pass | pass |
+| `chore/navbar-section-grounds` | 164 | 158 | pass | pass |
+| `chore/tidy-comments` | 161 | 158 | pass | pass |
+| All four merged | 171 | 158 | pass | pass |
+
+The baseline has 160 unit tests. The merged copy adds 11: 4 in T1
+(minus 1 deleted), 3 in T2, 4 in T4 and 1 in T5.
+
+Red steps seen: the three T1 cases, the T2 "no build step" case,
+and three of the four T4 cases failed for the expected reason before
+the change. The T4 "empty main" case and the T5 case are green on
+the old code by design. T3 lists the same 27 test files before and
+after, and the diff of the two lists is empty.
+
+A search of the merged tree for `groundIds`, "edit `links` only",
+the tags line, the two GitHub fields and "Build before unit" finds
+only the new tests and the Alpha guard fixture.
+
+Deviation: the main agent narrowed the T1 "no tags" case to the
+field shapes `"tags":` and `tags: string[]`. The first version
+failed on any repo description that has the word "tags". The narrow
+case still fails on the old file.
 
 ## The four questions
 
-To be filled in after Phase 4.
+1. Regressions. The site renders the same: no consumer read `tags`,
+   and all 158 e2e tests pass on each branch, the six nav ground
+   cases included. A CI build failure now shows under the "Unit
+   tests" step, and its log shows the error first. `norm` differs
+   only for `x/.git` and `x/.git/`, which GitHub never produces.
+   None found beyond these noted changes.
+2. Security. The pinned-repo job asks GitHub for two fewer fields,
+   so less untrusted data enters the build. The new regex works on
+   bundled URLs only. No new input, dependency, permission or
+   request. None found.
+3. Efficiency. CI builds one time fewer per run. The navbar runs one
+   `querySelectorAll` per scroll or resize, where it ran six
+   `getElementById` calls. Both are small next to the layout reads
+   it already does. No action.
+4. More tests before prod. Added in this change: 11 unit cases. The
+   e2e ground cases are the guard for the real section order. Not
+   covered: browsers other than Chromium, as before. No open action.
