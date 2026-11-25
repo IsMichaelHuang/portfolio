@@ -7,8 +7,6 @@ const node = {
   description: 'd',
   url: 'https://github.com/Someone/x',
   homepageUrl: null,
-  primaryLanguage: null,
-  repositoryTopics: { nodes: [] },
 }
 const reply = (body: unknown, status = 200) =>
   Promise.resolve(

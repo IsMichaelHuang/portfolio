@@ -11,8 +11,6 @@ export interface GitHubRepo {
   description: string | null
   url: string
   homepageUrl: string | null
-  primaryLanguage: { name: string } | null
-  repositoryTopics: { nodes: { topic: { name: string } }[] }
 }
 
 export const QUERY = `{
@@ -25,8 +23,6 @@ export const QUERY = `{
           description
           url
           homepageUrl
-          primaryLanguage { name }
-          repositoryTopics(first: 10) { nodes { topic { name } } }
         }
       }
     }
@@ -43,14 +39,11 @@ const isHttps = (s: string): boolean => {
 
 export function toProject(repo: GitHubRepo): Project | null {
   if (!repo.url.startsWith('https://github.com/')) return null
-  const topics = repo.repositoryTopics.nodes.map((n) => n.topic.name)
-  const lang = repo.primaryLanguage?.name
   const project: Project = {
     id: repo.nameWithOwner.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
     title: repo.name
       .replace(/[-_]/g, ' ')
       .replace(/\b\w/g, (c) => c.toUpperCase()),
-    tags: topics.length ? topics : lang ? [lang] : [],
     repoUrl: repo.url,
   }
   if (repo.description) project.description = repo.description
@@ -78,7 +71,6 @@ export interface Project {
   id: string;
   title: string;
   description?: string;
-  tags: string[];
   repoUrl?: string;
   liveUrl?: string;
 }

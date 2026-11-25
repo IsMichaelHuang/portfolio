@@ -340,10 +340,10 @@ Projects (`id="projects"`) has two blocks in that column:
    title, period, stack, highlights and "Code" link on the right.
    A featured project may carry an optional `figure` (`value` and
    `unit`; the value is a bold run in its `highlights`).
-2. **Also on GitHub**: unboxed entries (a hairline above each, no
-   tags) for the generated pins that are not already shown above or
-   in Hackathons, in two columns from 988px. The block, heading
-   included, is absent when none remain.
+2. **Also on GitHub**: unboxed entries (a hairline above each) for the
+   generated pins that are not already shown above or in Hackathons,
+   in two columns from 988px. The block, heading included, is absent
+   when none remain.
 
 Hackathon and featured data live in `src/data/work.ts` (`hackathons`
 and `featured`; shapes are typed there). To add one, append an
@@ -370,7 +370,6 @@ another user:
 - Repos whose URL is not under `https://github.com/` are dropped.
 - A homepage becomes the "Live" link only if it is a valid `https:`
   URL.
-- Tags are the repo topics, else the primary language, else none.
 - A missing token, API error, null user, or zero usable repos fails
   the run and leaves the file untouched.
 

@@ -6,7 +6,6 @@ vi.mock('../data/projects', () => ({
     {
       id: 'r',
       title: 'ResumeBuilder',
-      tags: [],
       repoUrl: 'https://github.com/IsMichaelHuang/resumeBuilder',
     },
   ],

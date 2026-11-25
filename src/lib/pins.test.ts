@@ -3,7 +3,6 @@ import { remainingPins } from './pins'
 const p = (id: string, repoUrl?: string) => ({
   id,
   title: id,
-  tags: [],
   repoUrl,
 })
 

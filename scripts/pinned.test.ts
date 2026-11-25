@@ -1,6 +1,14 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
-import { join, resolve } from 'node:path'
 import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
+import { join, resolve } from 'node:path'
+import { projects as generated } from '../src/data/projects.ts'
+import {
+  QUERY,
   buildProjectsFile,
   selectRepos,
   toProject,
@@ -13,8 +21,6 @@ const repo = (over: Partial<GitHubRepo> = {}): GitHubRepo => ({
   description: 'A thing',
   url: 'https://github.com/Someone/my-cool_repo',
   homepageUrl: null,
-  primaryLanguage: { name: 'Python' },
-  repositoryTopics: { nodes: [{ topic: { name: 'bot' } }] },
   ...over,
 })
 
@@ -24,7 +30,6 @@ describe('toProject', () => {
     expect(p.id).toBe('someone-my-cool-repo')
     expect(p.title).toBe('My Cool Repo')
     expect(p.repoUrl).toBe('https://github.com/Someone/my-cool_repo')
-    expect(p.tags).toEqual(['bot'])
     expect(p.description).toBe('A thing')
   })
 
@@ -38,14 +43,6 @@ describe('toProject', () => {
     expect(toProject(repo({ description: null }))).not.toHaveProperty(
       'description',
     )
-  })
-
-  it('falls back to the primary language, then to no tags', () => {
-    const none = { repositoryTopics: { nodes: [] } }
-    expect(toProject(repo(none))!.tags).toEqual(['Python'])
-    expect(
-      toProject(repo({ ...none, primaryLanguage: null }))!.tags,
-    ).toEqual([])
   })
 
   it.each([
@@ -65,6 +62,30 @@ describe('toProject', () => {
   it('returns null for a non-GitHub url', () => {
     expect(toProject(repo({ url: 'https://evil.com/x' }))).toBeNull()
     expect(toProject(repo({ url: 'javascript:alert(1)' }))).toBeNull()
+  })
+})
+
+describe('tags are gone', () => {
+  const file = readFileSync('src/data/projects.ts', 'utf8')
+
+  it('toProject sets no tags', () => {
+    expect(toProject(repo())).not.toHaveProperty('tags')
+  })
+
+  it('QUERY asks for no language or topics', () => {
+    expect(QUERY).not.toContain('primaryLanguage')
+    expect(QUERY).not.toContain('repositoryTopics')
+  })
+
+  // Field shapes only: a repo description may say "tags".
+  it('projects.ts has no tags', () => {
+    expect(file).not.toContain('"tags":')
+    expect(file).not.toContain('tags: string[]')
+  })
+
+  // A local fetch-pinned run that is not reverted makes this fail.
+  it('projects.ts matches buildProjectsFile(projects)', () => {
+    expect(file).toBe(buildProjectsFile(generated))
   })
 })
 
@@ -88,11 +109,10 @@ describe('buildProjectsFile', () => {
         id: nasty,
         title: nasty,
         description: nasty,
-        tags: [nasty, 'ok'],
         repoUrl: 'https://github.com/a/b?x=' + nasty,
         liveUrl: 'https://example.com/' + nasty,
       },
-      { id: 'bare', title: 'Bare', tags: [] },
+      { id: 'bare', title: 'Bare' },
     ]
     // Vite only imports inside the project root, so not os.tmpdir().
     mkdirSync('node_modules/.tmp', { recursive: true })
