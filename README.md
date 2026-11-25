@@ -306,10 +306,10 @@ generated `src/data/projects.ts` are exempt, as are SHA-pinned
 runs on a push to `main`, daily at 00:00 UTC (to refresh the pinned
 repos), and on manual dispatch. Pull requests never deploy.
 
-`.github/workflows/ci.yml` runs lint, build, unit tests, e2e tests
-and the file-limit check with a read-only token. It runs on pull
-requests, and deploy calls it first: the deploy job starts only if CI
-passes.
+`.github/workflows/ci.yml` runs lint, unit tests (which build first),
+e2e tests and the file-limit check with a read-only token. It runs on
+pull requests, and deploy calls it first: the deploy job starts only if
+CI passes.
 
 GitHub disables scheduled workflows in public repos after 60 days
 without repository activity. A `keepalive` job on the daily run calls

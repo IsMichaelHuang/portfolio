@@ -41,10 +41,7 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # Build before unit tests: some unit tests read dist/.
-      - name: Build
-        run: npm run build
-
+      # npm test builds dist/ first (pretest). dist.test.ts reads it.
       - name: Unit tests
         run: npm test
 
