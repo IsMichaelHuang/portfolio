@@ -29,6 +29,11 @@ describe('remainingPins', () => {
     ).toEqual([])
   })
 
+  it('drops a pin with .git then extra slashes', () => {
+    const pin = p('a', 'https://github.com/o/Alpha.git//')
+    expect(remainingPins([pin], urls)).toEqual([])
+  })
+
   it('keeps non-matching and URL-less pins', () => {
     const pins = [p('a', 'https://github.com/o/beta'), p('b')]
     expect(remainingPins(pins, urls)).toEqual(pins)
