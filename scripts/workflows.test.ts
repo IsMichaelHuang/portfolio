@@ -24,6 +24,17 @@ describe('ci.yml', () => {
     const perms = [...ci.matchAll(/^\s*([a-z-]+): (read|write|none)$/gm)]
     expect(perms.map((m) => m[0].trim())).toEqual(['contents: read'])
   })
+  // npm test builds dist/ first (pretest), so CI needs no Build step.
+  it('has no separate build step', () => {
+    expect(ci).not.toMatch(/^\s*run: npm run build\s*$/m)
+  })
+  it('runs unit tests with npm test', () => {
+    expect(ci).toMatch(/- name: Unit tests\n\s*run: npm test\s*$/m)
+  })
+  it('keeps pretest as the build', () => {
+    const pkg = JSON.parse(read('package.json'))
+    expect(pkg.scripts.pretest).toBe('npm run build')
+  })
 })
 
 describe('deploy.yml', () => {
