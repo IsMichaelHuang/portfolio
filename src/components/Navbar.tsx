@@ -2,15 +2,14 @@
  * Navbar
  *
  * Fixed in-page navigation (hash anchors, no router), a "Primary"
- * navigation landmark. To add or reorder items, edit `links` only.
+ * navigation landmark. The bar ground follows the sections in <main>
+ * by itself. A section with a nav link needs an entry in `links`.
  *
  * Active link: passive scroll and resize listeners measure each
  * section's top and ask `pickActive` which one the reader is in, with
  * the bar's measured height (+ 8px) as the offset. Above the first
  * section nothing is current; at the page bottom the last section is.
  * The current link gets aria-current="location".
- *
- * Styles are scoped via CSS Modules (Navbar.module.css).
  */
 import { useLayoutEffect, useRef, useState } from "react";
 import styles from "./Navbar.module.css";
@@ -36,16 +35,6 @@ const links = [
   { label: "Contact", href: "#contact" },
 ];
 
-/** All sections, in order; the bar takes the ground of the one under it. */
-const groundIds = [
-  "hero",
-  "experience",
-  "hackathons",
-  "projects",
-  "about",
-  "contact",
-];
-
 /** Section ids derived from the links array, used to query DOM targets. */
 const sectionIds = links.map(({ href }) => href.slice(1));
 
@@ -69,7 +58,10 @@ function Navbar() {
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 2;
       setActiveId(pickActive(tops, offset, atBottom));
-      const under = pickActive(measure(groundIds), offset, false);
+      const ids = [
+        ...document.querySelectorAll<HTMLElement>("main > section[id]"),
+      ].map((s) => s.id);
+      const under = pickActive(measure(ids), offset, false);
       const ground = document.getElementById(under)?.dataset.ground;
       if (ground) nav?.setAttribute("data-ground", ground);
       else nav?.removeAttribute("data-ground");
